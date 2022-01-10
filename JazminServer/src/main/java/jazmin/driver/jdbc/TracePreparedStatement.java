@@ -26,15 +26,15 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
  * @author yama 27 Dec, 2014
  */
 public class TracePreparedStatement implements PreparedStatement {
-	private static Logger logger = LoggerFactory.get(TracePreparedStatement.class);
+	private static Logger logger = LoggerFactory.getLogger(TracePreparedStatement.class);
 	//
 	private static final int SLOW_SQL_TIME = 1000;
 	private StringBuilder sqlString;

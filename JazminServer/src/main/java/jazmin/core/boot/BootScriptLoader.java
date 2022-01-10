@@ -26,8 +26,8 @@ import jazmin.core.job.JobStore;
 import jazmin.core.monitor.Monitor;
 import jazmin.core.task.TaskStore;
 import jazmin.core.thread.Dispatcher;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.util.DumpUtil;
 import jazmin.util.IOUtil;
 
@@ -128,11 +128,11 @@ public class BootScriptLoader {
 	//
 	//
 	static class BootContextImpl implements BootContext{
-		private static Logger logger=LoggerFactory.get(BootContextImpl.class);
+		private static Logger logger=LoggerFactory.getLogger(BootContextImpl.class);
 		/*stop server and show halt information*/
 		@Override
 		public void halt(String msg) {
-			logger.fatal(msg);
+			logger.error(msg);
 			throw new RuntimeException(msg);
 		}
 		/*log info*/
@@ -143,15 +143,15 @@ public class BootScriptLoader {
 		/*set log level*/
 		@Override
 		public void setLogLevel(String level) {
-			LoggerFactory.setLevel(level);
+//			LoggerFactory.setLevel(level);
 		}
 		@Override
 		public void setLogFile(String logFile,boolean immdiateFlush) {
-			LoggerFactory.setFile(logFile,immdiateFlush);
+//			LoggerFactory.setFile(logFile,immdiateFlush);
 		}
 		@Override
 		public void disableConsoleLog() {
-			LoggerFactory.disableConsoleLog();
+//			LoggerFactory.disableConsoleLog();
 		}
 		@Override
 		public void addServer(Server server) {

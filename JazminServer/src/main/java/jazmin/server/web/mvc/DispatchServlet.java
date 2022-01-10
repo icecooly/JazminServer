@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
@@ -21,7 +21,7 @@ import jazmin.log.LoggerFactory;
  */
 @SuppressWarnings("serial")
 public class DispatchServlet extends HttpServlet{
-	private static Logger logger=LoggerFactory.get(DispatchServlet.class);
+	private static Logger logger=LoggerFactory.getLogger(DispatchServlet.class);
 	//
 	public static Dispatcher dispatcher=new Dispatcher();
 
@@ -45,7 +45,7 @@ public class DispatchServlet extends HttpServlet{
 		}
 		if(ctx.exception!=null){
 			if(logger.isDebugEnabled()){
-				logger.catching(ctx.exception);
+				logger.error(ctx.exception.getMessage(),ctx.exception);
 			}
 			throw new ServletException(ctx.exception);
 		}

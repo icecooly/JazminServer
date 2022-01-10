@@ -36,15 +36,15 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import jazmin.core.Driver;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public class MailDriver extends Driver {
-	private static Logger logger=LoggerFactory.get(MailDriver.class);
+	private static Logger logger=LoggerFactory.getLogger(MailDriver.class);
 	//
 	private String host;
 	private int port;
@@ -126,7 +126,7 @@ public class MailDriver extends Driver {
 			transport.close();
 		}catch(Exception e){
 			errorCount.increment();
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 			throw e;
 		}finally{
 			totalSentCount.increment();

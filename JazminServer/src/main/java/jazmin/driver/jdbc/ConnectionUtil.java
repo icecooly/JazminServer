@@ -9,8 +9,8 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.util.DumpUtil;
 /**
  * 
@@ -18,7 +18,7 @@ import jazmin.util.DumpUtil;
  * 8 Jan, 2015
  */
 public class ConnectionUtil {
-	private static Logger logger=LoggerFactory.get(ConnectionUtil.class);
+	private static Logger logger=LoggerFactory.getLogger(ConnectionUtil.class);
 	private ConnectionUtil(){}
 	/**
 	 * Close the given JDBC Connection and ignore any thrown exception. This is

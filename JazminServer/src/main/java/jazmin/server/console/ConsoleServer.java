@@ -23,8 +23,8 @@ import org.apache.sshd.server.session.ServerSession;
 
 import jazmin.core.Jazmin;
 import jazmin.core.Server;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.server.console.builtin.ConsoleCommand;
 import jazmin.server.console.builtin.CutCommand;
@@ -54,7 +54,7 @@ import jazmin.server.console.repl.CliRunnerCommandFactory;
  * 26 Dec, 2014
  */
 public class ConsoleServer extends Server{
-	private static Logger logger=LoggerFactory.get(ConsoleServer.class);
+	private static Logger logger=LoggerFactory.getLogger(ConsoleServer.class);
 	//
 	int port=2222;
 	SshServer sshServer;

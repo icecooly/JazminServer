@@ -5,8 +5,8 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.EncoderException;
 import io.netty.handler.codec.MessageToByteEncoder;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.io.NetworkTrafficStat;
 import jazmin.server.rpc.RpcMessage;
 import jazmin.server.rpc.codec.CodecUtil;
@@ -22,7 +22,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 @Sharable
 public class CompressedJSONEncoder extends MessageToByteEncoder<RpcMessage> {
 	private static final int MAX_MESSAGE_LENGTH=1024*1024*1024;
-	private static Logger logger=LoggerFactory.get(CompressedJSONEncoder.class);
+	private static Logger logger=LoggerFactory.getLogger(CompressedJSONEncoder.class);
 	//
 	NetworkTrafficStat networkTrafficStat;
 	public CompressedJSONEncoder(NetworkTrafficStat networkTrafficStat) {

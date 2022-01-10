@@ -33,15 +33,15 @@ import java.io.IOException;
 import java.util.UUID;
 
 import jazmin.core.thread.NoTraceLog;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public class PostRequestWorker extends RequestWorker {
-	private static Logger logger = LoggerFactory.get(PostRequestWorker.class);
+	private static Logger logger = LoggerFactory.getLogger(PostRequestWorker.class);
 	//
 	private static final HttpDataFactory factory = new DefaultHttpDataFactory(
 			DefaultHttpDataFactory.MINSIZE);
@@ -75,7 +75,7 @@ public class PostRequestWorker extends RequestWorker {
 		try {
 			processRequest0();
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 			clean();
 			sendError(ctx, HttpResponseStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -97,7 +97,7 @@ public class PostRequestWorker extends RequestWorker {
 				try {
                     decoder.offer(chunk);
                 } catch (ErrorDataDecoderException e1) {
-                	logger.catching(e1);
+                	logger.error(e1.getMessage(),e1);
                 	sendError(ctx, HttpResponseStatus.INTERNAL_SERVER_ERROR);
                 	clean();
                     return;
@@ -118,7 +118,7 @@ public class PostRequestWorker extends RequestWorker {
 		try {
 			fileUpload.close();
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 		if(requestFile!=null&&requestFile.length()==0){
 			logger.warn("delete empty file {}",requestFile);
@@ -135,7 +135,7 @@ public class PostRequestWorker extends RequestWorker {
 		try {
 			handleContent(content);
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 			sendError(ctx, HttpResponseStatus.INTERNAL_SERVER_ERROR);
 		}		
 	}

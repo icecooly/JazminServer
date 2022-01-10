@@ -15,8 +15,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.util.IOUtil;
 
 /**
@@ -25,7 +25,7 @@ import jazmin.util.IOUtil;
  * 29 Dec, 2014
  */
 public class Request {
-	private static Logger logger =LoggerFactory.get(Request.class);
+	private static Logger logger =LoggerFactory.getLogger(Request.class);
 	private static final String USER_AGENT = "user-agent";
 	private List<String> querys;
 	private HttpServletRequest servletRequest;

@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
 import jazmin.core.Driver;
 import jazmin.core.Jazmin;
 import jazmin.core.thread.Dispatcher;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.server.console.ConsoleServer;
 
@@ -27,7 +27,7 @@ import jazmin.server.console.ConsoleServer;
  *
  */
 public class ProcessDriver extends Driver{
-	private static Logger logger=LoggerFactory.get(ProcessDriver.class);
+	private static Logger logger=LoggerFactory.getLogger(ProcessDriver.class);
 	//
 	private Map<String, ProcessInfo>processMap;
 	private ScheduledFuture<?>checkStatusScheduledFuture;
@@ -118,7 +118,7 @@ public class ProcessDriver extends Driver{
 			try{
 				checkProcessInfo(pi);
 			}catch(Exception e){
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 		}
 	}

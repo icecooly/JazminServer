@@ -20,8 +20,8 @@ import java.util.function.Consumer;
 import jazmin.core.Driver;
 import jazmin.core.Jazmin;
 import jazmin.core.thread.DispatcherCallbackAdapter;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.io.InvokeStat;
 
 /**
@@ -29,7 +29,7 @@ import jazmin.misc.io.InvokeStat;
  * 27 Dec, 2014
  */
 public abstract class ConnectionDriver extends Driver{
-	private static Logger logger=LoggerFactory.get(ConnectionDriver.class);
+	private static Logger logger=LoggerFactory.getLogger(ConnectionDriver.class);
 	//
 	private Map<String,InvokeStat> sqlStatMap;
 	private boolean isStatSql;
@@ -112,13 +112,13 @@ public abstract class ConnectionDriver extends Driver{
 				if (stmt != null)
 					stmt.close();
 			} catch (SQLException se2) {
-				logger.catching(se2);
+				logger.error(se2.getMessage(),se2);
 			}
 			try {
 				if (conn != null)
 					conn.close();
 			} catch (SQLException se) {
-				logger.catching(se);
+				logger.error(se.getMessage(),se);
 			}
 		}
 	}
@@ -155,7 +155,7 @@ public abstract class ConnectionDriver extends Driver{
 				cs.connection.commit();
 			}
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	/**
@@ -173,7 +173,7 @@ public abstract class ConnectionDriver extends Driver{
 				cs.connection.realConnection.close();
 			}
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 
@@ -191,7 +191,7 @@ public abstract class ConnectionDriver extends Driver{
 				cs.connection.rollback();
 			}
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 
@@ -262,7 +262,7 @@ public abstract class ConnectionDriver extends Driver{
 					try {
 						consumer.accept(ts);
 					} catch (Exception ex) {
-						logger.catching(ex);
+						logger.error(ex.getMessage(),ex);
 					}
 				}
 			}

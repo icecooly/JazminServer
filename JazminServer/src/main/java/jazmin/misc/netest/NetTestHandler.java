@@ -4,15 +4,15 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * 
  * @author yama
  * 9 May, 2015
  */
 public class NetTestHandler extends ChannelHandlerAdapter {
-	private static Logger logger=LoggerFactory.get(NetTestHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(NetTestHandler.class);
 	NetTestClient netTestClient;
 	public NetTestHandler(NetTestClient client) {
 		this.netTestClient=client;
@@ -23,7 +23,7 @@ public class NetTestHandler extends ChannelHandlerAdapter {
     	try {
 			netTestClient.onConnect();
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
     }
     @Override
@@ -31,7 +31,7 @@ public class NetTestHandler extends ChannelHandlerAdapter {
     	try {
 			netTestClient.onDisConnect();
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
     }
 
@@ -41,13 +41,13 @@ public class NetTestHandler extends ChannelHandlerAdapter {
     		ByteBuf buffer=(ByteBuf) msg;
     		netTestClient.onMessage(Unpooled.copiedBuffer(buffer));
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
     }
     //
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-    	logger.catching(cause);
+    	logger.error(cause.getMessage(),cause);
     	ctx.close();
     }
 }

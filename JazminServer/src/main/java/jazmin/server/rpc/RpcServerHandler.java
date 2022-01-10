@@ -10,8 +10,8 @@ import io.netty.util.AttributeKey;
 
 import java.io.IOException;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
@@ -19,7 +19,7 @@ import jazmin.log.LoggerFactory;
  */
 @Sharable
 public class RpcServerHandler extends ChannelHandlerAdapter{
-	private static Logger logger=LoggerFactory.get(RpcServerHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(RpcServerHandler.class);
 	private static final AttributeKey<RpcSession> SESSION_KEY=
 											AttributeKey.valueOf("rpcsession");
 	private RpcServer rpcServer;

@@ -9,8 +9,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.DecoderException;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.io.NetworkTrafficStat;
 import jazmin.server.rpc.RpcMessage;
 
@@ -19,7 +19,7 @@ import jazmin.server.rpc.RpcMessage;
  * @date Jun 7, 2014
  */
 public class KyroDecoder extends ByteToMessageDecoder {
-	private static Logger logger=LoggerFactory.get(KyroDecoder.class);
+	private static Logger logger=LoggerFactory.getLogger(KyroDecoder.class);
 	private static final int MAX_MESSAGE_LENGTH = 1024 * 1024*10;
 	//
 	NetworkTrafficStat networkTrafficStat;

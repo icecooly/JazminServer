@@ -5,8 +5,8 @@ import io.netty.channel.socket.DatagramPacket;
 
 import java.net.InetSocketAddress;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.sip.SipChannel;
 import jazmin.server.sip.io.sip.SipMessage;
 
@@ -16,7 +16,7 @@ import jazmin.server.sip.io.sip.SipMessage;
  * @author jonas@jonasborjesson.com
  */
 public final class UdpConnection extends AbstractConnection {
-	private static Logger logger=LoggerFactory.get(UdpConnection.class);
+	private static Logger logger=LoggerFactory.getLogger(UdpConnection.class);
     
 	//
     public UdpConnection(final Channel channel, final InetSocketAddress remoteAddress) {

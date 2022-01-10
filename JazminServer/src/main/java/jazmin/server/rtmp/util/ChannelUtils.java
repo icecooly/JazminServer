@@ -22,8 +22,8 @@ package jazmin.server.rtmp.util;
 import java.io.IOException;
 import java.nio.channels.ClosedChannelException;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.jboss.netty.channel.ExceptionEvent;
 

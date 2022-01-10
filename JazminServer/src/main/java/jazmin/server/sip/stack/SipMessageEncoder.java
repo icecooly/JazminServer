@@ -9,8 +9,8 @@ import io.netty.handler.codec.MessageToByteEncoder;
 
 import java.io.IOException;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.sip.io.buffer.Buffer;
 import jazmin.server.sip.io.sip.SipMessage;
 import jazmin.server.sip.io.sip.impl.SipParser;
@@ -20,7 +20,7 @@ import jazmin.server.sip.io.sip.impl.SipParser;
  *
  */
 public class SipMessageEncoder extends MessageToByteEncoder<SipMessage> {
-	private static Logger logger=LoggerFactory.get(SipMessageEncoder.class);
+	private static Logger logger=LoggerFactory.getLogger(SipMessageEncoder.class);
     @Override
     protected void encode(final ChannelHandlerContext ctx, final SipMessage msg, final ByteBuf out) {
     	try {
@@ -34,7 +34,7 @@ public class SipMessageEncoder extends MessageToByteEncoder<SipMessage> {
             out.writeByte(SipParser.CR);
             out.writeByte(SipParser.LF);
         } catch (final IOException e) {
-            logger.catching(e);
+            logger.error(e.getMessage(),e);
         }
     }
 

@@ -12,8 +12,8 @@ import io.netty.channel.ChannelOption;
 
 import java.nio.ByteBuffer;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.mysqlproxy.MySQLProxyServer.ProxyServerBackendChannelInitializer;
 import jazmin.server.mysqlproxy.mysql.protocol.AuthPacket;
 import jazmin.server.mysqlproxy.mysql.protocol.Capabilities;
@@ -23,7 +23,7 @@ import jazmin.server.mysqlproxy.mysql.protocol.Capabilities;
  *
  */
 public class ProxyFrontendHandler extends ChannelHandlerAdapter {
-	private static Logger logger=LoggerFactory.get(ProxyFrontendHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(ProxyFrontendHandler.class);
     private volatile Channel outboundChannel;
     private MySQLProxyServer server;
     private AuthPacket authPacket;
@@ -137,7 +137,7 @@ public class ProxyFrontendHandler extends ChannelHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-    	logger.catching(cause);
+    	logger.error(cause.getMessage(),cause);
         closeOnFlush(ctx.channel());
     }
 

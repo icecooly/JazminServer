@@ -18,8 +18,8 @@
 */
 package jazmin.server.msg;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.msg.codec.RequestMessage;
 import jazmin.server.msg.codec.ResponseMessage;
 import jazmin.util.DumpIgnore;
@@ -30,7 +30,7 @@ import jazmin.util.DumpIgnore;
  */
 @DumpIgnore
 public class Context {
-	private static Logger logger=LoggerFactory.get(Context.class);
+	private static Logger logger=LoggerFactory.getLogger(Context.class);
 	//
 	private boolean isFlush;
 	private boolean isDisableResponse;
@@ -152,7 +152,7 @@ public class Context {
 	protected void finalize() throws Throwable {
 		super.finalize();
 		if(!isFlush){
-			logger.fatal("context did not call flush {}",requestMessage);
+			logger.error("context did not call flush {}",requestMessage);
 		}
 	}
 }

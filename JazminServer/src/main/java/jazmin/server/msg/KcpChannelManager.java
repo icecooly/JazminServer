@@ -16,8 +16,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.DatagramPacket;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.msg.codec.RequestMessage;
 import jazmin.server.msg.kcp.KCP;
 import jazmin.util.HexDumpUtil;
@@ -28,7 +28,7 @@ import jazmin.util.RandomUtil;
  *
  */
 public class KcpChannelManager implements Runnable{
-	private static Logger logger=LoggerFactory.get(KcpChannelManager.class);
+	private static Logger logger=LoggerFactory.getLogger(KcpChannelManager.class);
 	//
 	private AtomicInteger kcpChannelId;
 	private Map<Integer,KcpChannel>kcpChannelMap;

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.util.FileUtil;
 import jazmin.util.IOUtil;
 
@@ -20,7 +20,7 @@ import jazmin.util.IOUtil;
  * 26 Dec, 2014
  */
 public class ApplicationLoader {
-	private static Logger logger=LoggerFactory.get(ApplicationLoader.class);
+	private static Logger logger=LoggerFactory.getLogger(ApplicationLoader.class);
 	private File workDir;
 	private File applicationPackage;
 	private File workImage;

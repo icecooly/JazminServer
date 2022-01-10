@@ -8,8 +8,8 @@ import java.util.List;
 
 import jazmin.core.Jazmin;
 import jazmin.driver.http.HttpRequest.HttpResponseRunnable;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHandler;
@@ -24,7 +24,7 @@ import com.ning.http.client.listener.TransferListener;
  * @author yama 11 Feb, 2015
  */
 public class HttpHandler extends AsyncCompletionHandler<Response> implements TransferListener{
-	private static Logger logger = LoggerFactory.get(HttpHandler.class);
+	private static Logger logger = LoggerFactory.getLogger(HttpHandler.class);
 	//
 	HttpResponseHandler responseHandler;
 	HttpClientDriver driver;
@@ -85,7 +85,7 @@ public class HttpHandler extends AsyncCompletionHandler<Response> implements Tra
 					request.getUri(),
 					t);
 		}
-		logger.catching(t);
+		logger.error(t.getMessage(),t);
 		if (responseHandler != null) {
 			Jazmin.dispatcher.invokeInPool("", new HttpResponseRunnable(
 					responseHandler, null, t), responseMethod);
@@ -127,7 +127,7 @@ public class HttpHandler extends AsyncCompletionHandler<Response> implements Tra
 			try{
 				this.contentLength=Long.valueOf(cl.get(0));
 			}catch(Exception e){
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 		}
 	}

@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.rtmp.rtmp.RtmpMessage;
 import jazmin.server.rtmp.rtmp.message.Metadata;
 import jazmin.server.rtmp.util.Utils;

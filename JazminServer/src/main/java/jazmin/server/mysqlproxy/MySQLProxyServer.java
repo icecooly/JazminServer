@@ -20,8 +20,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import jazmin.core.Jazmin;
 import jazmin.core.Server;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.io.IOWorker;
 import jazmin.server.console.ConsoleServer;
 
@@ -30,7 +30,7 @@ import jazmin.server.console.ConsoleServer;
  *
  */
 public class MySQLProxyServer extends Server{
-	private static Logger logger=LoggerFactory.get(MySQLProxyServer.class);
+	private static Logger logger=LoggerFactory.getLogger(MySQLProxyServer.class);
 	//
 	ServerBootstrap nettyServer;
 	EventLoopGroup bossGroup;
@@ -77,7 +77,7 @@ public class MySQLProxyServer extends Server{
 			try {
 				rule.channelFuture.channel().close().sync();
 			} catch (InterruptedException e) {
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 		}
 	}
@@ -101,7 +101,7 @@ public class MySQLProxyServer extends Server{
 			channelFuture = nettyServer.bind(rule.localPort).sync();
 			rule.channelFuture=channelFuture;
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	//

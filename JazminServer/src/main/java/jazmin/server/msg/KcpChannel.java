@@ -9,8 +9,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.DatagramPacket;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.io.NetworkTrafficStat;
 import jazmin.server.msg.codec.RequestMessage;
 import jazmin.server.msg.codec.ResponseMessage;
@@ -22,7 +22,7 @@ import jazmin.util.HexDumpUtil;
  *
  */
 public class KcpChannel extends KCP implements NetworkChannel {
-	private static Logger logger = LoggerFactory.get(KcpChannel.class);
+	private static Logger logger = LoggerFactory.getLogger(KcpChannel.class);
 	//
 	Channel channel;
 	InetSocketAddress localAddress;
@@ -123,7 +123,7 @@ public class KcpChannel extends KCP implements NetworkChannel {
 			RequestMessage req = messageServer.codecFactory.decode(receiveBuffer, networkTrafficStat);
 			return req;
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 		return null;
 	}
@@ -157,7 +157,7 @@ public class KcpChannel extends KCP implements NetworkChannel {
 			out.readBytes(content);
 			send(content);
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}finally {
 			out.release();
 		}

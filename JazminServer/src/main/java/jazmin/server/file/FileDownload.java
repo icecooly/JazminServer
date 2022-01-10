@@ -8,15 +8,15 @@ import io.netty.handler.codec.http.DefaultHttpRequest;
 
 import java.io.RandomAccessFile;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public class FileDownload extends FileOpt{
-	private static Logger logger=LoggerFactory.get(FileDownload.class);
+	private static Logger logger=LoggerFactory.getLogger(FileDownload.class);
 	//
 	static interface ResultHandler{
 		void handleRandomAccessFile(RandomAccessFile raf);

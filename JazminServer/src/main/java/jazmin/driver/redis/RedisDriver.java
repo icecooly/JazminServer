@@ -10,8 +10,8 @@ import java.util.List;
 import jazmin.core.Driver;
 import jazmin.core.Jazmin;
 import jazmin.core.thread.DispatcherCallbackAdapter;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.server.console.ConsoleServer;
 import redis.clients.jedis.JedisPoolConfig;
@@ -23,7 +23,7 @@ import redis.clients.util.Hashing;
  *
  */
 public class RedisDriver extends Driver{
-	private static Logger logger=LoggerFactory.get(RedisDriver.class);
+	private static Logger logger=LoggerFactory.getLogger(RedisDriver.class);
 	//
 	ShardedJedisPool pool;
 	JedisPoolConfig config;

@@ -50,8 +50,8 @@ import jazmin.core.Server;
 import jazmin.core.app.AppException;
 import jazmin.core.thread.Dispatcher;
 import jazmin.core.thread.DispatcherCallbackAdapter;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.misc.io.IOWorker;
 import jazmin.misc.io.NetworkTrafficStat;
@@ -67,7 +67,7 @@ import jazmin.server.msg.codec.ResponseMessage;
  * 25 Dec, 2014
  */
 public class MessageServer extends Server implements Registerable{
-	private static Logger logger=LoggerFactory.get(MessageServer.class);
+	private static Logger logger=LoggerFactory.getLogger(MessageServer.class);
 	//
 	static final int DEFAULT_PORT=3001;
 	static final int DEFAULT_IDLE_TIME=60*10;//10 min

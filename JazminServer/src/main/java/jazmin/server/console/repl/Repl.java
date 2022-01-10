@@ -13,8 +13,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.console.ConsoleServer;
 import jazmin.server.console.ascii.TerminalWriter;
 import jazmin.server.console.builtin.ConsoleCommand;
@@ -24,7 +24,7 @@ import jazmin.server.console.builtin.ConsoleCommand;
  * @version $Id$
  */
 public class Repl {
-	private static Logger logger=LoggerFactory.get(Repl.class);
+	private static Logger logger=LoggerFactory.getLogger(Repl.class);
 	//
 	static class CommandEnv{
 		@Override
@@ -128,7 +128,7 @@ public class Repl {
         	 c.setConsoleServer(consoleServer);
         	 return c;
          }catch(Throwable e){
-        	 logger.catching(e);
+        	 logger.error(e.getMessage(),e);
          	return null;
          }
     }
@@ -179,7 +179,7 @@ public class Repl {
         			}
             	}
 			} catch (InterruptedException e) {
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
         }
         return true;
@@ -226,7 +226,7 @@ public class Repl {
         try {
             closeable.close();
         } catch (IOException e) {
-        	logger.catching(e);
+        	logger.error(e.getMessage(),e);
         }
     }
 }

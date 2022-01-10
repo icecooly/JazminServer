@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.bouncycastle.asn1.x509.Certificate;
 import org.bouncycastle.crypto.tls.CertificateRequest;

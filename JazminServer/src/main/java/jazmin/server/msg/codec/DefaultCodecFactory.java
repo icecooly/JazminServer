@@ -15,8 +15,8 @@ import com.alibaba.fastjson.JSONArray;
 import flex.messaging.io.amf.ASObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.CorruptedFrameException;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.io.NetworkTrafficStat;
 import jazmin.server.msg.CodecFactory;
 import jazmin.server.msg.codec.amf.AMF3Deserializer;
@@ -42,7 +42,7 @@ import jazmin.util.IOUtil;
  *
  */
 public class DefaultCodecFactory implements CodecFactory{
-	private static Logger logger=LoggerFactory.get(MessageEncoder.class);
+	private static Logger logger=LoggerFactory.getLogger(MessageEncoder.class);
 	//
 	public static final int FORMAT_RAW=0;
 	public static final int FORMAT_JSON=1;

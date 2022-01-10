@@ -15,8 +15,8 @@ import java.util.TreeSet;
 import jazmin.codec.rtcp.RtcpPacket;
 import jazmin.codec.rtp.RtpPacket;
 import jazmin.core.Jazmin;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.server.relay.NetworkRelayChannel;
 import jazmin.server.relay.RelayChannel;
@@ -34,7 +34,7 @@ import org.bouncycastle.crypto.tls.DatagramTransport;
  */
 public class DtlsRelayChannel extends NetworkRelayChannel 
 implements DatagramTransport{
-	private static Logger logger=LoggerFactory.get(DtlsRelayChannel.class);
+	private static Logger logger=LoggerFactory.getLogger(DtlsRelayChannel.class);
 	//
 	private DtlsHandler dtlsHandler;
 	private static StunHandler stunHandler=new StunHandler();
@@ -169,7 +169,7 @@ implements DatagramTransport{
 						rc.dataFromRelay(this,bytes);
 					}
 				} catch (Exception e) {
-					logger.catching(e);
+					logger.error(e.getMessage(),e);
 				}
 			}
 		}
@@ -237,12 +237,12 @@ implements DatagramTransport{
 	}
 	//
 	public void onDtlsHandshakeFailed(Throwable e) {
-		logger.catching(e);
+		logger.error(e.getMessage(),e);
 		queue.close();
 		try {
 			closeChannel();
 		} catch (Exception e1) {
-			logger.catching(e1);
+			logger.error(e1.getMessage(),e1);
 		}
 	}
 	//--------------------------------------------------------------------------

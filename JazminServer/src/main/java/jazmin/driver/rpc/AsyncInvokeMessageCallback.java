@@ -5,8 +5,8 @@ import java.lang.reflect.Method;
 import jazmin.core.Jazmin;
 import jazmin.core.app.AppException;
 import jazmin.core.thread.Dispatcher;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.rpc.RpcMessage;
 import jazmin.server.rpc.RpcMessage.AppExceptionMessage;
 import jazmin.server.rpc.RpcMessageCallback;
@@ -17,7 +17,7 @@ import jazmin.server.rpc.RpcSession;
  * 16 Jan, 2015
  */
 public class AsyncInvokeMessageCallback implements RpcMessageCallback {
-	private static Logger logger=LoggerFactory.get(AsyncInvokeMessageCallback.class);
+	private static Logger logger=LoggerFactory.getLogger(AsyncInvokeMessageCallback.class);
 	//
 	public AsyncCallback<Object> callback;
 	public Method callbackMethod;

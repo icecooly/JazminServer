@@ -24,8 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.rtmp.io.f4v.box.CTTS;
 import jazmin.server.rtmp.io.f4v.box.CTTS.CTTSRecord;
 import jazmin.server.rtmp.io.f4v.box.MDHD;

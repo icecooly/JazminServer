@@ -6,8 +6,8 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.ftpserver.ftplet.Authentication;
 import org.apache.ftpserver.ftplet.AuthenticationFailedException;
@@ -97,7 +97,7 @@ import org.apache.ftpserver.util.BaseProperties;
  */
 public class FtpPropUserManager extends AbstractUserManager implements FtpUserManager{
 
-    private static final Logger logger = LoggerFactory.get(FtpPropUserManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(FtpPropUserManager.class);
 
     private final static String PREFIX = "ftpserver.user.";
 

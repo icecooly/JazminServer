@@ -8,8 +8,8 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 import java.net.InetSocketAddress;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.sip.SipChannel;
 import jazmin.server.sip.io.sip.SipMessage;
 
@@ -17,7 +17,7 @@ import jazmin.server.sip.io.sip.SipMessage;
  * @author jonas@jonasborjesson.com
  */
 public final class WsConnection extends AbstractConnection {
-	private static Logger logger=LoggerFactory.get(WsConnection.class);
+	private static Logger logger=LoggerFactory.getLogger(WsConnection.class);
 
     public WsConnection(final Channel channel, final InetSocketAddress remote) {
         super(channel, remote);

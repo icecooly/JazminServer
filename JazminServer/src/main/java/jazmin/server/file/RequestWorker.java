@@ -36,8 +36,8 @@ import java.util.TimeZone;
 import javax.activation.MimetypesFileTypeMap;
 
 import jazmin.core.thread.NoTraceLog;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -45,7 +45,7 @@ import jazmin.log.LoggerFactory;
  *
  */
 public abstract class RequestWorker{
-	private static Logger logger=LoggerFactory.get(RequestWorker.class);
+	private static Logger logger=LoggerFactory.getLogger(RequestWorker.class);
 	//
 	public static final String HTTP_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss zzz";
 	public static final String HTTP_DATE_GMT_TIMEZONE = "GMT";

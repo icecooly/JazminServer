@@ -4,8 +4,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.rpc.RpcClient;
 import jazmin.server.rpc.RpcException;
 import jazmin.server.rpc.RpcSession;
@@ -15,7 +15,7 @@ import jazmin.server.rpc.RpcSession;
  * 25 Dec, 2014
  */
 public abstract class RpcInvocationHandler implements InvocationHandler {
-	private static Logger logger=LoggerFactory.get(RpcInvocationHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(RpcInvocationHandler.class);
 	//
 	private int invokeCounter;
 	private RpcSession[]sessions;

@@ -15,8 +15,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.io.IOWorker;
 import jazmin.misc.io.NetworkTrafficStat;
 import jazmin.server.msg.codec.DefaultCodecFactory;
@@ -29,7 +29,7 @@ import jazmin.util.DumpUtil;
  * @author yama
  */
 public class MessageClient {
-	private static Logger logger=LoggerFactory.get(MessageClient.class);
+	private static Logger logger=LoggerFactory.getLogger(MessageClient.class);
 	//
 	private EventLoopGroup group;
 	private Bootstrap bootstrap;

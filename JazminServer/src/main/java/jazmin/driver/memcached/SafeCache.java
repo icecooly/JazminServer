@@ -1,8 +1,8 @@
 package jazmin.driver.memcached;
 
 import jazmin.core.app.AutoWired;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -10,7 +10,7 @@ import jazmin.log.LoggerFactory;
  *
  */
 public class SafeCache {
-	private static  Logger logger=LoggerFactory.get(SafeCache.class);
+	private static  Logger logger=LoggerFactory.getLogger(SafeCache.class);
 	
 	@AutoWired
 	protected MemcachedDriver cacheResource;

@@ -7,8 +7,8 @@ import java.io.OutputStream;
 import java.util.Map;
 
 import jazmin.core.Jazmin;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.console.ConsoleServer;
 import jazmin.server.console.builtin.ConsoleCommand;
 
@@ -17,7 +17,7 @@ import jazmin.server.console.builtin.ConsoleCommand;
  * @version $Id$
  */
 public class ReplThread implements Closeable {
-	private static Logger logger=LoggerFactory.get(ReplThread.class);
+	private static Logger logger=LoggerFactory.getLogger(ReplThread.class);
     private final InputStream stdin;
     private final OutputStream stderr;
     private final Thread thread;
@@ -42,12 +42,12 @@ public class ReplThread implements Closeable {
         			">";
         	Repl.repl(consoleServer,stdin, stdout, stderr, environment, commands,prompt);
         } catch (Exception e) {
-        	logger.catching(e);
+        	logger.error(e.getMessage(),e);
         }finally {
             try {
                 onExit.run();
             } catch (Exception e) {
-            	logger.catching(e);
+            	logger.error(e.getMessage(),e);
             }
         }
         });

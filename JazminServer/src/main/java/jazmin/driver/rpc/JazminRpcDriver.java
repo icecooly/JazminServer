@@ -25,8 +25,8 @@ import jazmin.core.Jazmin;
 import jazmin.core.monitor.Monitor;
 import jazmin.core.monitor.MonitorAgent;
 import jazmin.core.thread.Dispatcher;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.misc.io.InvokeStat;
 import jazmin.server.console.ConsoleServer;
@@ -40,7 +40,7 @@ import jazmin.server.rpc.RpcSession;
  * 25 Dec, 2014
  */
 public class JazminRpcDriver extends Driver{
-	private static Logger logger=LoggerFactory.get(JazminRpcDriver.class);
+	private static Logger logger=LoggerFactory.getLogger(JazminRpcDriver.class);
 	//
 	private RpcClient client;
 	private Map<String,List<RpcSession>>sessionMap;
@@ -222,7 +222,7 @@ public class JazminRpcDriver extends Driver{
 		try {
 			client.connect(session);
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}	
 		List<RpcSession>sessionList=sessionMap.get(serverInfo.cluster);
 		if(sessionList==null){
@@ -314,7 +314,7 @@ public class JazminRpcDriver extends Driver{
 						try{
 							client.heartbeat(session);
 						}catch(Exception e){
-							logger.catching(e);
+							logger.error(e.getMessage(),e);
 						}
 					}
 				}

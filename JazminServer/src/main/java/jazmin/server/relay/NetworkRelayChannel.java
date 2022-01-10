@@ -7,15 +7,15 @@ import io.netty.channel.Channel;
 
 import java.net.InetSocketAddress;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public abstract class NetworkRelayChannel extends RelayChannel{
-	private static Logger logger=LoggerFactory.get(NetworkRelayChannel.class);
+	private static Logger logger=LoggerFactory.getLogger(NetworkRelayChannel.class);
 	//
 	protected final String localHostAddress;
 	protected final int localPort;
@@ -47,7 +47,7 @@ public abstract class NetworkRelayChannel extends RelayChannel{
 				try {
 					rc.dataFromRelay(this,bytes);
 				} catch (Exception e) {
-					logger.catching(e);
+					logger.error(e.getMessage(),e);
 				}
 			}
 		}

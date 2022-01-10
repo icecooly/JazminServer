@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.Map;
 
 import jazmin.core.app.AppException;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.util.DumpUtil;
 
 /**
  * @author yama 23 Dec, 2014
  */
 public class ThreadWorker implements Runnable {
-	private static Logger logger = LoggerFactory.get(ThreadWorker.class);
+	private static Logger logger = LoggerFactory.getLogger(ThreadWorker.class);
 	//
 	private Object instance;
 	private Object[] args;

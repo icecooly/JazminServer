@@ -23,8 +23,8 @@ package jazmin.server.relay.udp.webrtc;
 
 import java.security.SecureRandom;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.relay.udp.DtlsRelayChannel;
 
 import org.bouncycastle.crypto.tls.DTLSServerProtocol;

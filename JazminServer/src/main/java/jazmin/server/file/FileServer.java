@@ -35,8 +35,8 @@ import jazmin.core.Server;
 import jazmin.core.monitor.Monitor;
 import jazmin.core.monitor.MonitorAgent;
 import jazmin.core.thread.Dispatcher;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.misc.io.IOWorker;
 import jazmin.server.console.ConsoleServer;
@@ -52,7 +52,7 @@ import com.ning.http.client.providers.netty.NettyAsyncHttpProviderConfig;
  *
  */
 public class FileServer extends Server {
-	private static Logger logger=LoggerFactory.get(FileServer.class);
+	private static Logger logger=LoggerFactory.getLogger(FileServer.class);
 	static final String SERVER_NAME="jazmin-file-server";
 	//
 	private int port;

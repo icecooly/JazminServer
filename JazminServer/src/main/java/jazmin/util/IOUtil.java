@@ -34,14 +34,14 @@ import java.util.zip.ZipFile;
 
 import com.jcraft.jzlib.GZIPOutputStream;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama 26 Dec, 2014
  */
 public class IOUtil {
-	private static Logger logger = LoggerFactory.get(IOUtil.class);
+	private static Logger logger = LoggerFactory.getLogger(IOUtil.class);
 	private static final int CACHE_SIZE = 512;
 
 	//

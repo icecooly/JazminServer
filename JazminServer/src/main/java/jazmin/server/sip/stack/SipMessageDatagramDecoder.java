@@ -7,8 +7,8 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 
 import java.util.List;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.sip.io.buffer.Buffer;
 import jazmin.server.sip.io.buffer.Buffers;
 import jazmin.server.sip.io.sip.SipMessage;
@@ -25,7 +25,7 @@ import jazmin.server.sip.io.sip.impl.SipParser;
  * @author jonas@jonasborjesson.com
  */
 public final class SipMessageDatagramDecoder extends MessageToMessageDecoder<DatagramPacket> {
-	private static Logger logger=LoggerFactory.get(SipMessageDatagramDecoder.class);
+	private static Logger logger=LoggerFactory.getLogger(SipMessageDatagramDecoder.class);
     private final Clock clock;
 
     public SipMessageDatagramDecoder() {

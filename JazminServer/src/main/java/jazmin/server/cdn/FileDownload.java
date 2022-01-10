@@ -17,8 +17,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ning.http.client.AsyncHandler;
 import com.ning.http.client.HttpResponseBodyPart;
@@ -30,7 +30,7 @@ import com.ning.http.client.HttpResponseStatus;
  *
  */
 public class FileDownload extends FileOpt implements AsyncHandler<String>{
-	private static Logger logger=LoggerFactory.get(FileDownload.class);
+	private static Logger logger=LoggerFactory.getLogger(FileDownload.class);
 	//
 	static interface ResultHandler{
 		void handleInputStream(InputStream inputStream,long fileLength);
@@ -129,14 +129,14 @@ public class FileDownload extends FileOpt implements AsyncHandler<String>{
 				outputStream.flush();
 				outputStream.close();			
 			}catch(Exception e){
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 			//
 			try{
 				tempFileOutputStream.flush();
 				tempFileOutputStream.close();		
 			}catch(Exception e){
-				logger.catching(e);	
+				logger.error(e.getMessage(),e);	
 			}
 			cdnServer.cachePolicy.moveTo(tempFile,file);	
 		}
@@ -186,8 +186,8 @@ public class FileDownload extends FileOpt implements AsyncHandler<String>{
 		if(tempFileOutputStream!=null){
 			try {
 				tempFileOutputStream.close();
-			} catch (IOException e1) {
-				logger.catching(e1);
+			} catch (IOException ex) {
+				logger.error(ex.getMessage(),ex);
 			}
 		}
 		if(tempFile!=null){
@@ -197,7 +197,7 @@ public class FileDownload extends FileOpt implements AsyncHandler<String>{
 		if(e instanceof IOException){
 			logger.warn("uri {} catch exception {}",uri,e);
 		}else{
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 		
 	}

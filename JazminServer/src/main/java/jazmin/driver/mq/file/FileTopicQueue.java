@@ -9,8 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import jazmin.driver.mq.MessageQueueDriver;
 import jazmin.driver.mq.TopicChannel;
 import jazmin.driver.mq.TopicQueue;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -18,7 +18,7 @@ import jazmin.log.LoggerFactory;
  *
  */
 public class FileTopicQueue extends TopicQueue{
-	private static Logger logger=LoggerFactory.get(FileTopicQueue.class);
+	private static Logger logger=LoggerFactory.getLogger(FileTopicQueue.class);
 	//
 	private String workDir;
 	int indexFileCapacity;

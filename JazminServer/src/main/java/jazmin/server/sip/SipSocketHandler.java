@@ -12,8 +12,8 @@ import io.netty.util.concurrent.GenericFutureListener;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.sip.stack.SipMessageEvent;
 /**
  * 
@@ -23,7 +23,7 @@ import jazmin.server.sip.stack.SipMessageEvent;
 @Sharable
 public final class SipSocketHandler extends SimpleChannelInboundHandler<SipMessageEvent> {
 	//
-	private static Logger logger=LoggerFactory.get(SipSocketHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(SipSocketHandler.class);
 	
 	SipServer sipServer;
 	public SipSocketHandler(SipServer server){

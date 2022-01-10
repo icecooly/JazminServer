@@ -36,8 +36,8 @@ import jazmin.core.monitor.Monitor;
 import jazmin.core.monitor.MonitorAgent;
 import jazmin.core.thread.DispatcherCallbackAdapter;
 import jazmin.driver.jdbc.Transaction;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.misc.io.IOWorker;
 import jazmin.misc.io.NetworkTrafficStat;
@@ -55,7 +55,7 @@ import jazmin.server.rpc.codec.zjson.CompressedJSONEncoder;
  * 23 Dec, 2014
  */
 public class RpcServer extends Server implements Registerable{
-	private static Logger logger=LoggerFactory.get(RpcServer.class);
+	private static Logger logger=LoggerFactory.getLogger(RpcServer.class);
 	//
 	private int port=6001;
 	private boolean enableSSL;

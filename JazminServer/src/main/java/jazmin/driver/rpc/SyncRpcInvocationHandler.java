@@ -4,8 +4,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import jazmin.core.app.AppException;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.rpc.RpcClient;
 import jazmin.server.rpc.RpcException;
 import jazmin.server.rpc.RpcMessage;
@@ -17,7 +17,7 @@ import jazmin.server.rpc.RpcSession;
  * @date Jun 4, 2014
  */
 public class SyncRpcInvocationHandler extends RpcInvocationHandler {
-	private static Logger logger=LoggerFactory.get(SyncRpcInvocationHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(SyncRpcInvocationHandler.class);
 	//
 	public SyncRpcInvocationHandler(
 			JazminRpcDriver driver,

@@ -11,15 +11,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public class PerformanceLogWriter {
-	private static Logger logger=LoggerFactory.get(PerformanceLogWriter.class);
+	private static Logger logger=LoggerFactory.getLogger(PerformanceLogWriter.class);
 	//
 	private String logFilePath;
 	private File logFile;
@@ -55,7 +55,7 @@ public class PerformanceLogWriter {
 				try{
 					writeLog();
 				}catch(Exception e){
-					logger.catching(e);
+					logger.error(e.getMessage(),e);
 					break;
 				}
 			}
@@ -80,7 +80,7 @@ public class PerformanceLogWriter {
 			try {
 				TimeUnit.MINUTES.sleep(1);
 			} catch (InterruptedException e) {
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 			PerformanceLog log=dispatcher.addPerformanceLog();
 			if(logFilePath==null){

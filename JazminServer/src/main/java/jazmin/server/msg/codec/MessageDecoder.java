@@ -13,8 +13,8 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.io.NetworkTrafficStat;
 import jazmin.server.msg.CodecFactory;
 /**
@@ -22,7 +22,7 @@ import jazmin.server.msg.CodecFactory;
  * 26 Dec, 2014
  */
 public class MessageDecoder extends ByteToMessageDecoder {
-	private static Logger logger=LoggerFactory.get(MessageDecoder.class);
+	private static Logger logger=LoggerFactory.getLogger(MessageDecoder.class);
 	
 	private CodecFactory codecFactory;
 	NetworkTrafficStat networkTrafficStat;
@@ -40,7 +40,7 @@ public class MessageDecoder extends ByteToMessageDecoder {
 				out.add(msg);
 			}	
 		}catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 }

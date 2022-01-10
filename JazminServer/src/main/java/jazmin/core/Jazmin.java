@@ -45,8 +45,8 @@ import jazmin.core.monitor.Monitor;
 import jazmin.core.notification.NotificationCenter;
 import jazmin.core.task.TaskStore;
 import jazmin.core.thread.Dispatcher;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.util.DumpUtil;
 
@@ -56,7 +56,7 @@ import jazmin.util.DumpUtil;
  * 2014-12-20
  */
 public class Jazmin {
-	private static Logger logger=LoggerFactory.get(Jazmin.class);
+	private static Logger logger=LoggerFactory.getLogger(Jazmin.class);
 	//
 	public static final String VERSION;
 	public static final String LOGO=            
@@ -227,7 +227,7 @@ public class Jazmin {
 			app.start();
 			logger.info(app.info());
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 			System.exit(1);
 		}
 	}
@@ -394,7 +394,7 @@ public class Jazmin {
 		String bgMode=System.getProperty("jazmin.boot.bg");
 		if(bgMode!=null){
 			System.out.println("close console log output");
-			LoggerFactory.disableConsoleLog();
+//			LoggerFactory.disableConsoleLog();
 		}
 		//
 		String propServerName=System.getProperty("jazmin.server.name");
@@ -410,7 +410,7 @@ public class Jazmin {
 				File bf=new File(bootFile);
 				boot(bf);
 			} catch (Exception e) {
-				logger.fatal(e.getMessage(),e);
+				logger.error(e.getMessage(),e);
 				System.exit(1);
 			}
 		}
@@ -433,11 +433,11 @@ public class Jazmin {
 			dumpLifecycle();
 			dumpJazmin();
 		} catch (Throwable e) {
-			logger.fatal(e.getMessage(),e);
+			logger.error(e.getMessage(),e);
 			System.exit(1);
 		}
 		//XXX VERY important XXX 
-		if(LoggerFactory.isConsoleLogEnabled()){
+//		if(LoggerFactory.isConsoleLogEnabled()){
 			StringBuilder sb=new StringBuilder();
 			sb.append("\n");
 			DumpUtil.repeat(sb,"X",80);
@@ -446,8 +446,8 @@ public class Jazmin {
 					+ "BootContext.disableConsoleLog() to close console log output"
 					+ " in production environment\n");
 			DumpUtil.repeat(sb,"X",80);
-			logger.fatal(sb);
-		}
+			logger.error(sb.toString());
+//		}
 	}
 	//
 	private static void dumpJazmin(){
@@ -567,7 +567,7 @@ public class Jazmin {
 		Date stopTime=new Date();
 		Duration d=Duration.between(stopTime.toInstant(), startTime.toInstant());
 		logger.info("jazmin {} running {}//",VERSION,d);  
-		LoggerFactory.stop();
+//		LoggerFactory.stop();
 	}
 	//--------------------------------------------------------------------------
 	/**

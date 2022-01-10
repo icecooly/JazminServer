@@ -13,8 +13,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.relay.NetworkRelayChannel;
 import jazmin.server.relay.RelayChannel;
 import jazmin.server.relay.RelayServer;
@@ -26,7 +26,7 @@ import jazmin.util.DumpUtil;
  *
  */
 public class TCPMulticastRelayChannel extends NetworkRelayChannel{
-	private static Logger logger=LoggerFactory.get(TCPMulticastRelayChannel.class);
+	private static Logger logger=LoggerFactory.getLogger(TCPMulticastRelayChannel.class);
 	private long idleTime;
 		//
 	class PeerConnection{

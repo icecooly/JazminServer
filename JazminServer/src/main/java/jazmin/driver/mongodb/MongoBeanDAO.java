@@ -27,8 +27,8 @@ import com.mongodb.client.model.Indexes;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.util.DumpUtil;
 
 /**
@@ -38,7 +38,7 @@ import jazmin.util.DumpUtil;
  */
 public abstract class MongoBeanDAO<T> extends MongoDAO{
 	//
-	private static Logger logger=LoggerFactory.get(MongoBeanDAO.class);
+	private static Logger logger=LoggerFactory.getLogger(MongoBeanDAO.class);
 	//
 	protected Class<T> typeClass;
 	//

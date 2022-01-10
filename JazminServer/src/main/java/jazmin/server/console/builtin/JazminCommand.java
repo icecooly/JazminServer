@@ -14,8 +14,6 @@ import jazmin.core.app.AutoWiredObject.AutoWiredField;
 import jazmin.core.job.JazminJob;
 import jazmin.core.task.JazminTask;
 import jazmin.core.thread.PerformanceLog;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
 import jazmin.misc.io.InvokeStat;
 import jazmin.server.console.ascii.AsciiChart;
 import jazmin.server.console.ascii.FormPrinter;
@@ -75,8 +73,8 @@ public class JazminCommand extends ConsoleCommand {
     	FormPrinter.create(out,20).
     	print("name",Jazmin.getServerName()).
     	print("version",Jazmin.VERSION).
-    	print("logLevel",LoggerFactory.getLevel()).
-    	print("logFile",LoggerFactory.getFile()).
+//    	print("logLevel",LoggerFactory.getLevel()).
+//    	print("logFile",LoggerFactory.getFile()).
     	print("startTime",Jazmin.getStartTime()).
     	print("bootFile",Jazmin.getBootFile()).
     	print("applicationPackage",Jazmin.getApplicationPackage()).
@@ -92,10 +90,10 @@ public class JazminCommand extends ConsoleCommand {
     //
     private void showLoggers(String args){
     	TablePrinter tp=TablePrinter.create(out).length(30).headers("NAME");
-		List<Logger>loggers=LoggerFactory.getLoggers();
-		for(Logger logger:loggers){
-			tp.print(logger.getName());
-		};
+//		List<Logger>loggers=LoggerFactory.getLoggers();
+//		for(Logger logger:loggers){
+//			tp.print(logger.getName());
+//		};
     }
     //
     private void showJobs(String args)throws Exception{
@@ -136,7 +134,7 @@ public class JazminCommand extends ConsoleCommand {
     }
     //
     private void setLogLevel(String logLevel){
-    	LoggerFactory.setLevel(logLevel);
+//    	LoggerFactory.setLevel(logLevel);
     }
     //
     private void showServers(String args){

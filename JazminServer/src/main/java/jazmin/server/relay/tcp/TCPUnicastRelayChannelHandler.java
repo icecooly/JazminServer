@@ -11,8 +11,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.relay.RelayChannel;
 
 /**
@@ -20,7 +20,7 @@ import jazmin.server.relay.RelayChannel;
  * 26 Apr, 2015
  */
 public class TCPUnicastRelayChannelHandler extends SimpleChannelInboundHandler<ByteBuf> {
-	private static Logger logger=LoggerFactory.get(RelayChannel.class);
+	private static Logger logger=LoggerFactory.getLogger(RelayChannel.class);
 	//
 	TCPUnicastRelayChannel relayChannel;
 	

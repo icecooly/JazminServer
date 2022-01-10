@@ -13,15 +13,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  * 7 May, 2015
  */
 public class CachePolicy {
-	private static Logger logger=LoggerFactory.get(CachePolicy.class);
+	private static Logger logger=LoggerFactory.getLogger(CachePolicy.class);
 	//
 	long defaultTTL=3600*1000*24*30L;
 	Map<String,Long>policyMap;

@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 
 import jazmin.core.Jazmin;
 import jazmin.core.Server;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.misc.io.IOWorker;
 import jazmin.server.console.ConsoleServer;
@@ -45,7 +45,7 @@ import jazmin.server.relay.udp.UDPUnicastRelayChannel;
  * @author yama 26 Apr, 2015
  */
 public class RelayServer extends Server{
-	private static Logger logger=LoggerFactory.get(RelayServer.class);
+	private static Logger logger=LoggerFactory.getLogger(RelayServer.class);
 	//
 	private Map<String,RelayChannel>relayChannels;
 	private int idleTime;
@@ -256,7 +256,7 @@ public class RelayServer extends Server{
 					}
 					relayChannels.remove(rc.id);
 				}catch(Exception e){
-					logger.catching(e);
+					logger.error(e.getMessage(),e);
 				}
 			}
 		}

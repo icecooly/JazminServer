@@ -10,8 +10,8 @@ import java.util.Date;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSchException;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.webssh.ConnectionInfoProvider.ConnectionInfo;
 import jazmin.util.SshUtil;
 
@@ -21,7 +21,7 @@ import jazmin.util.SshUtil;
  *
  */
 public class WebSshChannel {
-	private static Logger logger=LoggerFactory.get(WebSshChannel.class);
+	private static Logger logger=LoggerFactory.getLogger(WebSshChannel.class);
 	//
 
 	String id;
@@ -71,7 +71,7 @@ public class WebSshChannel {
 				connectionInfo.channelListener.onOpen(this);
 			}
 		}catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 			sendError(e.getMessage());
 		}
 		
@@ -97,7 +97,7 @@ public class WebSshChannel {
 			}
 		}catch (Exception e) {
 			sendError(e.getMessage());
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	//
@@ -115,7 +115,7 @@ public class WebSshChannel {
 			            }
 					} catch (Exception e) {
 						sendError(e.getMessage());
-						logger.catching(e);
+						logger.error(e.getMessage(),e);
 					}
 				}
 				logger.info("ssh connection :"+shell+" stopped");
@@ -151,7 +151,7 @@ public class WebSshChannel {
 		try{
 			receiveMessage0(msg);
 		}catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 			sendError(e.getMessage());
 		}
 	}
@@ -210,7 +210,7 @@ public class WebSshChannel {
 			shellOutputStream.write((cmd).getBytes());
 			shellOutputStream.flush();
 		}catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	//
@@ -231,7 +231,7 @@ public class WebSshChannel {
 				shell.getSession().disconnect();
 			}
 		} catch (JSchException e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 		webSshServer.removeChannel(id);
 		shell=null;

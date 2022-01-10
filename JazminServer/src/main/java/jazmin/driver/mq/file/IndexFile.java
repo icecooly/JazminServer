@@ -9,15 +9,15 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.StandardOpenOption;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public class IndexFile implements Comparable<IndexFile>{
-	private static Logger logger=LoggerFactory.get(IndexFile.class);
+	private static Logger logger=LoggerFactory.getLogger(IndexFile.class);
 	//
 	int index;
 	File indexFile;
@@ -104,7 +104,7 @@ public class IndexFile implements Comparable<IndexFile>{
 		try{
 			channel.close();
 		}catch (IOException e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 		logger.info("close index file {}",indexFile);
 	}
@@ -113,7 +113,7 @@ public class IndexFile implements Comparable<IndexFile>{
 		try {
 			channel.force(true);
 		} catch (IOException e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	//

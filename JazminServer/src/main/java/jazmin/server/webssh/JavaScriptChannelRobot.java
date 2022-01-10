@@ -17,8 +17,8 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.script.SimpleScriptContext;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.util.IOUtil;
 
 /**
@@ -26,7 +26,7 @@ import jazmin.util.IOUtil;
  *
  */
 public class JavaScriptChannelRobot extends ChannelRobot implements ScriptChannelContext{
-	private static Logger logger=LoggerFactory.get(JavaScriptChannelRobot.class);
+	private static Logger logger=LoggerFactory.getLogger(JavaScriptChannelRobot.class);
 	static class ExpectHolder{
 		String regex;
 		boolean once;

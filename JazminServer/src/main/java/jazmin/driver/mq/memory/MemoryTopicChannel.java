@@ -12,15 +12,15 @@ import jazmin.driver.mq.MessageQueueDriver;
 import jazmin.driver.mq.TopicChannel;
 import jazmin.driver.mq.TopicQueue;
 import jazmin.driver.mq.TopicSubscriber;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public class MemoryTopicChannel extends TopicChannel{
-	private static Logger logger=LoggerFactory.get(MemoryTopicChannel.class);
+	private static Logger logger=LoggerFactory.getLogger(MemoryTopicChannel.class);
 	//
 	private LinkedList<TopicMessage>topicQueue;
 	protected Map<Long,Long>acceptSet;

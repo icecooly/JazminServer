@@ -32,8 +32,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.concurrent.TimeUnit;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.io.IOWorker;
 
 import com.ning.http.client.AsyncHandler;
@@ -50,7 +50,7 @@ import com.ning.http.client.providers.netty.NettyAsyncHttpProviderConfig;
  * 23 Dec, 2014
  */
 public class FileClient {
-	private static final Logger logger=LoggerFactory.get(FileClient.class);
+	private static final Logger logger=LoggerFactory.getLogger(FileClient.class);
 	//
 	private EventLoopGroup group;
 	private Bootstrap bootstrap;
@@ -175,7 +175,7 @@ public class FileClient {
 					tempFileOutputStream.flush();
 					tempFileOutputStream.close();		
 				}catch(Exception e){
-					logger.catching(e);	
+					logger.error(e.getMessage(),e);	
 				}
 				
 				if(!file.exists()){
@@ -230,8 +230,8 @@ public class FileClient {
 			if(tempFileOutputStream!=null){
 				try {
 					tempFileOutputStream.close();
-				} catch (IOException e1) {
-					logger.catching(e1);
+				} catch (IOException ex) {
+					logger.error(ex.getMessage(),ex);
 				}
 			}
 			if(tempFile!=null){
@@ -241,7 +241,7 @@ public class FileClient {
 			if(e instanceof IOException){
 				logger.warn("uri {} catch exception {}",fileId,e);
 			}else{
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 		}
 		

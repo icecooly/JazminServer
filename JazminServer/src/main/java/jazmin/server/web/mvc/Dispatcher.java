@@ -16,15 +16,15 @@ import javax.servlet.http.HttpSession;
 
 import jazmin.core.Jazmin;
 import jazmin.core.thread.DispatcherCallbackAdapter;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  * 29 Dec, 2014
  */
 public class Dispatcher {
-	private static Logger logger=LoggerFactory.get(Dispatcher.class);
+	private static Logger logger=LoggerFactory.getLogger(Dispatcher.class);
 	//
 	public static class SessionObject{
 		public boolean invokeSyncSession;
@@ -216,9 +216,14 @@ public class Dispatcher {
 			try {
 				controllerStub.afterMethod.invoke(controllerStub.instance,ctx,e);
 			} catch (InvocationTargetException ee) {
-				logger.catching(ee.getTargetException());
+				Throwable t=ee.getTargetException();
+				if(t!=null) {
+					logger.error(t.getMessage(),t);
+				}else {
+					logger.error(ee.getMessage(),ee);
+				}
 			} catch (Exception e1) {
-				logger.catching(e1);
+				logger.error(e1.getMessage(),e1);
 			} 
 		}
 	}

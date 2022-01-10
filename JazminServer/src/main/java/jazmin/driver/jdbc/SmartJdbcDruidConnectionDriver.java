@@ -13,8 +13,8 @@ import io.itit.smartjdbc.SmartDataSource;
 import io.itit.smartjdbc.SmartJdbc;
 import io.itit.smartjdbc.connection.TransactionManager;
 import jazmin.core.Jazmin;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.server.console.ConsoleServer;
 
@@ -25,7 +25,7 @@ import jazmin.server.console.ConsoleServer;
  */
 public class SmartJdbcDruidConnectionDriver extends ConnectionDriver implements TransactionManager{
 	//
-	private static Logger logger=LoggerFactory.get(SmartJdbcDruidConnectionDriver.class);
+	private static Logger logger=LoggerFactory.getLogger(SmartJdbcDruidConnectionDriver.class);
 	private DruidDataSource  dataSource;
 	private SmartDataSource smartDataSource;
 	//

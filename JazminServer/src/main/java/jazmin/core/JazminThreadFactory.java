@@ -3,15 +3,15 @@ package jazmin.core;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  * @date Jun 21, 2014
  */
 public class JazminThreadFactory implements ThreadFactory{
-	private static Logger logger=LoggerFactory.get(JazminThreadFactory.class);
+	private static Logger logger=LoggerFactory.getLogger(JazminThreadFactory.class);
 	private AtomicInteger threadCounter=new AtomicInteger();
 	private String threadName;
 	public JazminThreadFactory(String name) {

@@ -27,8 +27,8 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
 import io.netty.util.AttributeKey;
 import io.netty.util.CharsetUtil;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.webssh.ConnectionInfoProvider.ConnectionInfo;
 
 /**
@@ -36,7 +36,7 @@ import jazmin.server.webssh.ConnectionInfoProvider.ConnectionInfo;
  */
 public class WebSshWebSocketHandler extends SimpleChannelInboundHandler<Object> {
 	private static Logger logger = LoggerFactory
-			.get(WebSshWebSocketHandler.class);
+			.getLogger(WebSshWebSocketHandler.class);
 	//
 	public static final AttributeKey<WebSshChannel> SESSION_KEY=
 			AttributeKey.valueOf("s");
@@ -111,7 +111,7 @@ public class WebSshWebSocketHandler extends SimpleChannelInboundHandler<Object> 
 		try {
 			webSshChannel.startShell();
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 			ctx.close();
 		}
 	}

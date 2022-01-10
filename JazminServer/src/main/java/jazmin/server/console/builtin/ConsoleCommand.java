@@ -20,8 +20,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.UnrecognizedOptionException;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.console.ConsoleServer;
 import jazmin.server.console.ascii.TerminalWriter;
 import jazmin.server.console.repl.ReadLineEnvironment;
@@ -33,7 +33,7 @@ import jazmin.util.DumpUtil;
  */
 public class ConsoleCommand{
 	//
-	private static Logger logger=LoggerFactory.get(ConsoleCommand.class);
+	private static Logger logger=LoggerFactory.getLogger(ConsoleCommand.class);
 	//
 	public static interface OptionRunnable{
 		void run(String input)throws Exception;
@@ -196,14 +196,14 @@ public class ConsoleCommand{
 		} catch (MissingArgumentException e) {
 			this.out.println(e.getMessage());
 		}catch (Exception e) {
-			logger.catching(e);	
+			logger.error(e.getMessage(),e);	
 			this.out.println(e.getMessage());
 		}finally{
 			try{
 				this.out.flush();
 				this.out.close();
 			}catch(Exception e){
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 		}
     }

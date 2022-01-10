@@ -5,15 +5,15 @@ package jazmin.server.webssh;
 
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public class WebSocketEndpoint implements PeerEndpoint{
-	private static Logger logger=LoggerFactory.get(WebSocketEndpoint.class);
+	private static Logger logger=LoggerFactory.getLogger(WebSocketEndpoint.class);
 	//
 	Channel channel;
 	public WebSocketEndpoint(Channel channel) {
@@ -25,7 +25,7 @@ public class WebSocketEndpoint implements PeerEndpoint{
 		try {
 			channel.close().sync();
 		} catch (InterruptedException e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 

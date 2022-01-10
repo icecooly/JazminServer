@@ -9,8 +9,8 @@ import java.util.Map;
 
 import jazmin.core.Jazmin;
 import jazmin.core.Lifecycle;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.util.JSONUtil;
 
@@ -24,7 +24,7 @@ import com.ning.http.client.providers.netty.NettyAsyncHttpProviderConfig;
  * 9 Jun, 2016
  */
 public class Monitor extends Lifecycle implements Runnable{
-	private static Logger logger=LoggerFactory.get(Monitor.class);
+	private static Logger logger=LoggerFactory.getLogger(Monitor.class);
 	//
 	AsyncHttpClientConfig.Builder clientConfigBuilder;
 	AsyncHttpClientConfig clientConfig;
@@ -68,7 +68,7 @@ public class Monitor extends Lifecycle implements Runnable{
 			try{
 				ma.start(this);
 			}catch(Exception e){
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 		}
 		//
@@ -83,14 +83,14 @@ public class Monitor extends Lifecycle implements Runnable{
 			try {
 				Thread.sleep(10*1000L);
 			} catch (InterruptedException e) {
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 			idx++;
 			for(MonitorAgent ma:monitorAgents){
 				try{
 					ma.sample(idx,this);
 				}catch(Exception e){
-					logger.catching(e);
+					logger.error(e.getMessage(),e);
 				}
 			}
 		}

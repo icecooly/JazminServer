@@ -8,15 +8,15 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOption;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * 
  * @author yama
  *
  */
 public class ProxyFrontendHandler extends ChannelHandlerAdapter {
-	private static Logger logger=LoggerFactory.get(ProxyFrontendHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(ProxyFrontendHandler.class);
     private volatile Channel outboundChannel;
     private ProxyServer server;
     public ProxyFrontendHandler(ProxyServer server) {
@@ -91,7 +91,7 @@ public class ProxyFrontendHandler extends ChannelHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-    	logger.catching(cause);
+    	logger.error(cause.getMessage(),cause);
         closeOnFlush(ctx.channel());
     }
 

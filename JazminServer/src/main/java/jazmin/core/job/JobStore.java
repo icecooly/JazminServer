@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
 import jazmin.core.Jazmin;
 import jazmin.core.Lifecycle;
 import jazmin.core.Registerable;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 
 /**
@@ -24,7 +24,7 @@ import jazmin.misc.InfoBuilder;
  * 25 Dec, 2014
  */
 public class JobStore extends Lifecycle implements Registerable{
-	private static Logger logger=LoggerFactory.get(JobStore.class);
+	private static Logger logger=LoggerFactory.getLogger(JobStore.class);
 	//
 	private Map<String, JazminJob>jobMap;
 	public JobStore() {
@@ -80,7 +80,7 @@ public class JobStore extends Lifecycle implements Registerable{
 					job.run();
 				}
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(e.getMessage(),e);
 			}
 			
 		});
@@ -122,7 +122,7 @@ public class JobStore extends Lifecycle implements Registerable{
 						job.cron,
 						job.nextRunTime());
 			} catch (Exception e) {
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 		};
 		return ib.toString();

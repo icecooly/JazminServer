@@ -6,8 +6,8 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.msg.codec.ResponseMessage;
 /**
  * 
@@ -16,7 +16,7 @@ import jazmin.server.msg.codec.ResponseMessage;
  */
 @Sharable
 public class MessageClientHandler extends ChannelHandlerAdapter{
-	private static Logger logger=LoggerFactory.get(MessageClientHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(MessageClientHandler.class);
 	private MessageClient messageClient;
     /**
      */

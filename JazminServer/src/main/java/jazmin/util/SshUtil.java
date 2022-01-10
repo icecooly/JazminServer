@@ -10,8 +10,8 @@ import java.io.OutputStream;
 import java.util.Properties;
 import java.util.function.BiConsumer;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelShell;
@@ -24,7 +24,7 @@ import com.jcraft.jsch.UserInfo;
  * @author yama 7 Jan, 2015
  */
 public class SshUtil {
-	private static Logger logger=LoggerFactory.get(SshUtil.class);
+	private static Logger logger=LoggerFactory.getLogger(SshUtil.class);
 	//
 	public static  class MyUserInfo implements UserInfo,
 			UIKeyboardInteractive {

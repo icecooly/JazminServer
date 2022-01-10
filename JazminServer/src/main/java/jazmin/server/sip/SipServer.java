@@ -42,8 +42,8 @@ import jazmin.core.Jazmin;
 import jazmin.core.JazminThreadFactory;
 import jazmin.core.Server;
 import jazmin.core.thread.Dispatcher;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.misc.io.IOWorker;
 import jazmin.server.console.ConsoleServer;
@@ -72,7 +72,7 @@ import jazmin.server.sip.stack.UdpConnection;
  * @author yama
  */
 public class SipServer extends Server{
-	private static Logger logger=LoggerFactory.get(SipServer.class);
+	private static Logger logger=LoggerFactory.getLogger(SipServer.class);
 	//
 	private String address;
     private int port;
@@ -649,7 +649,7 @@ public class SipServer extends Server{
 			}
 			messageHandler.after(ctx);
 		}catch(Exception e){
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 			if(message.isRequest()){
 				SipResponse rsp=message.createResponse(
 						SipStatusCode.SC_SERVER_INTERNAL_ERROR);

@@ -29,8 +29,8 @@ import io.netty.util.CharsetUtil;
 
 import java.io.IOException;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.websockify.HostInfoProvider.HostInfo;
 
 /**
@@ -38,7 +38,7 @@ import jazmin.server.websockify.HostInfoProvider.HostInfo;
  */
 public class WebsockifyHandler extends SimpleChannelInboundHandler<Object> {
 	private static Logger logger = LoggerFactory
-			.get(WebsockifyHandler.class);
+			.getLogger(WebsockifyHandler.class);
 	private WebSocketServerHandshaker handshaker;
 	private WebsockifyServer server;
 	private static final int MAX_WEBSOCKET_FRAME_SIZE=10240;

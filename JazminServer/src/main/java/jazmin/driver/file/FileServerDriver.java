@@ -21,8 +21,8 @@ import jazmin.core.Driver;
 import jazmin.core.Jazmin;
 import jazmin.core.monitor.Monitor;
 import jazmin.core.monitor.MonitorAgent;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.CachePolicy;
 import jazmin.misc.InfoBuilder;
 import jazmin.server.file.FileClient;
@@ -34,7 +34,7 @@ import jazmin.util.RandomUtil;
  *
  */
 public class FileServerDriver extends Driver{
-	private static Logger logger=LoggerFactory.get(FileServerDriver.class);
+	private static Logger logger=LoggerFactory.getLogger(FileServerDriver.class);
 	private FileClient client;
 	private CachePolicy cachePolicy;
 	private File homeDir;
@@ -211,7 +211,7 @@ public class FileServerDriver extends Driver{
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 			if(counter++>60){
 				throw new FileDriverException("wait 60 seconds for another client download");

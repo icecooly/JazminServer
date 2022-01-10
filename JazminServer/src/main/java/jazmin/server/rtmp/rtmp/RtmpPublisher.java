@@ -21,8 +21,8 @@ package jazmin.server.rtmp.rtmp;
 
 import java.util.concurrent.TimeUnit;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.rtmp.io.f4v.F4vReader;
 import jazmin.server.rtmp.io.flv.FlvReader;
 

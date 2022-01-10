@@ -8,15 +8,15 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * 
  * @author yama
  *
  */
 public class WebsockifyBackendHandler extends ChannelHandlerAdapter {
-	private static Logger logger=LoggerFactory.get(WebsockifyBackendHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(WebsockifyBackendHandler.class);
     private final WebsockifyChannel websockifyChannel;
     public WebsockifyBackendHandler(WebsockifyChannel websockifyChannel) {
         this.websockifyChannel = websockifyChannel;
@@ -52,7 +52,7 @@ public class WebsockifyBackendHandler extends ChannelHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-    	logger.catching(cause);
+    	logger.error(cause.getMessage(),cause);
     	ctx.channel().writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(
     			ChannelFutureListener.CLOSE);
     }

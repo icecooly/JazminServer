@@ -12,8 +12,8 @@ import io.netty.handler.ssl.SslHandler;
 import java.net.InetSocketAddress;
 import java.util.List;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.sip.io.buffer.Buffer;
 import jazmin.server.sip.io.sip.SipMessage;
 import jazmin.server.sip.io.sip.impl.SipInitialLine;
@@ -27,7 +27,7 @@ import jazmin.server.sip.io.sip.impl.SipResponseImpl;
 public class SipMessageStreamDecoder extends ByteToMessageDecoder {
 
 	private static Logger logger = LoggerFactory
-			.get(SipMessageStreamDecoder.class);
+			.getLogger(SipMessageStreamDecoder.class);
 	/**
 	 * The maximum allowed initial line. If we pass this threshold we will drop
 	 * the message and close down the connection (if we are using a connection

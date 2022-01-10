@@ -28,8 +28,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import jazmin.core.Jazmin;
 import jazmin.core.Server;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.misc.io.IOWorker;
 import jazmin.server.console.ConsoleServer;
@@ -41,7 +41,7 @@ import jazmin.server.console.ConsoleServer;
  * 26 Aug, 2015
  */
 public class WebSshServer extends Server{
-	private static Logger logger=LoggerFactory.get(WebSshServer.class);
+	private static Logger logger=LoggerFactory.getLogger(WebSshServer.class);
 	//
 	private int port;
 	private int wssPort;
@@ -230,13 +230,13 @@ public class WebSshServer extends Server{
 				try{
 					channel.updateTicket();
 				}catch(Exception e){
-					logger.catching(e);
+					logger.error(e.getMessage(),e);
 				}
 			});
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 		}
 	}

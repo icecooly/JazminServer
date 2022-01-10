@@ -15,8 +15,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.RateLimiter;
 import jazmin.server.msg.codec.DefaultCodecFactory;
 import jazmin.server.msg.codec.RequestMessage;
@@ -27,7 +27,7 @@ import jazmin.server.msg.codec.ResponseMessage;
  * 25 Dec, 2014
  */
 public class Session {
-	private static Logger logger=LoggerFactory.get(Session.class);
+	private static Logger logger=LoggerFactory.getLogger(Session.class);
 	//
 	String connectionType;
 	int id;

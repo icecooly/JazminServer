@@ -8,8 +8,8 @@ import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.msg.codec.ResponseMessage;
 
 /**
@@ -17,7 +17,7 @@ import jazmin.server.msg.codec.ResponseMessage;
  * 25 Feb, 2015
  */
 public class WebSocketSession extends Session{
-	private static Logger logger=LoggerFactory.get(WebSocketSession.class);
+	private static Logger logger=LoggerFactory.getLogger(WebSocketSession.class);
 	MessageServer messageServer;
 	boolean isBinary;
 	FullHttpRequest req;
@@ -46,7 +46,7 @@ public class WebSocketSession extends Session{
 					channel.writeAndFlush(frame);
 				}
 			} catch (Exception e) {
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 		}
 	}

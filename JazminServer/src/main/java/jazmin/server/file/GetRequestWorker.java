@@ -29,8 +29,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import jazmin.core.thread.NoTraceLog;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -81,7 +81,7 @@ import jazmin.log.LoggerFactory;
  */
 public class GetRequestWorker extends RequestWorker implements 
 ChannelProgressiveFutureListener,FileDownload.ResultHandler{
-	private static Logger logger=LoggerFactory.get(GetRequestWorker.class);
+	private static Logger logger=LoggerFactory.getLogger(GetRequestWorker.class);
 	//
 	FileDownload fileRequest;
 	GetRequestWorker(
@@ -99,7 +99,7 @@ ChannelProgressiveFutureListener,FileDownload.ResultHandler{
 			sendRaf(raf);
 		} catch (Exception e) {
 			sendError(ctx, HttpResponseStatus.INTERNAL_SERVER_ERROR);
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	@Override
@@ -168,7 +168,7 @@ ChannelProgressiveFutureListener,FileDownload.ResultHandler{
 		try {
 			fileRequest.close();
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 		logger.info("process request {} from {} complete time {} seconds",
 				request.uri(),
@@ -189,7 +189,7 @@ ChannelProgressiveFutureListener,FileDownload.ResultHandler{
 				cdnServer.requestFilter.endDownload(filterCtx);
 			}
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 			sendError(ctx, HttpResponseStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

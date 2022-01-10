@@ -13,8 +13,8 @@ import java.util.Date;
 import java.util.List;
 
 import jazmin.core.app.AutoWired;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.util.DumpUtil;
 
 
@@ -24,7 +24,7 @@ import jazmin.util.DumpUtil;
  */
 public class JazminDAO {
 	//
-	private static Logger logger=LoggerFactory.get(JazminDAO.class);
+	private static Logger logger=LoggerFactory.getLogger(JazminDAO.class);
 	//
 	protected int limitMaxRows=-1;
 	@AutoWired

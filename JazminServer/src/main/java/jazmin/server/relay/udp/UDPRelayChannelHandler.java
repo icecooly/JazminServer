@@ -11,8 +11,8 @@ import io.netty.channel.socket.DatagramPacket;
 
 import java.io.IOException;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.relay.NetworkRelayChannel;
 import jazmin.server.relay.RelayChannel;
 
@@ -21,7 +21,7 @@ import jazmin.server.relay.RelayChannel;
  * 26 Apr, 2015
  */
 public class UDPRelayChannelHandler extends SimpleChannelInboundHandler<DatagramPacket> {
-	private static Logger logger=LoggerFactory.get(RelayChannel.class);
+	private static Logger logger=LoggerFactory.getLogger(RelayChannel.class);
 	//
 	NetworkRelayChannel relayChannel;
 	public UDPRelayChannelHandler(NetworkRelayChannel relayChannel) {

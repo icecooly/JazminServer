@@ -1,7 +1,7 @@
 package jazmin.server.file;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.HttpContent;
@@ -13,7 +13,7 @@ import io.netty.util.CharsetUtil;
  * Handler that just dumps the contents of the response from the server
  */
 public class HttpUploadClientHandler extends SimpleChannelInboundHandler<HttpObject> {
-	private static Logger logger=LoggerFactory.get(HttpUploadClientHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(HttpUploadClientHandler.class);
 	public static final  AttributeKey<String> ATTR_RESULT=AttributeKey.valueOf("r");
 	//
     @Override
@@ -34,7 +34,7 @@ public class HttpUploadClientHandler extends SimpleChannelInboundHandler<HttpObj
     //
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-    	logger.catching(cause);
+    	logger.error(cause.getMessage(),cause);
         ctx.channel().close();
     }
 }

@@ -6,15 +6,15 @@ package jazmin.server.web.mvc;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletResponse;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  * 29 Dec, 2014
  */
 public class ResourceView implements View{
-	private static Logger logger=LoggerFactory.get(ResourceView.class);
+	private static Logger logger=LoggerFactory.getLogger(ResourceView.class);
 	//
 	private String file;
 	public ResourceView(String file) {

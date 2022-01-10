@@ -5,8 +5,8 @@ import io.netty.handler.codec.http.HttpObject;
 
 import java.io.IOException;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -14,7 +14,7 @@ import jazmin.log.LoggerFactory;
  *
  */
 public class CdnServerHandler extends SimpleChannelInboundHandler<HttpObject> {
-	private static Logger logger=LoggerFactory.get(CdnServerHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(CdnServerHandler.class);
 	//
 	CdnServer cdnServer;
 	public CdnServerHandler(CdnServer server) {
@@ -32,7 +32,7 @@ public class CdnServerHandler extends SimpleChannelInboundHandler<HttpObject> {
     	if(cause instanceof IOException){
     		logger.warn(cause.getMessage());
     	}else{
-    		logger.catching(cause);
+    		logger.error(cause.getMessage(),cause);
     	}
     }
     @Override

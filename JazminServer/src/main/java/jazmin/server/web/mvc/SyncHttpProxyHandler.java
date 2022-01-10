@@ -13,8 +13,8 @@ import jazmin.core.app.AppException;
 import jazmin.driver.http.HttpClientDriver;
 import jazmin.driver.http.HttpRequest;
 import jazmin.driver.http.HttpResponse;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.util.JSONUtil;
 
 /**
@@ -22,7 +22,7 @@ import jazmin.util.JSONUtil;
  *
  */
 public class SyncHttpProxyHandler implements InvocationHandler {
-	private Logger logger=LoggerFactory.get(SyncHttpProxyHandler.class);
+	private Logger logger=LoggerFactory.getLogger(SyncHttpProxyHandler.class);
 	String url;
 	HttpClientDriver httpDriver;
 	public SyncHttpProxyHandler(String url){

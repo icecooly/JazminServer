@@ -8,15 +8,15 @@ import java.io.IOException;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public class KcpUdpHandler extends SimpleChannelInboundHandler<DatagramPacket> {
-	private static Logger logger=LoggerFactory.get(KcpUdpHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(KcpUdpHandler.class);
 	KcpChannelManager kcpChannelManager;
 	
 	public KcpUdpHandler(KcpChannelManager kcpChannelManager) {

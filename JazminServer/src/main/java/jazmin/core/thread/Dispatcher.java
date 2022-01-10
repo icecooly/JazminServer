@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.LongAdder;
 import jazmin.core.Jazmin;
 import jazmin.core.JazminThreadFactory;
 import jazmin.core.Lifecycle;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.misc.io.InvokeStat;
 
@@ -47,7 +47,7 @@ import jazmin.misc.io.InvokeStat;
  * 23 Dec, 2014
  */
 public class Dispatcher extends Lifecycle implements Executor{
-	private static Logger logger=LoggerFactory.get(Dispatcher.class);
+	private static Logger logger=LoggerFactory.getLogger(Dispatcher.class);
 	//
 	public static final Object EMPTY_ARGS[]=new Object[]{};
 	public static final DispatcherCallback EMPTY_CALLBACK=new DispatcherCallbackAdapter(){};
@@ -289,7 +289,7 @@ public class Dispatcher extends Lifecycle implements Executor{
 			invokeInCaller(invoke.getClass().getSimpleName(),invoke,method
 					,EMPTY_CALLBACK,EMPTY_ARGS);
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	//
@@ -327,7 +327,7 @@ public class Dispatcher extends Lifecycle implements Executor{
 					method.getName(),
 					getQueue().size());
 		}catch (Throwable e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	//
@@ -336,7 +336,7 @@ public class Dispatcher extends Lifecycle implements Executor{
 			Method method=invoke.getClass().getMethod("doInvoke");
 			invokeInPool(invoke.getClass().getSimpleName(),invoke,method);
 		} catch (Exception e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	//

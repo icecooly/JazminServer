@@ -19,8 +19,8 @@ import jazmin.core.monitor.MonitorAgent;
 import jazmin.core.thread.Dispatcher;
 import jazmin.driver.mq.file.FileTopicQueue;
 import jazmin.driver.mq.memory.MemoryTopicQueue;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.server.console.ConsoleServer;
 
@@ -30,7 +30,7 @@ import jazmin.server.console.ConsoleServer;
  */
 public class MessageQueueDriver extends Driver implements Registerable{
 	//
-	private static Logger logger=LoggerFactory.get(MessageQueueDriver.class);
+	private static Logger logger=LoggerFactory.getLogger(MessageQueueDriver.class);
 	//
 	public static final String TOPIC_QUEUE_TYPE_MEMORY="memory";
 	public static final String TOPIC_QUEUE_TYPE_FILE="file";
@@ -227,7 +227,7 @@ public class MessageQueueDriver extends Driver implements Registerable{
 				try{
 					takeMessage();
 				}catch(Exception e){
-					logger.catching(e);
+					logger.error(e.getMessage(),e);
 				}
 			}
 		}
@@ -260,7 +260,7 @@ public class MessageQueueDriver extends Driver implements Registerable{
 				try {
 					lockObject.wait(1000);//wait for 1 seconds
 				} catch (InterruptedException e) {
-					logger.catching(e);
+					logger.error(e.getMessage(),e);
 				}
 			}
 		}

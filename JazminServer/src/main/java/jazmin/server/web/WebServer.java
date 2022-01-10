@@ -19,8 +19,8 @@ import jazmin.core.Jazmin;
 import jazmin.core.Registerable;
 import jazmin.core.monitor.Monitor;
 import jazmin.core.monitor.MonitorAgent;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.server.console.ConsoleServer;
 import jazmin.server.web.mvc.ControllerStub;
@@ -53,7 +53,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
  */
 public class WebServer extends jazmin.core.Server implements Registerable{
 	//
-	private static Logger logger=LoggerFactory.get(WebServer.class);
+	private static Logger logger=LoggerFactory.getLogger(WebServer.class);
 	//
 	private Server server;
 	private HandlerCollection handlers;

@@ -7,8 +7,8 @@ import org.eclipse.jetty.server.RequestLog;
 import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -16,7 +16,7 @@ import jazmin.log.LoggerFactory;
  * 29 Dec, 2014
  */
 public class WebRequestLog extends AbstractLifeCycle implements RequestLog {
-	private static Logger logger = LoggerFactory.get(WebRequestLog.class);
+	private static Logger logger = LoggerFactory.getLogger(WebRequestLog.class);
 
 	public WebRequestLog() {
 		super();

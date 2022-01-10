@@ -3,7 +3,7 @@
  */
 package jazmin.server.web;
 
-import jazmin.log.LoggerFactory;
+import org.slf4j.LoggerFactory;
 
 import org.eclipse.jetty.util.log.AbstractLogger;
 import org.eclipse.jetty.util.log.Logger;
@@ -12,7 +12,7 @@ import org.eclipse.jetty.util.log.Logger;
  * @author yama 28 Dec, 2014
  */
 public class JettyLogger extends AbstractLogger {
-	private final static jazmin.log.Logger logger = LoggerFactory.get(JettyLogger.class);
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(JettyLogger.class);
 	public static boolean enable=false;
 	public JettyLogger() throws Exception {
 	}
@@ -102,7 +102,7 @@ public class JettyLogger extends AbstractLogger {
 
 	public void ignore(Throwable ignored) {
 		if(enable){
-			logger.warn(ignored);
+			logger.warn(ignored.getMessage(),ignored);
 		}
 	}
 

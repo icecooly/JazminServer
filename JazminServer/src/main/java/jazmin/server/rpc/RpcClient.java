@@ -21,8 +21,8 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.util.AttributeKey;
 import jazmin.core.Jazmin;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.io.IOWorker;
 import jazmin.misc.io.NetworkTrafficStat;
 import jazmin.server.rpc.codec.json.JSONDecoder;
@@ -37,7 +37,7 @@ import jazmin.server.rpc.codec.zjson.CompressedJSONEncoder;
  * 23 Dec, 2014
  */
 public class RpcClient {
-	private static Logger logger=LoggerFactory.get(RpcClient.class);
+	private static Logger logger=LoggerFactory.getLogger(RpcClient.class);
 	//
 	public static final AttributeKey<RpcSession> SESSION_KEY=
 										AttributeKey.valueOf("rpcsession");
@@ -218,7 +218,7 @@ public class RpcClient {
 			msg.type=RpcMessage.TYPE_HEARTBEAT;
 			session.write(msg);
 		}catch(Exception e){
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	//--------------------------------------------------------------------------
@@ -292,7 +292,7 @@ public class RpcClient {
 	 */
 	public RpcMessage invokeSync(RpcSession session,String serviceId,Object args[]){
 		if(breakerCounter.isBreak()){
-			logger.fatal("rpc client:"+session.cluster+" breaking,serviceId:"+serviceId);
+			logger.error("rpc client:"+session.cluster+" breaking,serviceId:"+serviceId);
 			throw new RpcBreakerException(
 					"rpc client:"+session.cluster+" breaking,serviceId:"+serviceId);
 		}
@@ -331,7 +331,7 @@ public class RpcClient {
 			Object args[],
 			RpcMessageCallback callback){
 		if(breakerCounter.isBreak()){
-			logger.fatal("rpc client:"+session.cluster+" breaking,serviceId:"+serviceId);
+			logger.error("rpc client:"+session.cluster+" breaking,serviceId:"+serviceId);
 			throw new RpcBreakerException(
 					"rpc client:"+session.cluster+" breaking,serviceId:"+serviceId);
 		}

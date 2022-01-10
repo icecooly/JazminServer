@@ -14,15 +14,15 @@ import jazmin.driver.mq.MessageQueueDriver;
 import jazmin.driver.mq.TopicChannel;
 import jazmin.driver.mq.TopicQueue;
 import jazmin.driver.mq.TopicSubscriber;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public class FileTopicChannel extends TopicChannel{
-	private static Logger logger=LoggerFactory.get(FileTopicChannel.class);
+	private static Logger logger=LoggerFactory.getLogger(FileTopicChannel.class);
 	//
 	LinkedList<IndexFile>indexSegmentFiles;
 	LinkedList<IndexFile>takeIndexSegmentFiles;

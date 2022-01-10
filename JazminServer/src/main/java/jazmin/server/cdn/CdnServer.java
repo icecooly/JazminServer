@@ -36,8 +36,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import jazmin.core.Jazmin;
 import jazmin.core.Server;
 import jazmin.core.thread.Dispatcher;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.CachePolicy;
 import jazmin.misc.InfoBuilder;
 import jazmin.misc.io.IOWorker;
@@ -53,7 +53,7 @@ import com.ning.http.client.providers.netty.NettyAsyncHttpProviderConfig;
  *
  */
 public class CdnServer extends Server {
-	private static Logger logger=LoggerFactory.get(CdnServer.class);
+	private static Logger logger=LoggerFactory.getLogger(CdnServer.class);
 	static final String SERVER_NAME="jazmin-cdn-server";
 	//
 	private int port;

@@ -12,8 +12,8 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.mysqlproxy.mysql.protocol.HandshakePacket;
 /**
  * 
@@ -21,7 +21,7 @@ import jazmin.server.mysqlproxy.mysql.protocol.HandshakePacket;
  *
  */
 public class ProxyBackendHandler extends ChannelHandlerAdapter {
-	private static Logger logger=LoggerFactory.get(ProxyFrontendHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(ProxyFrontendHandler.class);
 	//
     private final Channel inboundChannel;
     private HandshakePacket handshake;
@@ -98,7 +98,7 @@ public class ProxyBackendHandler extends ChannelHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-    	logger.catching(cause);
+    	logger.error(cause.getMessage(),cause);
         ProxyFrontendHandler.closeOnFlush(ctx.channel());
     }
 }

@@ -7,8 +7,8 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -16,7 +16,7 @@ import jazmin.log.LoggerFactory;
  */
 public class JazminClassloader extends URLClassLoader {
 	//
-	private static Logger logger=LoggerFactory.get(JazminClassloader.class);
+	private static Logger logger=LoggerFactory.getLogger(JazminClassloader.class);
 	public JazminClassloader(File workImage) throws MalformedURLException {
 		super(getJarUrl(workImage),JazminClassloader.class.getClassLoader());
 	}
@@ -26,7 +26,7 @@ public class JazminClassloader extends URLClassLoader {
 			try {
 				result.add(dir.toURI().toURL());
 			} catch (MalformedURLException e) {
-				logger.catching(e);
+				logger.error(e.getMessage(),e);
 			}
 		}
 		if(dir.isDirectory()) {
@@ -54,7 +54,7 @@ public class JazminClassloader extends URLClassLoader {
 		//
 		logger.info("classpath urls:");
 		urls.forEach((u)->{
-			logger.info(u);
+			logger.info(u.toString());
 		});
 		return urls.toArray(new URL[urls.size()]);
 	}

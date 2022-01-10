@@ -19,15 +19,15 @@ import jazmin.core.Lifecycle;
 import jazmin.core.Registerable;
 import jazmin.core.Server;
 import jazmin.core.app.AutoWiredObject.AutoWiredField;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * 
  * @author yama
  * 1 Apr, 2015
  */
 public class Application extends Lifecycle {
-	private static Logger logger=LoggerFactory.get(Application.class);
+	private static Logger logger=LoggerFactory.getLogger(Application.class);
 	//
 	private Map<Class<?>,AutoWiredObject>autoWiredMap=
 			new ConcurrentHashMap<Class<?>, AutoWiredObject>();
@@ -164,7 +164,7 @@ public class Application extends Lifecycle {
 			createWired(instance);
 			return instance;
 		}catch (Exception e) {
-			logger.fatal("can not create wired object of class "+clazz);
+			logger.error("can not create wired object of class "+clazz);
 			throw e;
 		}
 	}

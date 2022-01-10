@@ -6,15 +6,15 @@ package jazmin.server.webssh;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public class OutputStreamEndpoint implements PeerEndpoint{
-	private static Logger logger=LoggerFactory.get(OutputStreamEndpoint.class);
+	private static Logger logger=LoggerFactory.getLogger(OutputStreamEndpoint.class);
 	OutputStream os;
 	public OutputStreamEndpoint(OutputStream os){
 		this.os=os;
@@ -25,7 +25,7 @@ public class OutputStreamEndpoint implements PeerEndpoint{
 		try {
 			os.close();
 		} catch (IOException e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 
@@ -34,7 +34,7 @@ public class OutputStreamEndpoint implements PeerEndpoint{
 		try {
 			os.write(msg.getBytes("UTF-8"));
 		} catch (IOException e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	//

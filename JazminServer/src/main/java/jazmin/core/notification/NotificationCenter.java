@@ -16,8 +16,8 @@ import jazmin.core.Jazmin;
 import jazmin.core.Lifecycle;
 import jazmin.core.Registerable;
 import jazmin.core.thread.Dispatcher;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 
 /**
@@ -25,7 +25,7 @@ import jazmin.misc.InfoBuilder;
  *
  */
 public class NotificationCenter extends Lifecycle implements Registerable{
-	private static Logger logger=LoggerFactory.get(NotificationCenter.class);
+	private static Logger logger=LoggerFactory.getLogger(NotificationCenter.class);
 	//
 	List<NotificationListener> listeners;
 	public NotificationCenter() {

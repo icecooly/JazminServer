@@ -8,8 +8,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.relay.RelayChannel;
 import jazmin.server.relay.RelayServer;
 import jazmin.util.HexDumpUtil;
@@ -19,7 +19,7 @@ import jazmin.util.HexDumpUtil;
  *
  */
 public class HexDumpRelayChannel extends RelayChannel{
-	private static Logger logger=LoggerFactory.get(HexDumpRelayChannel.class);
+	private static Logger logger=LoggerFactory.getLogger(HexDumpRelayChannel.class);
 	private File dumpFile;
 	private BufferedWriter bufferedWriter;
 	//
@@ -37,7 +37,7 @@ public class HexDumpRelayChannel extends RelayChannel{
 				}
 			}
 		}catch (IOException e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 		if(bufferedWriter==null){
 			logger.error("can not create dump file:"+filePath);

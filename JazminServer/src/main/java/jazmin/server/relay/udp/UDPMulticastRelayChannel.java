@@ -14,8 +14,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.relay.NetworkRelayChannel;
 import jazmin.server.relay.RelayChannel;
 import jazmin.server.relay.RelayServer;
@@ -27,7 +27,7 @@ import jazmin.util.DumpUtil;
  *
  */
 public class UDPMulticastRelayChannel extends NetworkRelayChannel{
-	private static Logger logger=LoggerFactory.get(UDPMulticastRelayChannel.class);
+	private static Logger logger=LoggerFactory.getLogger(UDPMulticastRelayChannel.class);
 	private long idleTime;
 	Channel outboundChannel;
 	//

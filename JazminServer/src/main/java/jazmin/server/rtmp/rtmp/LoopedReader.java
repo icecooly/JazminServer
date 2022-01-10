@@ -22,8 +22,8 @@ package jazmin.server.rtmp.rtmp;
 import java.util.ArrayList;
 import java.util.List;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.rtmp.rtmp.message.Metadata;
 
 public class LoopedReader implements RtmpReader {

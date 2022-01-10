@@ -7,8 +7,8 @@ import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.AttributeKey;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.msg.codec.RequestMessage;
 /**
  * 
@@ -17,7 +17,7 @@ import jazmin.server.msg.codec.RequestMessage;
  */
 @Sharable
 public class TcpServerHandler extends ChannelHandlerAdapter{
-	private static Logger logger=LoggerFactory.get(TcpServerHandler.class);
+	private static Logger logger=LoggerFactory.getLogger(TcpServerHandler.class);
 	private static final AttributeKey<Session> SESSION_KEY=
 								AttributeKey.valueOf("s");
 	private MessageServer messageServer;

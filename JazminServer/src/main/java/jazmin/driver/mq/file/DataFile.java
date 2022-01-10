@@ -11,15 +11,15 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  *
  */
 public class DataFile {
-	private static Logger logger=LoggerFactory.get(DataFile.class);
+	private static Logger logger=LoggerFactory.getLogger(DataFile.class);
 	//
 	File dataFile;
 	FileChannel readChannel;
@@ -62,7 +62,7 @@ public class DataFile {
 		try {
 			writeChannel.force(true);
 		} catch (IOException e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	//
@@ -73,7 +73,7 @@ public class DataFile {
 			fis.close();
 			fos.close();
 		}catch (IOException e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 	}
 	//

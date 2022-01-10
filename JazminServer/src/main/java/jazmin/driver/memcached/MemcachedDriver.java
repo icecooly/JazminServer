@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.LongAdder;
 
 import jazmin.core.Driver;
 import jazmin.core.Jazmin;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.server.console.ConsoleServer;
 import jazmin.util.DumpUtil;
@@ -29,7 +29,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
  * 27 Dec, 2014
  */
 public class MemcachedDriver extends Driver{
-	private static Logger logger=LoggerFactory.get(MemcachedDriver.class);
+	private static Logger logger=LoggerFactory.getLogger(MemcachedDriver.class);
 	//--------------------------------------------------------------------------
 	private MemcachedClient memcachedClient;
 	private List<String> serverAddrs;

@@ -11,8 +11,8 @@ import java.nio.ByteBuffer;
 
 import jazmin.codec.rtp.RtpPacket;
 import jazmin.codec.rtp.RtpPayloadType;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.relay.RelayChannel;
 import jazmin.server.relay.RelayServer;
 
@@ -21,7 +21,7 @@ import jazmin.server.relay.RelayServer;
  *
  */
 public class RtpDumpRelayChannel extends RelayChannel{
-	private static Logger logger=LoggerFactory.get(RtpDumpRelayChannel.class);
+	private static Logger logger=LoggerFactory.getLogger(RtpDumpRelayChannel.class);
 	private File dumpFile;
 	private OutputStream outputStream;
 	private RtpPacket rtpPacket;
@@ -41,7 +41,7 @@ public class RtpDumpRelayChannel extends RelayChannel{
 				}
 			}
 		}catch (IOException e) {
-			logger.catching(e);
+			logger.error(e.getMessage(),e);
 		}
 		if(outputStream==null){
 			logger.error("can not create dump file:"+filePath);

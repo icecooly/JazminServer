@@ -13,15 +13,15 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.LongAdder;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yama
  * 23 Dec, 2014
  */
 public class RpcSession {
-	private static Logger logger=LoggerFactory.get(RpcSession.class);
+	private static Logger logger=LoggerFactory.getLogger(RpcSession.class);
 	//
 	boolean enableSSL;
 	String remoteHostAddress;

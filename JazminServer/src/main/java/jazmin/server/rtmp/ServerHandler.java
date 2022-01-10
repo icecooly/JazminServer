@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.rtmp.amf.Amf0Object;
 import jazmin.server.rtmp.rtmp.RtmpMessage;
 import jazmin.server.rtmp.rtmp.RtmpPublisher;

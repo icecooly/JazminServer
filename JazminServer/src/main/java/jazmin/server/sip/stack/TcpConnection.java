@@ -7,8 +7,8 @@ import io.netty.channel.Channel;
 
 import java.net.InetSocketAddress;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.sip.SipChannel;
 import jazmin.server.sip.io.sip.SipMessage;
 
@@ -16,7 +16,7 @@ import jazmin.server.sip.io.sip.SipMessage;
  * @author jonas@jonasborjesson.com
  */
 public class TcpConnection extends AbstractConnection {
-	private static Logger logger=LoggerFactory.get(TcpConnection.class);
+	private static Logger logger=LoggerFactory.getLogger(TcpConnection.class);
 	
     public TcpConnection(final Channel channel, final InetSocketAddress remote) {
         super(channel, remote);

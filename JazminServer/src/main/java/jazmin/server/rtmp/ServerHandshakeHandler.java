@@ -21,8 +21,8 @@ package jazmin.server.rtmp;
 
 import java.util.Arrays;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.server.rtmp.rtmp.RtmpHandshake;
 import jazmin.server.rtmp.rtmp.RtmpPublisher;
 import jazmin.server.rtmp.util.Utils;

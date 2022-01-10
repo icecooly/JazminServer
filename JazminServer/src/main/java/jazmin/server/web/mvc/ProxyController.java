@@ -15,8 +15,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jazmin.core.app.AppException;
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.util.JSONUtil;
 import jazmin.util.XssShieldUtil;
 
@@ -25,7 +25,7 @@ import jazmin.util.XssShieldUtil;
  *
  */
 public class ProxyController {
-	private static Logger logger=LoggerFactory.get(ProxyController.class);
+	private static Logger logger=LoggerFactory.getLogger(ProxyController.class);
 	//
 	public static class InvokeInfo{
 		public Object target;
@@ -144,7 +144,7 @@ public class ProxyController {
 		}finally {
 			if(exception!=null){
 				logger.error("invoke failed.classAndMethod:{} ",classAndMethod);
-				logger.catching(exception);
+				logger.error(exception.getMessage(),exception);
 			}
 			contextThreadLocal.set(null);
 			ctx.view(makeResultView(ret, exception));

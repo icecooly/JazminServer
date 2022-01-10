@@ -7,8 +7,8 @@ import io.netty.handler.codec.DecoderException;
 
 import java.util.List;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jazmin.misc.io.NetworkTrafficStat;
 import jazmin.server.rpc.RpcMessage;
 
@@ -20,7 +20,7 @@ import com.alibaba.fastjson.JSON;
  */
 public class JSONDecoder extends ByteToMessageDecoder {
 
-	private static Logger logger=LoggerFactory.get(JSONDecoder.class);
+	private static Logger logger=LoggerFactory.getLogger(JSONDecoder.class);
 	private static final int MAX_MESSAGE_LENGTH = 1024 * 1024*1024;
 	//
 	NetworkTrafficStat networkTrafficStat;

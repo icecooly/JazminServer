@@ -22,8 +22,8 @@ package jazmin.server.rtmp.io;
 import java.io.File;
 import java.io.RandomAccessFile;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
