@@ -9,9 +9,9 @@ import java.util.Date;
 
 import com.alibaba.druid.pool.DruidDataSource;
 
-import io.itit.smartjdbc.SmartDataSource;
-import io.itit.smartjdbc.SmartJdbc;
-import io.itit.smartjdbc.connection.TransactionManager;
+import jazmin.driver.jdbc.smartjdbc.SmartDataSource;
+import jazmin.driver.jdbc.smartjdbc.SmartJdbc;
+import jazmin.driver.jdbc.smartjdbc.connection.TransactionManager;
 import jazmin.core.Jazmin;
 import jazmin.log.Logger;
 import jazmin.log.LoggerFactory;

@@ -4,38 +4,46 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import jazmin.driver.jdbc.smartjdbc.Config;
-import jazmin.driver.jdbc.smartjdbc.Query;
-import jazmin.driver.jdbc.smartjdbc.QueryFieldInfo;
-import jazmin.driver.jdbc.smartjdbc.QueryInfo;
-import jazmin.driver.jdbc.smartjdbc.QueryWhere;
-import jazmin.driver.jdbc.smartjdbc.QueryWhere.Where;
-import jazmin.driver.jdbc.smartjdbc.SmartJdbcException;
-import jazmin.driver.jdbc.smartjdbc.SqlBean;
-import jazmin.driver.jdbc.smartjdbc.annotations.DomainField;
-import jazmin.driver.jdbc.smartjdbc.annotations.ForeignKey;
-import jazmin.driver.jdbc.smartjdbc.annotations.InnerJoin;
-import jazmin.driver.jdbc.smartjdbc.annotations.InnerJoins;
-import jazmin.driver.jdbc.smartjdbc.annotations.LeftJoin;
-import jazmin.driver.jdbc.smartjdbc.annotations.OrderBys;
-import jazmin.driver.jdbc.smartjdbc.annotations.OrderBys.OrderBy;
-import jazmin.driver.jdbc.smartjdbc.annotations.QueryDefine;
-import jazmin.driver.jdbc.smartjdbc.annotations.QueryField;
-import jazmin.driver.jdbc.smartjdbc.annotations.QueryField.OrGroup;
 import jazmin.log.Logger;
 import jazmin.log.LoggerFactory;
-import jazmin.util.ArrayUtils;
-import jazmin.util.ClassUtils;
-import jazmin.util.StringUtil;
+
+
+import jazmin.driver.jdbc.smartjdbc.Query;
+import jazmin.driver.jdbc.smartjdbc.Query.OrderBy;
+import jazmin.driver.jdbc.smartjdbc.SmartDataSource;
+import jazmin.driver.jdbc.smartjdbc.SmartJdbcException;
+import jazmin.driver.jdbc.smartjdbc.Types;
+import jazmin.driver.jdbc.smartjdbc.annotations.EntityField;
+import jazmin.driver.jdbc.smartjdbc.annotations.ForeignKey;
+import jazmin.driver.jdbc.smartjdbc.annotations.QueryField;
+import jazmin.driver.jdbc.smartjdbc.cache.EntityFieldInfo;
+import jazmin.driver.jdbc.smartjdbc.cache.EntityInfo;
+import jazmin.driver.jdbc.smartjdbc.cache.QueryFieldInfo;
+import jazmin.driver.jdbc.smartjdbc.cache.QueryInfo;
+import jazmin.driver.jdbc.smartjdbc.enums.AggregationFunction;
+import jazmin.driver.jdbc.smartjdbc.enums.ColumnType;
+import jazmin.driver.jdbc.smartjdbc.enums.ConditionType;
+import jazmin.driver.jdbc.smartjdbc.enums.JoinType;
+import jazmin.driver.jdbc.smartjdbc.enums.OrderByType;
+import jazmin.driver.jdbc.smartjdbc.enums.SqlOperator;
+import jazmin.driver.jdbc.smartjdbc.provider.entity.Aggregation;
+import jazmin.driver.jdbc.smartjdbc.provider.entity.Join;
+import jazmin.driver.jdbc.smartjdbc.provider.entity.Joins;
+import jazmin.driver.jdbc.smartjdbc.provider.entity.SelectSql;
+import jazmin.driver.jdbc.smartjdbc.provider.entity.SqlBean;
+import jazmin.driver.jdbc.smartjdbc.provider.where.QueryWhere;
+import jazmin.driver.jdbc.smartjdbc.provider.where.QueryWhere.WhereStatment;
+import jazmin.driver.jdbc.smartjdbc.provider.where.Where;
+import jazmin.driver.jdbc.smartjdbc.provider.where.WhereSqlBuilder;
+import jazmin.driver.jdbc.smartjdbc.util.ClassUtils;
+import jazmin.driver.jdbc.smartjdbc.util.StringUtil;
 
 /**
  * 
@@ -46,89 +54,39 @@ public class SelectProvider extends SqlProvider{
 	//
 	private static Logger logger=LoggerFactory.getLogger(SelectProvider.class);
 	//
-	public static class SelectField{//select tableAlias.field as asField
-		public String tableAlias;
-		public String field;
-		public String preAsField;
-		public String asField;
-		public boolean distinct;
-		public String statFunction;
-	}
-	//
-	public static class GroupByField{
-		public String tableAlias;
-		public String field;
-	}
-	//
-	public static class Join{
-		public String key;
-		public String table1Alias;
-		public Class<?> table1;
-		public String table1Field;
-		public String table2Alias;
-		public Class<?> table2;
-		public String table2Field;
-		public String[] table1Fields;
-		public String[] table2Fields;
-		public List<Join> joins;
-		//
-		public Join() {
-			joins=new ArrayList<>();
-		}
-	}
-	//
-	public static class SortField {
-		public String fieldName;
-		public int sortType;
-		public int order;
-	}
-	//
-	protected Class<?> domainClass;
-	protected Query query;
+	protected EntityInfo entity;
+	protected QueryInfo queryInfo;
+	protected Class<?> entityClass;
+	protected Query<?> query;
 	protected boolean isSelectCount;
 	protected boolean needPaging;
 	protected boolean needOrderBy;
-	protected boolean isForUpdate;
-	protected List<SelectField> selectFields;
-	protected boolean ingoreSelectDomainFiled;
+	protected List<EntityFieldInfo> selectFields;
 	protected Set<String> includeFields;
 	protected Set<String> excludeFields;//userName not user_name
-	protected Map<String,Join> innerJoinMap;
-	protected Map<String,String> innerJoinFieldAliasMap;
-	protected List<Join> innerJoins;//inner join tableName alias on 
-	protected List<Join> leftJoins;//left join tableName alias on 
 	protected QueryWhere qw;
-	protected List<GroupByField> groupBys;
+	protected List<EntityFieldInfo> groupBys;
+	protected List<Aggregation> aggregationList;
+	protected Joins joins;
 	//
-	public SelectProvider(Class<?> domainClass) {
-		this.domainClass=domainClass;
+	public SelectProvider(SmartDataSource smartDataSource) {
+		super(smartDataSource);
 		this.selectFields=new ArrayList<>();
 		this.includeFields=new LinkedHashSet<>();
 		this.excludeFields=new LinkedHashSet<>();
 		this.qw=QueryWhere.create();
 		this.groupBys=new ArrayList<>();
-		this.leftJoins=new ArrayList<>();
-		this.innerJoins=new ArrayList<>();
+		this.aggregationList=new ArrayList<>();
 		this.needOrderBy=true;
+	}
+	//
+	public SelectProvider entityClass(Class<?> entityClass) {
+		this.entityClass=entityClass;
+		return this;
 	}
 	//
 	public SelectProvider selectCount() {
 		this.isSelectCount=true;
-		return this;
-	}
-	//
-	public SelectProvider sum(String sumField) {
-		sum(MAIN_TABLE_ALIAS, sumField, sumField);
-		return this;
-	}
-	//
-	public SelectProvider sum(String alias,String field,String asField) {
-		select(alias, field,null,asField, false, "sum");
-		return this;
-	}
-	//
-	public SelectProvider ingoreSelectDomainFiled() {
-		this.ingoreSelectDomainFiled=true;
 		return this;
 	}
 	//
@@ -142,13 +100,16 @@ public class SelectProvider extends SqlProvider{
 		return this;
 	}
 	//
-	public SelectProvider query(Query query) {
+	public SelectProvider query(Query<?> query) {
 		this.query=query;
 		return this;
 	}
 	//
 	public SelectProvider query(QueryWhere qw) {
 		this.qw=qw;
+		if(qw.getLimitEnd()>0) {
+			needPaging(true);
+		}
 		return this;
 	}
 	//
@@ -156,18 +117,17 @@ public class SelectProvider extends SqlProvider{
 		return select(null, field);
 	}
 	//
-	public SelectProvider select(String tableAlias,String field) {
-		return select(tableAlias,field,null);
+	public SelectProvider select(String tableAlias,String name) {
+		return select(tableAlias,name,null);
 	}
 	//
-	public SelectProvider select(String tableAlias,String field,String asAlias) {
-		return select(tableAlias, field,null,asAlias, false, null);
+	public SelectProvider select(String tableAlias,String name, String asAlias) {
+		return select(tableAlias, name,asAlias, false, null);
 	}
 	//
-	public SelectProvider select(String tableAlias,String field,
-			String preAsField,String asField,boolean distinct,String statFunction) {
-		selectFields.add(createSelectField(tableAlias, field, 
-				preAsField,asField, distinct, statFunction));
+	public SelectProvider select(String tableAlias,String name,String asName,boolean distinct,String statFunction) {
+		selectFields.add(createSelectField(tableAlias, name, 
+				asName, distinct, statFunction));
 		return this;
 	}
 	//
@@ -189,70 +149,31 @@ public class SelectProvider extends SqlProvider{
 		return this;
 	}
 	//
-	protected SelectField createSelectField(String tableAlias,String field,
-			String preAsField,String asField,boolean distinct,String statFunction) {
-		SelectField sf=new SelectField();
+	protected EntityFieldInfo createSelectField(String tableAlias,String name,String asName,boolean distinct,String statFunction) {
+		EntityFieldInfo sf=new EntityFieldInfo();
 		sf.tableAlias=tableAlias;
-		sf.field=field;
-		sf.preAsField=preAsField;
-		sf.asField=asField;
+		sf.name=name;
+		sf.asName=asName;
 		sf.distinct=distinct;
 		sf.statFunction=statFunction;
 		return sf;
 	}
 	//
 	public SelectProvider where(String alias,String key,Object value){
-		return this.where(alias,key, "=", value);
+		return this.where(alias,key, SqlOperator.EQ, value);
 	}
 	//
 	public SelectProvider where(String key,Object value){
-		return this.where(MAIN_TABLE_ALIAS,key, "=", value);
+		return this.where(MAIN_TABLE_ALIAS,key, SqlOperator.EQ, value);
 	}
 	//
-	public SelectProvider where(String alias,String key,String op,Object value){
-		return where(alias, key, op, value, null);
-	}
-	//
-	public SelectProvider where(String alias,String key,String op,Object value,OrGroup orGroup){
-		qw.where(alias, key, op, value,orGroup);
+	public SelectProvider where(String alias,String key,SqlOperator op,Object value){
+		qw.where(alias, key, op, value);
 		return this;
 	}
 	//
-	public SelectProvider arrayOpt(String alias,String operator,String key,Object[] values,OrGroup orGroup){
-		if(StringUtil.isEmpty(operator)||operator.trim().equalsIgnoreCase("in")) {
-			qw.in(alias, key, values,orGroup);
-		}
-		else if(operator.trim().equalsIgnoreCase("not in")) {
-			qw.notin(alias, key, values,orGroup);
-		}
-		else if(operator.trim().equalsIgnoreCase("json_contains")) {
-			qw.jsonContains(alias, key, values,orGroup);
-		}
-		return this;
-	}
-	//
-	public SelectProvider in(String alias,String key,Object[] values){
-		qw.in(alias, key, values);
-		return this;
-	}
-	//
-	public SelectProvider notin(String alias,String key,Object[] values){
-		qw.notin(alias, key, values);
-		return this;
-	}
-	//
-	public SelectProvider jsonContains(String alias,String key,Object[] values){
-		qw.jsonContains(alias, key, values);
-		return this;
-	}
-	//
-	public SelectProvider whereSql(String sql,Object ...values){
-		qw.whereSql(sql,null, values);
-		return this;
-	}
-	//
-	public SelectProvider whereSql(String sql,OrGroup orGroup,Object ...values){
-		qw.whereSql(sql,orGroup, values);
+	public SelectProvider whereSql(String sql,Map<String,Object> values){
+		qw.whereSql(sql, values);
 		return this;
 	}
 	//
@@ -266,10 +187,21 @@ public class SelectProvider extends SqlProvider{
 		return this;
 	}
 	//
-	protected GroupByField createGroupByField(String tableAlias,String field) {
-		GroupByField groupByField=new GroupByField();
+	public SelectProvider groupBy(List<EntityFieldInfo> groupBys) {
+		this.groupBys=groupBys;
+		return this;
+	}
+	//
+	public SelectProvider aggregationList(List<Aggregation> aggregationList) {
+		this.aggregationList=aggregationList;
+		return this;
+	}
+	//
+	//
+	protected EntityFieldInfo createGroupByField(String tableAlias,String name) {
+		EntityFieldInfo groupByField=new EntityFieldInfo();
 		groupByField.tableAlias=tableAlias;
-		groupByField.field=field;
+		groupByField.name=name;
 		return groupByField;
 	}
 	//
@@ -289,79 +221,134 @@ public class SelectProvider extends SqlProvider{
 	}
 	//
 	public SelectProvider forUpdate(){
-		this.isForUpdate=true;
+		qw.isForUpdate();
 		return this;
 	}
 	//
-	protected List<Field> getQueryFields(Query query){
-		List<Field> fieldList=new ArrayList<>();
-		List<Field> fields = ClassUtils.getFieldList(query.getClass());
-		QueryDefine queryDefine = query.getClass().getAnnotation(QueryDefine.class);
-		if (queryDefine == null) {
-			throw new IllegalArgumentException("queryDefine not found in " + query.getClass().getName());
+	public SelectProvider of(String of){
+		qw.setOf(of);
+		return this;
+	}
+	//
+	//聚合函数
+	protected void addAggregation(StringBuilder sql) {
+		this.needPaging=false;
+		if(groupBys.size()==0) {//如果没有分组则不能排序
+			this.needOrderBy=false;
 		}
-		for (Field field : fields) {
+		//
+		for (EntityFieldInfo field : groupBys) {
+			sql.append(getSelectFieldSql(field));
+			sql.append(",");
+		}
+		//
+		for (Aggregation aggregation : aggregationList) {
+			sql.append("");
+			String func=aggregation.func.trim();
+			if(func.equalsIgnoreCase(AggregationFunction.COUNT.name())) {
+				sql.append(" count(1) ");
+			}
+			if(func.equalsIgnoreCase(AggregationFunction.AVG.name())) {
+				sql.append(" avg("+getExpr(aggregation)+") ");
+			}
+			if(func.equalsIgnoreCase(AggregationFunction.MAX.name())) {
+				sql.append(" max("+getExpr(aggregation)+") ");
+			}
+			if(func.equalsIgnoreCase(AggregationFunction.MIN.name())) {
+				sql.append(" min("+getExpr(aggregation)+") ");
+			}
+			if(func.equalsIgnoreCase(AggregationFunction.SUM.name())) {
+				sql.append(" sum("+getExpr(aggregation)+") ");
+			}
+			if(aggregation.asName!=null) {
+				sql.append(" as "+addIdentifier(aggregation.asName)).append(" ");
+			}
+			sql.append(",");
+		}
+		sql.deleteCharAt(sql.length()-1);
+	}
+	//
+	private String getExpr(Aggregation aggregation) {
+		StringBuilder sql=new StringBuilder();
+		if(aggregation.distinct) {
+			sql.append("distinct( ");
+		}
+		sql.append(aggregation.expr).append(" ");
+		if(aggregation.distinct) {
+			sql.append(") ");
+		}
+		return sql.toString();
+	}
+	//
+	protected void getQueryFields(List<QueryFieldInfo> fieldList,Object obj,QueryInfo queryInfo){
+		for (QueryFieldInfo fieldInfo : queryInfo.fieldList) {
 			try {
-				if (Modifier.isStatic(field.getModifiers()) || 
-						Modifier.isFinal(field.getModifiers())) {
+				Field field=fieldInfo.field;
+				if(!field.isAccessible()) {
+					field.setAccessible(true);
+				}
+				Object reallyValue = field.get(obj);
+				if (reallyValue == null) {
 					continue;
 				}
-				if((field.getType().equals(int.class)||field.getType().equals(short.class))&&
-						field.getName().endsWith("Sort")) {//ingore Sort Field
-					continue;
-				}
-				Class<?> fieldType = field.getType();
-				Object reallyValue = field.get(query);
-				if (reallyValue == null
-						|| (fieldType.equals(String.class) && StringUtil.isEmpty((String) reallyValue))) {
-					continue;
-				}
-				QueryField queryField = field.getAnnotation(QueryField.class);
-				if (queryField!= null && queryField.ingore()) {
-					continue;
-				}
-				fieldList.add(field);
+				fieldList.add(fieldInfo);
 			}catch (Exception e) {
 				logger.error(e.getMessage(),e);
 				throw new IllegalArgumentException(e);
 			}
 		}
-		return fieldList;
+		for (QueryInfo e : queryInfo.children) {
+			try {
+				if(!e.field.isAccessible()) {
+					e.field.setAccessible(true);
+				}
+				Object reallyValue = e.field.get(obj);
+				if (reallyValue == null) {
+					continue;
+				}
+				getQueryFields(fieldList,reallyValue,e);
+			} catch (Exception ex) {
+				logger.error(ex.getMessage(),ex);
+				throw new IllegalArgumentException(ex);
+			}	
+		}
 	}
 	//
-	protected boolean isValidInnerJoin(InnerJoin innerJoin) {
-		if(innerJoin==null) {
+	protected boolean isValidJoin(jazmin.driver.jdbc.smartjdbc.annotations.Join join) {
+		if(join==null||join.type()==null) {
 			return false;
 		}
-		if(innerJoin.table2().equals(void.class)) {
-			throw new SmartJdbcException("@InnerJoin table2 cannot be null");
+		if(join.table2().equals(void.class)) {
+			throw new SmartJdbcException("Join table2 cannot be null");
 		}
-		if(StringUtil.isEmpty(innerJoin.table1Field())) {
-			throw new SmartJdbcException("@InnerJoin table1Field cannot be null");
+		if(join.table1Fields().length==0) {
+			throw new SmartJdbcException("Join table1Fields cannot be null");
 		}
-		if(StringUtil.isEmpty(innerJoin.table2Field())) {
-			throw new SmartJdbcException("@InnerJoin table2Field cannot be null");
+		if(join.table2Fields().length==0) {
+			throw new SmartJdbcException("Join table2Fields cannot be null");
+		}
+		if(join.table1Fields().length!=join.table2Fields().length) {
+			throw new SmartJdbcException("Join table1Fields length not equal table2Fields length");
 		}
 		return true;
 	}
 	//
-	protected Map<String, Join> getInnerJoins(Query query) {
-		Map<String, Join> map = new LinkedHashMap<>();
+	protected void createJoins() {
+		if(entity!=null) {
+			joins=entity.joins;
+		}
+		if(joins==null) {
+			joins=new Joins();
+		}
 		if(query==null) {
-			return map;
+			return;
 		}
-		Class<?> queryClass=query.getClass();
-		QueryDefine qd=queryClass.getAnnotation(QueryDefine.class);
-		if(qd==null||qd.domainClass().equals(void.class)) {
-			throw new IllegalArgumentException("domainClass not found /"+query.getClass().getSimpleName());
-		}
-		List<Field> fields=getQueryFields(query);
-		int index = 1;
-		innerJoinFieldAliasMap=new HashMap<>();
-		for (Field field : fields) {
-			InnerJoin innerJoin=field.getAnnotation(InnerJoin.class);
-			InnerJoins innerJoins=field.getAnnotation(InnerJoins.class);
-			QueryField queryField=field.getAnnotation(QueryField.class);
+		List<QueryFieldInfo> fieldInfos=new ArrayList<>();
+		getQueryFields(fieldInfos,query,queryInfo);
+		for (QueryFieldInfo fieldInfo : fieldInfos) {
+			jazmin.driver.jdbc.smartjdbc.annotations.Join innerJoin=fieldInfo.join;
+			jazmin.driver.jdbc.smartjdbc.annotations.Joins innerJoins=fieldInfo.joins;
+			QueryField queryField=fieldInfo.queryField;
 			String foreignKeyFields="";
 			if(queryField!=null) {
 				foreignKeyFields=queryField.foreignKeyFields();
@@ -369,52 +356,37 @@ public class SelectProvider extends SqlProvider{
 			if(innerJoin==null&&innerJoins==null&&StringUtil.isEmpty(foreignKeyFields)) {
 				continue;
 			}
-			List<InnerJoin> innerJoinsList=new ArrayList<>();
-			if(isValidInnerJoin(innerJoin)) {
+			List<jazmin.driver.jdbc.smartjdbc.annotations.Join> innerJoinsList=new ArrayList<>();
+			if(isValidJoin(innerJoin)) {
 				innerJoinsList.add(innerJoin);
 			}
-			if(innerJoins!=null&&innerJoins.innerJoins()!=null) {
-				for (InnerJoin join : innerJoins.innerJoins()) {
-					if(isValidInnerJoin(join)) {
+			if(innerJoins!=null&&innerJoins.joins()!=null) {
+				for (jazmin.driver.jdbc.smartjdbc.annotations.Join join : innerJoins.joins()) {
+					if(isValidJoin(join)) {
 						innerJoinsList.add(join);
 					}
 				}
 			}
 			if(innerJoinsList.size()>0) {//use annotation
 				Join join=null;
-				Class<?> table1=domainClass;
+				Class<?> table1=entityClass;
 				String table1Alias=MAIN_TABLE_ALIAS;
-				for (InnerJoin j: innerJoinsList) {
-					String key=j.table1Field()+"-"+j.table2().getName()+"-"+j.table2Field();
-					if(join==null) {
-						join = map.get(key);
-						if(join==null) {
-							join=createInnerJoin(key,table1Alias,"i"+(index++),table1,j.table2(),j.table1Field(),
-									j.table2Field(),j.table1Fields(),j.table2Fields());
-							map.put(key, join);
-						}
-					}else {
-						Join childJoin=getJoin(key, join.joins);
-						if(childJoin==null) {
-							childJoin=createInnerJoin(key,table1Alias,"i"+(index++),table1,j.table2(),j.table1Field(),
-									j.table2Field(),j.table1Fields(),j.table2Fields());
-							join.joins.add(childJoin);
-						}
-						join=childJoin;
-					}
+				for (jazmin.driver.jdbc.smartjdbc.annotations.Join j: innerJoinsList) {
+					join=createJoin(j.type(),table1,j.table2(),table1Alias,j.table2Alias(),
+									j.table1Fields(),j.table2Fields());
 					table1=join.table2;
 					table1Alias=join.table2Alias;
 				}
-				innerJoinFieldAliasMap.put(field.getName(), table1Alias);
+				fieldInfo.tableAlias=table1Alias;
 			}else if(!StringUtil.isEmpty(foreignKeyFields)) {
 				String[] foreignKeyIds=foreignKeyFields.split(",");
-				Class<?> table1=domainClass;
+				Class<?> table1=entityClass;
 				String table1Alias=MAIN_TABLE_ALIAS;
 				Join join=null;
 				for (String id : foreignKeyIds) {
 					Field foreignKeyField=null;
 					try {
-						foreignKeyField=table1.getField(id);
+						foreignKeyField=ClassUtils.getExistedField(table1,id);
 					} catch (Exception e) {
 						logger.error(e.getMessage(),e);
 						throw new IllegalArgumentException(e.getMessage()+"/"+table1.getSimpleName());
@@ -422,241 +394,128 @@ public class SelectProvider extends SqlProvider{
 					ForeignKey foreignKey=foreignKeyField.getAnnotation(ForeignKey.class);
 					if(foreignKey==null) {
 						throw new IllegalArgumentException("@ForeignKey not found in "+
-									domainClass.getSimpleName()+"."+foreignKeyField.getName());
+									entityClass.getSimpleName()+"."+foreignKeyField.getName());
 					}
-					Class<?> table2=foreignKey.domainClass();
+					Class<?> table2=foreignKey.entityClass();
 					String table2Field=foreignKey.field();
-					String key=id+"-"+table2.getName()+"-"+table2Field;
-					if(join==null) {
-						join = map.get(key);
-						if(join==null) {
-							join=createInnerJoin(key,table1Alias,"i"+(index++),table1, table2,id,table2Field,null,null);
-							map.put(key, join);
-						}
-					}else {
-						Join childJoin=getJoin(key, join.joins);
-						if(childJoin==null) {
-							childJoin=createInnerJoin(key,table1Alias,"i"+(index++),table1,table2,id,table2Field,null,null);
-							join.joins.add(childJoin);
-						}
-						join=childJoin;
-					}
+					join=createJoin(JoinType.LEFT_JOIN,
+							table1, table2,
+							table1Alias,null,
+							new String[] {id},new String[] {table2Field});
 					table1=table2;
 					table1Alias=join.table2Alias;
 				}
-				innerJoinFieldAliasMap.put(field.getName(), table1Alias);
-			}else {
-				continue;
+				fieldInfo.tableAlias=table1Alias;
 			}
 		}
-		return map;
 	}
 	//
-	protected Join createInnerJoin(String key,String table1Alias,String table2Alias,
-			Class<?> table1,Class<?> table2,String table1Field,String table2Field,
-			String[] table1Fields,String[] table2Fields) {
-		Join join=new Join();
-		join.key=key;
-		join.table1Alias=table1Alias;
-		join.table2Alias=table2Alias;
-		join.table1Field=table1Field;
-		join.table2Field=table2Field;
-		join.table1Fields=table1Fields;
-		join.table2Fields=table2Fields;
-		join.table1=table1;
-		join.table2=table2;
-		this.innerJoins.add(join);
-		return join;
-	}
-	//
-	protected QueryInfo createQueryInfo(Query query){
-		List<Field> fields = ClassUtils.getFieldList(query.getClass());
-		QueryDefine queryDefine = query.getClass().getAnnotation(QueryDefine.class);
-		if (queryDefine == null) {
-			throw new IllegalArgumentException("queryDefine not found in " + query.getClass().getName());
-		}
-		QueryInfo info=new QueryInfo();
-		for (Field field : fields) {
-			try {
-				if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
-					continue;
-				}
-				if(field.getType().equals(int.class)&&field.getName().endsWith("Sort")) {
-					continue;
-				}
-				Class<?> fieldType = field.getType();
-				Object reallyValue = field.get(query);
-				if (reallyValue == null
-						|| (fieldType.equals(String.class) && StringUtil.isEmpty((String) reallyValue))) {
-					continue;
-				}
-				QueryField queryField = field.getAnnotation(QueryField.class);
-				if (queryField != null && queryField.ingore()) {
-					continue;
-				}
-				QueryFieldInfo fieldInfo=new QueryFieldInfo();
-				fieldInfo.fieldType=fieldType;
-				fieldInfo.value=reallyValue;
-				fieldInfo.queryField=queryField;
-				fieldInfo.field=field;
-				if (queryField != null) {
-					OrGroup orGroup=queryField.orGroup();
-					if(!StringUtil.isEmpty(orGroup.group())) {
-						fieldInfo.orGroup=queryField.orGroup();
-					}
-				}
-				info.fields.add(fieldInfo);
-				
-			}catch (Exception e) {
-				logger.error(e.getMessage(), e);
-				throw new IllegalArgumentException(e.getMessage());
-			}
-		}
-		return info;
-	}
 	/**
 	 * 
-	 * @param q
+	 * @param query
 	 */
-	protected void addWheres(Query q) {
-		if(q==null) {
+	protected void addWheres(Query<?> query) {
+		if(query==null) {
 			return;
 		}
-		QueryInfo queryInfo=createQueryInfo(q);
 		Map<String,Object> paraMap=new HashMap<>();
-		List<QueryFieldInfo> fields=queryInfo.fields;
-		for (QueryFieldInfo info : fields) {
-			Field field=info.field;
-			try {
-				Object value=field.get(q);
-				paraMap.put(field.getName(), value);
-			} catch (Exception e) {
-				logger.error(e.getMessage(),e);
-				throw new SmartJdbcException(e.getMessage());
-			}
+		if(!query.getParams().isEmpty()) {
+			paraMap.putAll(query.getParams());
 		}
-		for (QueryFieldInfo info : fields) {
-			Field field=info.field;
-			try {
-				Class<?> fieldType = field.getType();
-				Object value=field.get(q);
+		createParaMap(paraMap, query, queryInfo);
+		addWheres(qw.getWhere(), paraMap, query, queryInfo);
+	}
+	//
+	private void createParaMap(Map<String,Object> paraMap,Object obj,QueryInfo queryInfo) {
+		try {
+			List<QueryFieldInfo> fields=queryInfo.fieldList;
+			for (QueryFieldInfo info : fields) {
+				Field field=info.field;
+				try {
+					if(!field.isAccessible()) {
+						field.setAccessible(true);
+					}
+					Object value=field.get(obj);
+					paraMap.put(info.fieldName, value);
+				} catch (Exception e) {
+					logger.error(e.getMessage(),e);
+					throw new SmartJdbcException(e.getMessage());
+				}
+			}
+			for (QueryInfo child : queryInfo.children) {
+				if(!child.field.isAccessible()) {
+					child.field.setAccessible(true);
+				}
+				Object childObj=child.field.get(obj);
+				if(childObj==null) {
+					continue;
+				}
+				createParaMap(paraMap, childObj, child);
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			throw new IllegalArgumentException(e.getMessage());
+		}
+		
+	}
+	//
+	protected void addWheres(Where w,Map<String,Object> paraMap,Object obj,QueryInfo queryInfo) {
+		try {
+			for (QueryFieldInfo info : queryInfo.fieldList) {
+				Field field=info.field;
+				if(!field.isAccessible()) {
+					field.setAccessible(true);
+				}
+				Object value=field.get(obj);
+				if(value==null) {
+					continue;
+				}
 				QueryField queryField=field.getAnnotation(QueryField.class);
-				String alias = MAIN_TABLE_ALIAS;
-				InnerJoins innerJoins=field.getAnnotation(InnerJoins.class);
-				InnerJoin innerJoin=field.getAnnotation(InnerJoin.class);
-				if(innerJoin!=null||(innerJoins!=null&&innerJoins.innerJoins()!=null)||
-						(queryField!=null&&!StringUtil.isEmpty(queryField.foreignKeyFields()))) {
-					alias=innerJoinFieldAliasMap.get(field.getName());
+				String alias = info.tableAlias;
+				if(alias==null) {
+					if(!StringUtil.isEmpty(queryField.alias())) {
+						alias=queryField.alias();
+					}else {
+						alias=SqlProvider.MAIN_TABLE_ALIAS;
+					}
 				}
 				//
 				if(queryField!=null&&!StringUtil.isEmpty(queryField.whereSql())) {//whereSql check first
 					String whereSql=queryField.whereSql();
-					SqlBean sqlBean=parseSql(whereSql, paraMap);//eg:userName like #{userName}
-					whereSql(sqlBean.sql,info.orGroup,sqlBean.parameters);
+					w.whereSql(whereSql,paraMap);
 				}else {
 					String dbFieldName=convertFieldName(field.getName());
 					if(queryField!=null&&(!StringUtil.isEmpty(queryField.field()))) {
 						dbFieldName=convertFieldName(queryField.field());
 					}
-					String operator="";
-					if(queryField!=null&&(!StringUtil.isEmpty(queryField.operator()))) {
+					SqlOperator operator=SqlOperator.EQ;//default eq
+					if(queryField!=null) {
 						operator=queryField.operator();
 					}
-					if (fieldType.equals(int[].class)||
-							fieldType.equals(short[].class)||
-							fieldType.equals(byte[].class)||
-							fieldType.equals(String[].class)) {//in or not in
-						if(fieldType.equals(int[].class)) {
-							arrayOpt(alias,operator,dbFieldName, ArrayUtils.convert((int[])value),info.orGroup);
-						}else if(fieldType.equals(short[].class)) {
-							arrayOpt(alias,operator,dbFieldName, ArrayUtils.convert((short[])value),info.orGroup);
-						}else if(fieldType.equals(byte[].class)) {
-							arrayOpt(alias,operator, dbFieldName, ArrayUtils.convert((byte[])value),info.orGroup);
-						}else if(fieldType.equals(String[].class)) {
-							arrayOpt(alias,operator, dbFieldName, ArrayUtils.convert((String[])value),info.orGroup);
-						}
-						continue;
-					}else if (StringUtil.isEmpty(operator)) {
-						if(fieldType.equals(String.class)) {//字符串默认like
-							operator="like";
-						}else {
-							operator="=";
-						}
-					}
-					where(alias,dbFieldName,operator,value,info.orGroup);
+					w.where(alias,dbFieldName,operator,value);
 				}
-			} catch (Exception e) {
-				logger.error(e.getMessage(),e);
-				throw new IllegalArgumentException(e.getMessage());
 			}
-		}
-	}
-	public static boolean preParseSql(String sql) {
-		Pattern p=Pattern.compile("\\#\\{[a-zA-Z_$][a-zA-Z0-9_$]*\\}");
-		Matcher m = p.matcher(sql);
-		if(m.find()) { 
-		    return true;
-		}
-		return false;
-	}
-	//
-	/**
-	 * 
-	 * @param data
-	 * @param regex
-	 * @return
-	 */
-	public static List<String> matchs(String data, String regex) {
-		List<String> result = new ArrayList<>();
-		if (data == null || regex == null) {
-			return result;
-		}
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(data);
-		while (matcher.find()) {
-			result.add(matcher.group(1));
-		}
-		return result;
-	}
-	//
-	public static SqlBean parseSql(String sql,Map<String,Object> paraMap) {
-		Pattern p=Pattern.compile("\\#\\{([a-zA-Z_][a-zA-Z0-9_]*)\\}");
-		Matcher m = p.matcher(sql);
-		Pattern $p=Pattern.compile("\\$\\{([a-zA-Z_][a-zA-Z0-9_]*)\\}");
-		Matcher $m = $p.matcher(sql);
-		String newSql=sql;
-		Object[] values=null;
-		List<String> groups=new ArrayList<>();
-		while(m.find()) { 
-		    groups.add(m.group(1));
-		}
-		newSql=m.replaceAll("?");
-		values=new Object[groups.size()];
-		int i=0;
-		for (String group : groups) {
-			Object value=paraMap.get(group);
-			if(value==null) {
-				throw new SmartJdbcException(group+" not found.\nsql:"+sql+
-						"\nall can choose paras is:"+paraMap.keySet()); 
+			//
+			for (QueryInfo child : queryInfo.children) {
+				if(!child.field.isAccessible()) {
+					child.field.setAccessible(true);
+				}
+				Object childObj=child.field.get(obj);
+				if(childObj==null) {
+					continue;
+				}
+				Where wc=new Where();
+				if(child.conditionType.equals(ConditionType.AND)) {
+					w.and(wc);
+				}else {
+					w.or(wc);
+				}
+				addWheres(wc, paraMap, childObj, child);
 			}
-			values[i++]=value;
+		} catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			throw new IllegalArgumentException(e.getMessage());
 		}
-		//
-		while($m.find()) { 
-			String group=$m.group(1);
-			String replaceGroup="\\$\\{"+group+"\\}";
-			Object value=paraMap.get(group);
-			if(value==null) {
-				throw new SmartJdbcException(group+" not found.\nsql:"+sql+
-						"\nall can choose paras is:"+paraMap.keySet()); 
-			}
-			if(value instanceof String) {
-				newSql=newSql.replaceAll(replaceGroup,"'"+value.toString()+"'");
-			}else {
-				newSql=newSql.replaceAll(replaceGroup,value.toString());
-			}
-		}
-		return new SqlBean(newSql,values);
 	}
 	//
 	protected int getSortFieldOrder(String[] sortFields,String fieldName) {
@@ -673,88 +532,58 @@ public class SelectProvider extends SqlProvider{
 		return 0;
 	}
 	//
-	protected void addOrderBy(Query query) {
+	protected void addOrderBy(Query<?> query) {
 		List<String> orderByList=addOrderByList(query);
 		for (String e : orderByList) {
 			orderBy(e);
 		}
 	}
 	//
-	public List<String> addOrderByList(Query query) {
+	public List<String> addOrderByList(Query<?> query) {
 		List<String> orderByList=new ArrayList<>();
 		if(query==null) {
 			return orderByList;
 		}
-		boolean haveSort=false;
-		List<Field> fields = ClassUtils.getFieldList(query.getClass());
-		String[] querySortFields=query.sortFields;
-		List<SortField> sortFields=new ArrayList<>();
-		for (Field field : fields) {
-			if (Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers())) {
-				continue;
-			}
-			if(!field.getType().equals(int.class)) {
-				continue;
-			}
-			String fieldName=field.getName();
-			if(!fieldName.endsWith("Sort")) {
-				continue;
-			}
-			try {
-				int sortType=field.getInt(query);
-				if(sortType==0) {
-					continue;
-				}
-				String reallyFieldName=fieldName.substring(0,fieldName.length()-4);
-				String dbFieldName=convertFieldName(reallyFieldName);
-				SortField sortField=new SortField();
-				sortField.fieldName=dbFieldName;
-				sortField.sortType=sortType;
-				sortField.order=getSortFieldOrder(querySortFields,fieldName);
-				sortFields.add(sortField);
-				haveSort=true;
-			} catch (Exception e1) {
-				logger.error(e1.getMessage(),e1);
+		if(query.getOrderByList()==null||query.getOrderByList().isEmpty()) {
+			if(Query.defaultOrderBy!=null) {
+				return Arrays.asList(Query.defaultOrderBy);
+			}else {
+				return orderByList;
 			}
 		}
-		sortFields.sort((a,b)->{
-			return a.order-b.order;
-		});
-		for (SortField e : sortFields) {
-			if(e.sortType==Query.SORT_TYPE_ASC) {
-				orderByList.add(e.fieldName+" asc");
-			}else if(e.sortType==Query.SORT_TYPE_DESC) {
-				orderByList.add(e.fieldName+" desc");
+		for (OrderBy order : query.getOrderByList()) {
+			String fieldName=order.field;
+			if(fieldName==null) {
+				continue;
 			}
-		}
-		if(!haveSort) {
-			OrderBys orderBys=query.getClass().getAnnotation(OrderBys.class);
-			if(orderBys!=null&&orderBys.orderBys()!=null) {
-				for (OrderBy orderBy : orderBys.orderBys()) {
-					if (query.orderType != null&& query.orderType == orderBy.orderType()) {
-						orderByList.add(orderBy.sql());
-					}
-				}
+			StringBuilder orderby=new StringBuilder();
+			if(!StringUtil.isEmpty(order.tableAlias)) {
+				orderby.append(order.tableAlias).append(".");
 			}
-			if(Config.getDefaultOrderBy()!=null) {
-				Config.getDefaultOrderBy().accept(this,query);
+			String orderBy=order.type;
+			String dbField=convertFieldName(fieldName);
+			orderby.append(dbField);
+			if(orderBy.equalsIgnoreCase(OrderByType.ASC.name())) {
+				orderby.append(" asc ");
+			}else if(orderBy.equalsIgnoreCase(OrderByType.DESC.name())) {
+				orderby.append(" desc ");
 			}
+			orderByList.add(orderby.toString());
 		}
 		return orderByList;
 	}
 	//
-	protected void addPaging(Query query) {
+	protected void addPaging() {
 		if(query==null) {
 			return;
 		}
-		this.limit(query.getStartPageIndex(),query.pageSize);
+		this.limit(query.getStartPageIndex(),query.getPageSize());
 	}
 	//
-	protected void buildSelectDomainFields(){
-		int index=1;
-		Map<String, Join> map = new LinkedHashMap<>();
-		List<Field> fields = ClassUtils.getFieldList(domainClass);
-		for (Field field : fields) {
+	protected void buildSelectFields(){
+		entity=EntityInfo.create(entityClass);
+		for (EntityFieldInfo fieldInfo : entity.fieldList) {
+			Field field=fieldInfo.field;
 			if (Modifier.isStatic(field.getModifiers())|| Modifier.isFinal(field.getModifiers())) {
 				continue;
 			}
@@ -763,245 +592,122 @@ public class SelectProvider extends SqlProvider{
 			}
 			if(excludeFields.contains(field.getName())){
 				continue;
-			}
-			DomainField domainField = field.getAnnotation(DomainField.class);
-			if(domainField!=null&&domainField.ignoreWhenSelect()) {
+			}	
+			EntityField entityField = fieldInfo.entityField;
+			if(entityField!=null&&entityField.ignoreWhenSelect()) {
 				continue;
 			}
-			if(domainField==null) {
-				select(MAIN_TABLE_ALIAS, field.getName());
-				continue;
+			if(fieldInfo.tableAlias==null) {
+				fieldInfo.tableAlias=SqlProvider.MAIN_TABLE_ALIAS;//默认主表
 			}
-			boolean distinct=domainField.distinct();
-			String statFunc=domainField.statFunc();
-			String reallyName=field.getName();
-			if(!StringUtil.isEmpty(domainField.field())) {
-				reallyName=domainField.field();
-			}
-			//
-			LeftJoin leftJoin=field.getAnnotation(LeftJoin.class);
-			if(leftJoin!=null) {
-				Join join=createLeftJoin(field.getName(),MAIN_TABLE_ALIAS,"l"+(index++),
-						domainClass,leftJoin.table2(),leftJoin.table1Field(),leftJoin.table2Field());
-				select(join.table2Alias,reallyName,null,field.getName(),distinct,statFunc);
-			}else if(!StringUtil.isEmpty(domainField.foreignKeyFields())) {
-				String foreignKeyId = domainField.foreignKeyFields();
-				String[] foreignKeyIds=foreignKeyId.split(",");
-				Class<?> table1=domainClass;
-				String table1Alias=MAIN_TABLE_ALIAS;
-				Join join=null;
-				for (String id : foreignKeyIds) {
-					Field foreignKeyField=null;
-					try {
-						foreignKeyField=table1.getField(id);
-					} catch (Exception e) {
-						logger.error(e.getMessage(),e);
-						throw new IllegalArgumentException(e.getMessage()+"/"+table1.getSimpleName());
-					}
-					ForeignKey foreignKey=foreignKeyField.getAnnotation(ForeignKey.class);
-					if(foreignKey==null) {
-						throw new IllegalArgumentException("@ForeignKey not found in "+
-									domainClass.getSimpleName()+"."+foreignKeyField.getName());
-					}
-					Class<?> table2=foreignKey.domainClass();
-					String key=id;
-					if(join==null) {
-						join = map.get(key);
-						if(join==null) {
-							join=createLeftJoin(key,table1Alias,"l"+(index++),table1, table2,id);
-							map.put(key, join);
-						}
-					}else {
-						Join childJoin=getJoin(key, join.joins);
-						if(childJoin==null) {
-							childJoin=createLeftJoin(key,table1Alias,"l"+(index++),table1,table2,id);
-							join.joins.add(childJoin);
-						}
-						join=childJoin;
-					}
-					table1=table2;
-					table1Alias=join.table2Alias;
+			if(entityField==null) {
+				selectFields.add(fieldInfo);
+			}else if(Types.WRAP_TYPES.contains(field.getType())){//基本字段类型
+				selectFields.add(fieldInfo);
+			}else if(field.getGenericType() instanceof ParameterizedType){//List Set Map
+				selectFields.add(fieldInfo);
+			}else {//查询对象字段列表
+				List<Field> subClassFields=ClassUtils.getPersistentFields((Class<?>)field.getGenericType());
+				for (Field subClassField : subClassFields) {
+					selectFields.add(createSelectField(fieldInfo.tableAlias, subClassField.getName(), 
+							field.getName()+"$"+subClassField.getName(), false, null));
 				}
-				if(WRAP_TYPES.contains(field.getType())){
-					addSelect(join.table2Alias, field, domainField);
-				}else if(field.getGenericType() instanceof ParameterizedType){
-					addSelect(join.table2Alias, field, domainField);
-				}else {
-					List<Field> subClassFields=getPersistentFields((Class<?>)field.getGenericType());
-					for (Field subClassField : subClassFields) {
-						select(join.table2Alias,subClassField.getName(),field.getName()+"_",
-								subClassField.getName(),distinct,statFunc);
-					}
-				}
-			}else {
-				addSelect(MAIN_TABLE_ALIAS, field, domainField);
-				continue;
 			}
 		}
 	}
 	//
-	protected void addSelect(String tableAlias,Field field,DomainField domainField) {
-		String selectField=field.getName();
-		String asField=null;
-		if(!StringUtil.isEmpty(domainField.field())) {
-			asField=field.getName();
-			selectField=domainField.field();
-		}
-		if(!StringUtil.isEmpty(domainField.statFunc())) {
-			asField=field.getName();
-		}
-		select(tableAlias,selectField,null,asField,domainField.distinct(),domainField.statFunc());
+	protected Join createJoin(JoinType type, 
+			Class<?> table1,Class<?> table2,String table1Alias,String table2Alias,
+			String[] table1Fields,String[] table2Fields) {
+		return joins.addJoin(type, table1, table2,
+				table1Alias, table2Alias, table1Fields, table2Fields);
 	}
 	//
-	protected String getSinglePrimaryKey(Class<?> clazz) {
-		List<Field> list=SqlProvider.getPrimaryKey(clazz);
-		if(list.size()>1||list.size()==0) {
-			throw new SmartJdbcException("PrimaryKey column can only be one");
-		}
-		return list.get(0).getName();
-	}
-	//
-	protected Join getJoin(String key,List<Join> list) {
-		for (Join join : list) {
-			if(join.key.equals(key)) {
-				return join;
-			}
-		}
-		return null;
-	}
-	//
-	protected Join createLeftJoin(String key,String table1Alias,String table2Alias,Class<?> table1,Class<?> table2,
-			String table1Field) {
-		return createLeftJoin(key, table1Alias, table2Alias, table1, table2, table1Field, getSinglePrimaryKey(table2));
-	}
-	//
-	protected Join createLeftJoin(String key,String table1Alias,String table2Alias,Class<?> table1,Class<?> table2,
-			String table1Field,String table2Field) {
-		Join join = new Join();
-		join.key=key;
-		join.table1Alias=table1Alias;
-		join.table2Alias=table2Alias;
-		join.table1=table1;
-		join.table2 = table2;
-		join.table1Field=table1Field;
-		join.table2Field= table2Field;
-		leftJoins.add(join);
-		return join;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	protected SqlBean queryCount() {
-		StringBuffer sql = new StringBuffer();
-		sql.append("\nselect count(1) \n");
-		this.needPaging=false;
-		return build(sql);
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	protected SqlBean query() {
-		StringBuffer sql = new StringBuffer();
-		if(!ingoreSelectDomainFiled) {
-			buildSelectDomainFields();
-		}
-		sql.append("\nselect ");
-		if(selectFields.size()==0) {
-			throw new IllegalArgumentException("no select field found in "+domainClass.getName());
-		}
-		addSelectFields(sql);
-		return build(sql);
-	}
-	
-	protected void addSelectFields(StringBuffer sql) {
-		for (SelectField field : selectFields) {
-			if(field.distinct) {
-				sql.append(" distinct ");
-			}
-			if(StringUtil.isEmpty(field.statFunction)) {
-				sql.append(field.tableAlias).append(".`");
-				sql.append(convertFieldName(field.field)).append("`");
-			}else {
-				sql.append(field.statFunction);
-				sql.append("(");
-				sql.append(field.tableAlias).append(".`");
-				sql.append(convertFieldName(field.field)).append("`");
-				sql.append(")");
-			}
-			if(field.asField!=null) {
-				String asField=convertFieldName(field.asField);
-				if(field.preAsField!=null) {
-					asField=field.preAsField+asField;
-				}
-				sql.append(" as `").append(asField).append("`");
-			}
+	protected void addSelectFields(StringBuilder sql) {
+		for (EntityFieldInfo field : selectFields) {
+			sql.append(getSelectFieldSql(field));
 			sql.append(",");
 		}
 		sql.deleteCharAt(sql.length()-1);
-		sql.append("\n");
+		sql.append(" ");
 	}
 	//
+	protected String getSelectFieldSql(EntityFieldInfo field) {
+		StringBuilder sql=new StringBuilder();
+		if(field.distinct) {
+			sql.append(" distinct ");
+		}
+		if(StringUtil.isEmpty(field.statFunction)) {
+			sql.append(field.tableAlias).append(".");
+			sql.append(addIdentifier(convertFieldName(field.name))).append("");
+			if(smartDataSource.isJsonb2Text()&&
+					field.entityField!=null&&
+					field.entityField.columnType().equals(ColumnType.JSONB)
+					) {
+				sql.append("::text"); 
+			}
+		}else {
+			sql.append(field.statFunction);
+		}
+		if(field.asName!=null) {
+			sql.append(" as ").append(addIdentifier(convertFieldName(field.asName)));
+		}
+		return sql.toString();
+	}
 	//
 	protected String getFromSql() {
-		StringBuffer sql=new StringBuffer();
-		sql.append("from ").append(getTableName(domainClass)).append(" ").append(MAIN_TABLE_ALIAS).append(" \n");
-		//inner join
-		this.innerJoinMap=getInnerJoins(query);
-		for (Join join : innerJoins) {
-			sql.append("inner join  ");
-			sql.append(getTableName(join.table2)).append(" ").append(join.table2Alias);
-			sql.append(" on ").append(join.table1Alias).append(".`"+convertFieldName(join.table1Field)+"`=").
-				append(join.table2Alias).append(".`").append(convertFieldName(join.table2Field)).append("`");
-			if(join.table1Fields!=null&&join.table2Fields!=null&&join.table1Fields.length>0
-					&&join.table1Fields.length==join.table2Fields.length) {
-				for(int i=0;i<join.table1Fields.length;i++) {
-					sql.append(" and ").append(join.table1Alias).append(".`"+convertFieldName(join.table1Fields[i])+"`=").
-					append(join.table2Alias).append(".`").append(convertFieldName(join.table2Fields[i])).append("`");
+		StringBuilder sql=new StringBuilder();
+		sql.append("\nfrom ").append(getTableName(entityClass)).append(" ").
+				append(MAIN_TABLE_ALIAS).append(" ");
+		//join
+		createJoins();
+		if(joins!=null) {
+			for (Join join : joins.getJoinList()) {
+				if(join.joinType.equals(JoinType.INNER_JOIN)) {
+					sql.append("\ninner join  ");
 				}
+				if(join.joinType.equals(JoinType.LEFT_JOIN)) {
+					sql.append("\nleft join  ");
+				}
+				if(join.joinType.equals(JoinType.RIGHT_JOIN)) {
+					sql.append("\nright join  ");
+				}
+				addJoinSql(sql, join);
 			}
-			sql.append("\n");
-		}
-		//left join
-		for (Join join : leftJoins) {
-			sql.append("left join  ");
-			sql.append(getTableName(join.table2)).append(" ").append(join.table2Alias);
-			sql.append(" on ").append(join.table1Alias).append(".`"+convertFieldName(join.table1Field)+"`=").
-				append(join.table2Alias).append(".").append(convertFieldName(join.table2Field));
-			sql.append("\n");
 		}
 		return sql.toString();
 	}
 	//
-	protected String getWhereSql() {
-		StringBuffer sql=new StringBuffer();
-		addWheres(query);
-		sql.append("where 1=1 ");
-		for (Where w : qw.getWheres()) {
-			if(w.alias==null) {
-				w.alias=MAIN_TABLE_ALIAS;
+	protected void addJoinSql(StringBuilder sql,Join join) {
+		sql.append(getTableName(join.table2)).append(" ").append(join.table2Alias);
+		sql.append(" on ");
+		for(int i=0;i<join.table1Fields.length;i++) {
+			sql.append(join.table1Alias).append("."+addIdentifier(convertFieldName(join.table1Fields[i]))+"=").
+			append(join.table2Alias).append(".").append(addIdentifier(convertFieldName(join.table2Fields[i])));
+			if(i<join.table1Fields.length-1) {
+				sql.append(" and ");
 			}
 		}
-		sql.append(qw.whereStatement().sql);
-		sql.append("\n");
-		return sql.toString();
+		sql.append(" ");
+	}
+	//
+	protected WhereStatment getWhereSql() {
+		addWheres(query);
+		return new WhereSqlBuilder(getDatabaseType(),qw).build();
 	}
 	//
 	protected String getGroupBySql() {
-		StringBuffer sql=new StringBuffer();
+		StringBuilder sql=new StringBuilder();
 		if(groupBys.size()>0) {
-			sql.append("group by ");
-			for (GroupByField field : groupBys) {
+			sql.append("\ngroup by ");
+			for (EntityFieldInfo field : groupBys) {
 				if(!StringUtil.isEmpty(field.tableAlias)) {
 					sql.append(field.tableAlias).append(".");
 				}
-				sql.append(convertFieldName(field.field)).append(",");
+				sql.append(convertFieldName(field.name)).append(",");
 			}
 			sql.deleteCharAt(sql.length()-1);
-			sql.append("\n");
+			sql.append(" ");
 		}
 		return sql.toString();
 	}
@@ -1013,15 +719,15 @@ public class SelectProvider extends SqlProvider{
 		if(!needOrderBy) {
 			return "";
 		}
-		StringBuffer sql=new StringBuffer();
+		StringBuilder sql=new StringBuilder();
 		addOrderBy(query);
 		if (qw.getOrderBys().size()>0) {
-			sql.append("order by ");
+			sql.append("\norder by ");
 			for (String orderBy : qw.getOrderBys()) {
 				sql.append(orderBy).append(",");
 			}
 			sql.deleteCharAt(sql.length()-1);
-			sql.append("\n");
+			sql.append(" ");
 		}
 		return sql.toString();
 	}
@@ -1033,52 +739,85 @@ public class SelectProvider extends SqlProvider{
 		if(!needPaging) {
 			return "";
 		}
-		StringBuffer sql=new StringBuffer();
-		addPaging(query);	
+		StringBuilder sql=new StringBuilder();
+		addPaging();	
 		if(qw.getLimitEnd()!=-1) {
-			sql.append("limit ").append(qw.getLimitStart()).append(",").append(qw.getLimitEnd()).append("\n");
+			sql.append("\nlimit ").append(qw.getLimitStart()).append(",").append(qw.getLimitEnd()).append(" ");
 		}
 		return sql.toString();
 	}
 	//
 	protected String getForUpdateSql() {
-		if(isForUpdate) {
-			return "for update \n";
+		if(qw.isForUpdate()) {
+			return "\nfor update ";
 		}
 		return "";
 	}
 	//
-	protected SqlBean build(StringBuffer selectSql) {
-		SqlBean bean=new SqlBean();
+	public Class<?> getEntityClass() {
+		return entityClass;
+	}
+	
+	public List<EntityFieldInfo> getSelectFields() {
+		return selectFields;
+	}
+	
+	public void setSelectFields(List<EntityFieldInfo> selectFields) {
+		this.selectFields = selectFields;
+	}
+	
+	//
+	protected SqlBean build(StringBuilder selectSql) {
+		if(query!=null) {
+			queryInfo=QueryInfo.create(query.getClass());
+		}
+		SelectSql bean=new SelectSql();
 		bean.selectSql=selectSql.toString();
 		bean.fromSql=getFromSql();
-		bean.whereSql=getWhereSql();
+		WhereStatment ws=getWhereSql();
+		bean.whereSql=ws.sql;
 		bean.groupBySql=getGroupBySql();
 		bean.orderBySql=getOrderBySql();
 		bean.limitSql=getLimitSql();
 		bean.forUpdateSql=getForUpdateSql();
 		bean.sql=bean.toSql();
-		bean.parameters=qw.whereValues();
+		bean.parameters=ws.values;
 		return bean;
 	}
-		
-	public Class<?> getDomainClass() {
-		return domainClass;
+	//
+	/**
+	 * 
+	 * @return
+	 */
+	protected SqlBean queryCount() {
+		StringBuilder sql = new StringBuilder();
+		sql.append("\nselect count(1) ");
+		this.needPaging=false;
+		return build(sql);
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
+	protected SqlBean query() {
+		StringBuilder sql = new StringBuilder();
+		buildSelectFields();
+		sql.append("\nselect ");
+		if(aggregationList.size()==0&&groupBys.size()==0) {
+			addSelectFields(sql);
+		}else {
+			addAggregation(sql);
+		}
+		return build(sql);
+	}
+		
 	@Override
 	public SqlBean build() {
 		if(isSelectCount) {
 			return queryCount();
+		}else {
+			return query();
 		}
-		return query();
-	}
-	
-	public List<SelectField> getSelectFields() {
-		return selectFields;
-	}
-	
-	public void setSelectFields(List<SelectField> selectFields) {
-		this.selectFields = selectFields;
 	}
 }

@@ -14,6 +14,7 @@ import jazmin.log.LoggerFactory;
 public class TestLoggerFactory {
 	//
 	private static Logger logger=LoggerFactory.get(TestLoggerFactory.class);
+	private static org.slf4j.Logger logger2=org.slf4j.LoggerFactory.getLogger(TestLoggerFactory.class);
 	//
 	
 	public static void main(String[] args) throws Exception{
@@ -34,6 +35,8 @@ public class TestLoggerFactory {
 		logger.error("66666");
 		LoggerFactory.setLevel("INFO");
 		logger.info("77777");
+		//
+		logger2.error("logger2xx");
 	}
 
 }

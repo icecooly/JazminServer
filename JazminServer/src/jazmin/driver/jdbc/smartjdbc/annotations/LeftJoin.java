@@ -16,9 +16,9 @@ import java.lang.annotation.Target;
 @Documented
 public @interface LeftJoin {
 	//
-	public String table1Field();
+	public String[] table1Fields();
 
-	public String table2Field() default "id";
+	public String[] table2Fields();
 
 	public Class<?> table2() default void.class;
 }

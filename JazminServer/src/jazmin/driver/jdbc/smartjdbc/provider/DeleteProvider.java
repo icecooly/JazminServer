@@ -1,33 +1,30 @@
 package jazmin.driver.jdbc.smartjdbc.provider;
 
-import jazmin.driver.jdbc.smartjdbc.QueryWhere;
-import jazmin.driver.jdbc.smartjdbc.QueryWhere.WhereStatment;
-import jazmin.driver.jdbc.smartjdbc.SqlBean;
+import jazmin.driver.jdbc.smartjdbc.SmartDataSource;
+import jazmin.driver.jdbc.smartjdbc.provider.entity.EntityDelete;
+import jazmin.driver.jdbc.smartjdbc.provider.where.QueryWhere;
 
 /**
  * 
  * @author skydu
  *
  */
-public class DeleteProvider extends SqlProvider{
+public abstract class DeleteProvider extends SqlProvider{
 	//
-	protected Class<?> domainClass;
-	protected QueryWhere qw;
+	public DeleteProvider(SmartDataSource smartDataSource) {
+		super(smartDataSource);
+	}
 	//
-	public DeleteProvider(Class<?> domainClass,QueryWhere qw) {
-		this.domainClass=domainClass;
-		this.qw=qw;
+	protected EntityDelete delete;
+	protected QueryWhere queryWhere;
+	//
+	public DeleteProvider delete(EntityDelete delete) {
+		this.delete=delete;
+		return this;
 	}
 	
-	@Override
-	public SqlBean build() {
-		StringBuffer sql=new StringBuffer();
-		String tableName=getTableName(domainClass);
-		sql.append("delete from ").append(tableName).append(" ");
-		sql.append("where 1=1 ");
-		WhereStatment ws=qw.whereStatement();
-		sql.append(ws.sql);
-		return createSqlBean(sql.toString(),ws.values);
+	public DeleteProvider queryWhere(QueryWhere queryWhere) {
+		this.queryWhere=queryWhere;
+		return this;
 	}
-
 }
