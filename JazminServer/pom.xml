@@ -197,6 +197,12 @@
 			<groupId>org.apache.flex.blazeds</groupId>
 			<artifactId>flex-messaging-core</artifactId>
 			<version>4.7.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
 		<dependency>
