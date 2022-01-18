@@ -248,7 +248,7 @@ public abstract class BaseDAO{
 			throw new RuntimeException(e.getMessage(),e);
 		}finally {
 			if(logger.isDebugEnabled()){
-				logger.debug("query \nisException:{} \nuseTime:{}ms \nsql:{} \nparameters:{} \nresult:{}",
+				logger.debug("query \nisException:{} \nuseTime:{}ms \nsql:{} \nparameters:{}",
 						isException,
 						useTime,
 						sql,
