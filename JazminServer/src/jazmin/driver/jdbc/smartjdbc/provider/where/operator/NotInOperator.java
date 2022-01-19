@@ -31,8 +31,10 @@ public class NotInOperator extends ColumnOperator{
 		if(values==null||values.length==0) {
 			return "";
 		}
+		String columnSql=getColumnSql();
 		StringBuilder sql=new StringBuilder();
-		sql.append(getColumnSql());
+		sql.append("(");
+		sql.append(columnSql);
 		sql.append(" ");
 		sql.append(getOperatorSql());
 		sql.append("( ");
@@ -43,6 +45,10 @@ public class NotInOperator extends ColumnOperator{
 		sql.deleteCharAt(sql.length() - 1);
 		sql.append(")");
 		sql.append(" ");
+		sql.append(" or ");
+		sql.append(columnSql);
+		sql.append(" is null");
+		sql.append(")");
 		return sql.toString();
 	}
 }

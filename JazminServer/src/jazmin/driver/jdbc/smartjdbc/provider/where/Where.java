@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import jazmin.driver.jdbc.smartjdbc.enums.ConditionType;
 import jazmin.driver.jdbc.smartjdbc.enums.SqlOperator;
@@ -16,6 +17,7 @@ import jazmin.driver.jdbc.smartjdbc.provider.SqlProvider;
  */
 public class Where {
 	//
+	public String uuid;
 	public ConditionType conditionType;
 	public List<Where> children;
 	public List<Condition> conditionList;
@@ -42,6 +44,7 @@ public class Where {
 	}
 
 	public Where() {
+		this.uuid=UUID.randomUUID().toString();
 		this.children = new LinkedList<>();
 		this.conditionList=new LinkedList<>();
 	}

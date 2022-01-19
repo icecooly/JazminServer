@@ -44,9 +44,6 @@ public class OperatorBuilder {
 		if(operator.equals(SqlOperator.NE)) {
 			opt=new NeOperator(ctx);
 		}
-		if(operator.equals(SqlOperator.SAFE_NE)) {
-			opt=new SafeNeOperator(ctx);
-		}
 		if(operator.equals(SqlOperator.IN)) {
 			opt=new InOperator(ctx);
 		}
@@ -121,6 +118,12 @@ public class OperatorBuilder {
 		}
 		if(operator.equals(SqlOperator.NOT_BETWEEN_AND)) {
 			opt=new NotBetweenAndOperator(ctx);
+		}
+		if(operator.equals(SqlOperator.JSON_BELONG)) {
+			opt=new JsonBelongOperator(ctx);
+		}
+		if(operator.equals(SqlOperator.ARRAY_BELONG)) {
+			opt=new ArrayBelongOperator(ctx);
 		}
 		return opt;
 	}

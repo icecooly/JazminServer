@@ -1,5 +1,6 @@
 package jazmin.driver.jdbc.smartjdbc.provider.where.operator;
 
+import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
 import jazmin.driver.jdbc.smartjdbc.provider.where.Where.Condition;
 import jazmin.driver.jdbc.smartjdbc.util.ArrayUtils;
 
@@ -8,9 +9,9 @@ import jazmin.driver.jdbc.smartjdbc.util.ArrayUtils;
  * @author skydu
  *
  */
-public class NotBetweenAndOperator extends ColumnOperator{
+public class ArrayBelongOperator extends ColumnOperator {
 
-	public NotBetweenAndOperator(OperatorContext ctx) {
+	public ArrayBelongOperator(OperatorContext ctx) {
 		super(ctx);
 	}
 
@@ -22,30 +23,26 @@ public class NotBetweenAndOperator extends ColumnOperator{
 	@Override
 	public String build() {
 		Condition c=getCtx().getCondition();
+		DatabaseType type = ctx.getDatabaseType();
 		String column = c.key;
 		Object value = c.value;
 		if (column == null || value == null) {
 			return "";
 		}
 		Object[] values = ArrayUtils.convert(value);
-		if(value==null||values.length!=2) {
+		if(value==null||values.length==0) {
 			return "";
 		}
 		StringBuilder sql = new StringBuilder();
 		//
-		String columnSql=getColumnSql();
-		sql.append("(");
-		sql.append(columnSql);
-		sql.append(" not between ? and ? ");
-		sql.append(" or ");
-		sql.append(columnSql);
-		sql.append(" is null");
-		sql.append(")");
-		ctx.addParameter(values[0]);
-		ctx.addParameter(values[1]);
-		
+		if (type.equals(DatabaseType.POSTGRESQL)||
+				type.equals(DatabaseType.KINGBASE)) {
+			sql.append("( ");
+			ctx.addParameter(value);
+			sql.append(getColumnSql()).append("<@").append("?");
+			sql.append(") ");
+		}
 		return sql.toString();
 	}
-
 
 }
