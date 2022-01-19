@@ -21,6 +21,7 @@ public enum SqlOperator {
     NOT_LIKE_RIGHT,
     EQ,//等于
     NE,//不等于
+    SAFE_NE,//安全不等于 NULL也会返回 is distinct from
     GT,//大于
     GE,//大于等于
     LT,//小于
@@ -38,5 +39,4 @@ public enum SqlOperator {
 	ARRAY_NOT_ANY,//数组中不包含任意一个
 	ARRAY_CONTAINS,//数组包含 
 	ARRAY_NOT_CONTAINS,//数组不包含
-	
 }

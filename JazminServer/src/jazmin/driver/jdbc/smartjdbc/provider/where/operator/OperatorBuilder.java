@@ -44,6 +44,9 @@ public class OperatorBuilder {
 		if(operator.equals(SqlOperator.NE)) {
 			opt=new NeOperator(ctx);
 		}
+		if(operator.equals(SqlOperator.SAFE_NE)) {
+			opt=new SafeNeOperator(ctx);
+		}
 		if(operator.equals(SqlOperator.IN)) {
 			opt=new InOperator(ctx);
 		}
