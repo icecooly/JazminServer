@@ -29,7 +29,7 @@ public class LikeOldOperator extends ColumnOperator{
 		sql.append(" ");
 		sql.append(getOperatorSql());
 		sql.append(" ");
-		sql.append("concat('%',"+c.value.toString()+",'%')");
+		sql.append("concat('%',"+"'"+c.value.toString()+"','%')");
 		sql.append(" ");
 		return sql.toString();
 	}

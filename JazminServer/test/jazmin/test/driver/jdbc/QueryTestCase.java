@@ -78,6 +78,11 @@ public class QueryTestCase extends BaseTestCase{
 		dao.getEntity(User.class,QueryWhere.create().ge("age", 25));
 	}
 	
+	public void testQueryLikeOld() {
+		/**查询姓名包含'张'的用户*/
+		List<User> users=dao.getList(User.class,QueryWhere.create().likeOld("name","王"));
+		System.out.println(DumpUtil.dump(users));
+	}
 	/**
 	 * 
 	 */
