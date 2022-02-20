@@ -50,6 +50,9 @@ public class OperatorBuilder {
 		if(operator.equals(SqlOperator.NOT_IN)) {
 			opt=new NotInOperator(ctx);
 		}
+		if(operator.equals(SqlOperator.LIKE_OLD)) {
+			opt=new LikeOldOperator(ctx);
+		}
 		if(operator.equals(SqlOperator.LIKE)) {
 			opt=new LikeOperator(ctx);
 		}
