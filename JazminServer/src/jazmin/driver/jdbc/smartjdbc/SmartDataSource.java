@@ -49,6 +49,8 @@ public class SmartDataSource {
 	
 	private boolean jsonb2Text;
 	
+	private boolean bool2Int;
+	
 	private Map<String,DatabaseType> driverClassMapping;
 	/**
 	 * javaFieldName->dbName
@@ -308,6 +310,17 @@ public class SmartDataSource {
 	public void setJsonb2Text(boolean jsonb2Text) {
 		this.jsonb2Text = jsonb2Text;
 	}
-	
+	/**
+	 * @return the bool2Int
+	 */
+	public boolean isBool2Int() {
+		return bool2Int;
+	}
+	/**
+	 * @param bool2Int the bool2Int to set
+	 */
+	public void setBool2Int(boolean bool2Int) {
+		this.bool2Int = bool2Int;
+	}
 	
 }
