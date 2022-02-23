@@ -56,9 +56,6 @@ public abstract class ColumnOperator extends Operator{
 		}else {
 			sql.append(c.key);
 		}
-		if(c.keyCast!=null) {
-			sql.append(c.keyCast);
-		}
 		if(c.keyFunc!=null) {
 			String columnSql=sql.toString();
 			sql=new StringBuilder();
@@ -66,6 +63,9 @@ public abstract class ColumnOperator extends Operator{
 			sql.append("(");
 			sql.append(columnSql);
 			sql.append(") ");
+		}
+		if(c.keyCast!=null) {
+			sql.append(c.keyCast);
 		}
 		return sql.toString();
 	}
