@@ -3,13 +3,11 @@ package jazmin.driver.jdbc.smartjdbc.provider.where.operator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
-
-
 import jazmin.driver.jdbc.smartjdbc.SmartJdbcException;
 import jazmin.driver.jdbc.smartjdbc.enums.SqlOperator;
 import jazmin.driver.jdbc.smartjdbc.provider.where.Where.Condition;
+import jazmin.log.Logger;
+import jazmin.log.LoggerFactory;
 
 /**
  * 
@@ -59,17 +57,32 @@ public class OperatorBuilder {
 		if(operator.equals(SqlOperator.NOT_LIKE)) {
 			opt=new NotLikeOperator(ctx);
 		}
+		if(operator.equals(SqlOperator.NOT_LIKE_OLD)) {
+			opt=new NotLikeOldOperator(ctx);
+		}
 		if(operator.equals(SqlOperator.LIKE_LEFT)) {
 			opt=new LikeLeftOperator(ctx);
+		}
+		if(operator.equals(SqlOperator.LIKE_LEFT_OLD)) {
+			opt=new LikeLeftOldOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.LIKE_RIGHT)) {
 			opt=new LikeRightOperator(ctx);
 		}
+		if(operator.equals(SqlOperator.LIKE_RIGHT_OLD)) {
+			opt=new LikeRightOldOperator(ctx);
+		}
 		if(operator.equals(SqlOperator.NOT_LIKE_LEFT)) {
 			opt=new NotLikeLeftOperator(ctx);
 		}
+		if(operator.equals(SqlOperator.NOT_LIKE_LEFT_OLD)) {
+			opt=new NotLikeLeftOldOperator(ctx);
+		}
 		if(operator.equals(SqlOperator.NOT_LIKE_RIGHT)) {
 			opt=new NotLikeRightOperator(ctx);
+		}
+		if(operator.equals(SqlOperator.NOT_LIKE_RIGHT_OLD)) {
+			opt=new NotLikeRightOldOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.GT)) {
 			opt=new GtOperator(ctx);

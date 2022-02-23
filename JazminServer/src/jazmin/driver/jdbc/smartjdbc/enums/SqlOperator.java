@@ -14,12 +14,17 @@ public enum SqlOperator {
     IN,
     NOT_IN,
     LIKE,
-    LIKE_OLD,
     NOT_LIKE,
     LIKE_LEFT,//key LIKE '%值'
     NOT_LIKE_LEFT,
     LIKE_RIGHT,//key LIKE '值%'
     NOT_LIKE_RIGHT,
+    LIKE_OLD,
+    NOT_LIKE_OLD,
+    LIKE_LEFT_OLD,
+    LIKE_RIGHT_OLD,
+    NOT_LIKE_LEFT_OLD,
+    NOT_LIKE_RIGHT_OLD,
     EQ,//等于
     NE,//不等于
     GT,//大于
