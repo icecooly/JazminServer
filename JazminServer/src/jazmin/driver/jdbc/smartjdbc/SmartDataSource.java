@@ -16,15 +16,12 @@ import java.util.function.Function;
 
 import javax.sql.DataSource;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
-
-
 import jazmin.driver.jdbc.smartjdbc.annotations.Entity;
 import jazmin.driver.jdbc.smartjdbc.connection.TransactionManager;
 import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
-import jazmin.driver.jdbc.smartjdbc.util.SqlUtil;
 import jazmin.driver.jdbc.smartjdbc.util.StringUtil;
+import jazmin.log.Logger;
+import jazmin.log.LoggerFactory;
 
 /**
  * 
@@ -52,6 +49,9 @@ public class SmartDataSource {
 	private boolean bool2Int;
 	
 	private Map<String,DatabaseType> driverClassMapping;
+	
+	private String identifier;
+	
 	/**
 	 * javaFieldName->dbName
 	 */
@@ -113,7 +113,17 @@ public class SmartDataSource {
 			if(databaseType==null) {
 				throw new SmartJdbcException("not support database "+driverClassName);
 			}
-			logger.info("init driverClassName:{} databaseType:{}",driverClassName,databaseType);
+			if(databaseType.equals(DatabaseType.MYSQL)) {
+				identifier="`";
+			}
+			if(databaseType.equals(DatabaseType.POSTGRESQL)) {
+				identifier="\"";
+			}
+			if(databaseType.equals(DatabaseType.KINGBASE)) {
+				identifier="\"";
+			}
+			logger.info("init driverClassName:{} databaseType:{} identifier:{}",
+					driverClassName,databaseType,identifier);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			throw e;
@@ -293,8 +303,19 @@ public class SmartDataSource {
 		throw new SmartJdbcException("tableName not found "+entityClass);
 	}
 	
-	public String identifier() {
-		return SqlUtil.identifier(databaseType);
+	/**
+	 * 
+	 * @return
+	 */
+	public String getIdentifier() {
+		return identifier;
+	}
+	/**
+	 * 
+	 * @param identifier
+	 */
+	public void setIdentifier(String identifier) {
+		this.identifier=identifier;
 	}
 	/**
 	 * 
@@ -322,5 +343,16 @@ public class SmartDataSource {
 	public void setBool2Int(boolean bool2Int) {
 		this.bool2Int = bool2Int;
 	}
-	
+	/**
+	 * @return the driverClassMapping
+	 */
+	public Map<String, DatabaseType> getDriverClassMapping() {
+		return driverClassMapping;
+	}
+	/**
+	 * @param driverClassMapping the driverClassMapping to set
+	 */
+	public void setDriverClassMapping(Map<String, DatabaseType> driverClassMapping) {
+		this.driverClassMapping = driverClassMapping;
+	}
 }

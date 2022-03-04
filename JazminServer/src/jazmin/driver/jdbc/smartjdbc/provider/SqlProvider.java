@@ -58,7 +58,7 @@ public abstract class SqlProvider {
 	 * @return
 	 */
 	public String identifier() {
-		return smartDataSource.identifier();
+		return smartDataSource.getIdentifier();
 	}
 	//
 	public String getAlias(String alias) {

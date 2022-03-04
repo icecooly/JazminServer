@@ -3,6 +3,7 @@ package jazmin.driver.jdbc.smartjdbc.provider.where;
 import java.util.LinkedList;
 import java.util.List;
 
+import jazmin.driver.jdbc.smartjdbc.SmartDataSource;
 import jazmin.driver.jdbc.smartjdbc.enums.ConditionType;
 import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
 import jazmin.driver.jdbc.smartjdbc.provider.where.QueryWhere.WhereStatment;
@@ -21,11 +22,13 @@ import jazmin.driver.jdbc.smartjdbc.util.StringUtil;
 public class WhereSqlBuilder {
 	//
 	private QueryWhere queryWhere;
+	private SmartDataSource smartDataSource;
 	private DatabaseType databaseType;
 	private StringBuilder sql;
 	private List<Object> values;
 	//
-	public WhereSqlBuilder(DatabaseType databaseType, QueryWhere queryWhere) {
+	public WhereSqlBuilder( SmartDataSource smartDataSource, DatabaseType databaseType, QueryWhere queryWhere) {
+		this.smartDataSource=smartDataSource;
 		this.databaseType=databaseType;
 		this.queryWhere=queryWhere;
 		this.sql=new StringBuilder();
@@ -96,7 +99,7 @@ public class WhereSqlBuilder {
 		int conditonCount=0;
 		if (conditions.size() > 0) {
 			int index = 0;
-			OperatorContext ctx = new OperatorContext(databaseType);
+			OperatorContext ctx = new OperatorContext(smartDataSource,databaseType);
 			ctx.setParameters(values);
 			String conditionType=getConditionTypeSql(where.conditionType);
 			for (Condition c : conditions) {

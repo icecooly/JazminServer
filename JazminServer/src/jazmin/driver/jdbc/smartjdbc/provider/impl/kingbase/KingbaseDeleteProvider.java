@@ -22,7 +22,7 @@ public class KingbaseDeleteProvider extends DeleteProvider{
 		StringBuilder sql=new StringBuilder();
 		String tableName=addIdentifier(delete.tableName);
 		sql.append("delete from ").append(tableName).append(" ").append(MAIN_TABLE_ALIAS).append(" ");
-		WhereStatment ws=new WhereSqlBuilder(getDatabaseType(),queryWhere).build();
+		WhereStatment ws=new WhereSqlBuilder(smartDataSource,getDatabaseType(),queryWhere).build();
 		sql.append(ws.sql);
 		return SqlBean.build(sql.toString(),ws.values);
 	}

@@ -3,9 +3,9 @@ package jazmin.driver.jdbc.smartjdbc.provider.where.operator;
 import java.util.ArrayList;
 import java.util.List;
 
+import jazmin.driver.jdbc.smartjdbc.SmartDataSource;
 import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
 import jazmin.driver.jdbc.smartjdbc.provider.where.Where.Condition;
-import jazmin.driver.jdbc.smartjdbc.util.SqlUtil;
 
 /**
  * 
@@ -14,12 +14,14 @@ import jazmin.driver.jdbc.smartjdbc.util.SqlUtil;
  */
 public class OperatorContext {
 	//
+	private SmartDataSource smartDataSource;
 	private DatabaseType databaseType;
 	private Condition condition;
 	private List<Object> parameters;
 	//
 	//
-	public OperatorContext(DatabaseType databaseType) {
+	public OperatorContext(SmartDataSource smartDataSource,DatabaseType databaseType) {
+		this.smartDataSource=smartDataSource;
 		this.databaseType=databaseType;
 		parameters=new ArrayList<>();
 	}
@@ -48,20 +50,6 @@ public class OperatorContext {
 	}
 
 	/**
-	 * @return the databaseType
-	 */
-	public DatabaseType getDatabaseType() {
-		return databaseType;
-	}
-
-	/**
-	 * @param databaseType the databaseType to set
-	 */
-	public void setDatabaseType(DatabaseType databaseType) {
-		this.databaseType = databaseType;
-	}
-
-	/**
 	 * @return the condition
 	 */
 	public Condition getCondition() {
@@ -80,7 +68,23 @@ public class OperatorContext {
 	 * @return
 	 */
 	public String identifier() {
-		return SqlUtil.identifier(databaseType);
+		return smartDataSource.getIdentifier();
 	}
+
+	/**
+	 * @return the databaseType
+	 */
+	public DatabaseType getDatabaseType() {
+		return databaseType;
+	}
+
+	/**
+	 * @param databaseType the databaseType to set
+	 */
+	public void setDatabaseType(DatabaseType databaseType) {
+		this.databaseType = databaseType;
+	}
+	
+	
 
 }
