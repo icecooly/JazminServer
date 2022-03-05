@@ -48,7 +48,7 @@ public class SmartDataSource {
 	
 	private Map<String,DatabaseType> driverClassMapping;
 	
-	private String identifier;
+	private String identifier="";
 	
 	/**
 	 * javaFieldName->dbName
@@ -69,6 +69,7 @@ public class SmartDataSource {
 		driverClassMapping.put("com.mysql.jdbc.Driver", DatabaseType.MYSQL);
 		driverClassMapping.put("org.postgresql.Driver", DatabaseType.POSTGRESQL);
 		driverClassMapping.put("com.kingbase8.Driver", DatabaseType.KINGBASE);
+		driverClassMapping.put("sgcc.nds.jdbc.driver.NdsDriver", DatabaseType.NDS);
 	}
 	//
 	private void loadingDriverClassNameMapping() {

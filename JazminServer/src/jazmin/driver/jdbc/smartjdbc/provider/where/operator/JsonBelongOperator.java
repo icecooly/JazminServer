@@ -37,8 +37,7 @@ public class JsonBelongOperator extends ColumnOperator {
 		}
 		JsonContain jsonContain=c.jsonContain;
 		StringBuilder sql = new StringBuilder();
-		if (type.equals(DatabaseType.POSTGRESQL)||
-				type.equals(DatabaseType.KINGBASE)) {
+		if (isBasePostgresql(type)) {
 			sql.append("( ");
 			if(jsonContain==null||jsonContain.objectField==null) {
 				sql.append(getColumnSql()).append("<@'"+JSONUtil.toJson(values)+"'");

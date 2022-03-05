@@ -35,8 +35,7 @@ public class ArrayNotAnyOperator extends ColumnOperator {
 		}
 		StringBuilder sql = new StringBuilder();
 		//
-		if (type.equals(DatabaseType.POSTGRESQL)||
-				type.equals(DatabaseType.KINGBASE)) {
+		if (isBasePostgresql(type)) {
 			sql.append(" not ( ");
 			for (int i = 0; i < values.length; i++) {
 				Object v=values[i];
