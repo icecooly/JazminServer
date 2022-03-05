@@ -120,6 +120,9 @@ public class SmartDataSource {
 			if(databaseType.equals(DatabaseType.KINGBASE)) {
 				identifier="\"";
 			}
+			if(databaseType.equals(DatabaseType.NDS)) {
+				identifier="";
+			}
 			logger.info("init driverClassName:{} databaseType:{} identifier:{}",
 					driverClassName,databaseType,identifier);
 		} catch (Exception e) {
