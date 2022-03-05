@@ -44,8 +44,6 @@ public class SmartDataSource {
 	
 	private boolean fieldCamelCase;
 	
-	private boolean jsonb2Text;
-	
 	private boolean bool2Int;
 	
 	private Map<String,DatabaseType> driverClassMapping;
@@ -316,20 +314,6 @@ public class SmartDataSource {
 	 */
 	public void setIdentifier(String identifier) {
 		this.identifier=identifier;
-	}
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isJsonb2Text() {
-		return jsonb2Text;
-	}
-	/**
-	 * 
-	 * @param jsonb2Text
-	 */
-	public void setJsonb2Text(boolean jsonb2Text) {
-		this.jsonb2Text = jsonb2Text;
 	}
 	/**
 	 * @return the bool2Int

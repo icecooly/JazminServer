@@ -5,6 +5,7 @@ import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
 import jazmin.driver.jdbc.smartjdbc.provider.DeleteProvider;
 import jazmin.driver.jdbc.smartjdbc.provider.impl.kingbase.KingbaseDeleteProvider;
 import jazmin.driver.jdbc.smartjdbc.provider.impl.mysql.MysqlDeleteProvider;
+import jazmin.driver.jdbc.smartjdbc.provider.impl.nds.NdsDeleteProvider;
 import jazmin.driver.jdbc.smartjdbc.provider.impl.postgresql.PostgresqlDeleteProvider;
 
 /**
@@ -24,6 +25,9 @@ public class DeleteProviderFactory {
 		}
 		if(type.equals(DatabaseType.KINGBASE)) {
 			return new KingbaseDeleteProvider(smartDataSource);
+		}
+		if(type.equals(DatabaseType.NDS)) {
+			return new NdsDeleteProvider(smartDataSource);
 		}
 		throw new RuntimeException("unspoort database type "+type);
 	}

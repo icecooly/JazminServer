@@ -12,5 +12,6 @@ package jazmin.driver.jdbc.smartjdbc.enums;
 public enum DatabaseType {
     MYSQL,
    POSTGRESQL,
-   KINGBASE
+   KINGBASE,
+   NDS
 }

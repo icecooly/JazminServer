@@ -640,8 +640,7 @@ public class SelectProvider extends SqlProvider{
 		if(StringUtil.isEmpty(field.statFunction)) {
 			sql.append(field.tableAlias).append(".");
 			sql.append(addIdentifier(convertFieldName(field.name))).append("");
-			if(smartDataSource.isJsonb2Text()&&
-					field.entityField!=null&&
+			if(field.entityField!=null&&
 					field.entityField.columnType().equals(ColumnType.JSONB)
 					) {
 				sql.append("::text"); 

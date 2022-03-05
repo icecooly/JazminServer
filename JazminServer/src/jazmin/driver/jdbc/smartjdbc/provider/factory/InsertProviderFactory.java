@@ -5,6 +5,7 @@ import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
 import jazmin.driver.jdbc.smartjdbc.provider.InsertProvider;
 import jazmin.driver.jdbc.smartjdbc.provider.impl.kingbase.KingbaseInsertProvider;
 import jazmin.driver.jdbc.smartjdbc.provider.impl.mysql.MysqlInsertProvider;
+import jazmin.driver.jdbc.smartjdbc.provider.impl.nds.NdsInsertProvider;
 import jazmin.driver.jdbc.smartjdbc.provider.impl.postgresql.PostgresqlInsertProvider;
 
 /**
@@ -24,6 +25,9 @@ public class InsertProviderFactory {
 		}
 		if(type.equals(DatabaseType.KINGBASE)) {
 			return new KingbaseInsertProvider(smartDataSource);
+		}
+		if(type.equals(DatabaseType.NDS)) {
+			return new NdsInsertProvider(smartDataSource);
 		}
 		throw new RuntimeException("unspoort database type "+type);
 	}
