@@ -58,7 +58,7 @@ import jazmin.util.DumpUtil;
 public class Jazmin {
 	private static Logger logger=LoggerFactory.get(Jazmin.class);
 	//
-	public static final String VERSION;
+	public static final String VERSION="1.2";
 	public static final String LOGO=            
 "                                                                           \r\n"+
 "                                      .                c,                  \r\n"+
@@ -99,9 +99,6 @@ public class Jazmin {
 "	 |__yama_||__| |__||_______||_|   |_||___| |_|  |__|					\r\n";   
 
 	//--------------------------------------------------------------------------
-   static{
-		VERSION=Jazmin.class.getPackage().getImplementationVersion();
-	}
 	//
 	private static ScheduledExecutorService scheduledExecutorService=
 			new ScheduledThreadPoolExecutor(

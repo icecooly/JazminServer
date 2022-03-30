@@ -62,6 +62,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 
 	private void handleHttpRequest(ChannelHandlerContext ctx,
 			FullHttpRequest req) {
+		if(logger.isDebugEnabled()) {
+			logger.debug("messageReceived handleHttpRequest");
+		}
 		// Handle a bad request.
 		if (!req.decoderResult().isSuccess()) {
 			sendHttpResponse(ctx, req, new DefaultFullHttpResponse(HTTP_1_1,
@@ -93,6 +96,9 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 	}
 
 	private void handleWebSocketFrame(ChannelHandlerContext ctx,WebSocketFrame frame) {
+		if(logger.isDebugEnabled()) {
+			logger.debug("messageReceived handleWebSocketFrame");
+		}
 		// Check for closing frame
 		if (frame instanceof CloseWebSocketFrame) {
 			handshaker.close(ctx.channel(),(CloseWebSocketFrame) frame.retain());

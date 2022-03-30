@@ -189,8 +189,8 @@ public class Session {
 	 * @param message the message before session kicked
 	 */
 	public void kick(String message){
-		if(logger.isDebugEnabled()){
-			logger.debug("session kicked:{} {}",id,message);
+		if(logger.isInfoEnabled()){
+			logger.info("session kicked:{} {}",id,message);
 		}
 		if(channel!=null){
 			channel.close();	

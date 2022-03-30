@@ -23,6 +23,7 @@ import jazmin.driver.jdbc.smartjdbc.provider.where.Where.Condition;
 import jazmin.driver.jdbc.smartjdbc.provider.where.Where.JsonContain;
 import jazmin.driver.jdbc.smartjdbc.util.DumpUtil;
 import jazmin.test.driver.jdbc.dao.BizDAO;
+import jazmin.test.driver.jdbc.domain.entity.AppTable;
 import jazmin.test.driver.jdbc.domain.entity.Article;
 import jazmin.test.driver.jdbc.domain.entity.User;
 import jazmin.test.driver.jdbc.domain.query.ArticleQuery;
@@ -656,5 +657,10 @@ public class QueryTestCase extends BaseTestCase{
 						Arrays.asList(
 								sdf.parse("2020-10-09"),
 								sdf.parse("2020-11-09"))));
+	}
+	
+	public void testLeftJoin() {
+		AppTable table=dao.getEntity(AppTable.class,QueryWhere.create().eq("id", "1"));
+		System.out.println(DumpUtil.dump(table));
 	}
 }
