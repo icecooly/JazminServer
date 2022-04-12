@@ -38,6 +38,9 @@ public class NdsSelectProvider extends PostgresqlSelectProvider {
 					)) {
 				sql.append("::text");
 			}
+			if(field.field.getType().equals(Boolean.class)||field.field.getType().equals(boolean.class)) {
+				sql.append("::text");
+			}
 		} else {
 			sql.append(field.statFunction);
 		}
