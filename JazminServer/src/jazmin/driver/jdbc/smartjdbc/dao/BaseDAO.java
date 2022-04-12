@@ -513,7 +513,7 @@ public abstract class BaseDAO{
 				DatabaseType databaseType=getDatabaseType();
 				if(databaseType.equals(DatabaseType.NDS)) {
 					StringBuilder v=new StringBuilder();
-					v.append("(");
+					v.append("{");
 					Object[] list=((Object[]) o);
 					if(list.length>0) {
 						for (Object item : list) {
@@ -521,7 +521,7 @@ public abstract class BaseDAO{
 						}
 						v.deleteCharAt(v.length()-1);
 					}
-					v.append(")");
+					v.append("}");
 					ps.setString(i++, v.toString());
 				}else {
 					if(type.equals(String[].class)) {
