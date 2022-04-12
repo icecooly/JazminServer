@@ -506,12 +506,7 @@ public abstract class BaseDAO{
 				continue;
 			}
 			if (o instanceof Boolean) {
-				SmartDataSource dataSource=getSmartDataSource();
-				if(dataSource.isBool2Int()) {
-					ps.setInt(i++, ((Boolean)o)?1:0);
-				}else {
-					ps.setBoolean(i++, ((Boolean) o));
-				}
+				ps.setBoolean(i++, ((Boolean) o));
 				continue;
 			}
 			if (Types.ARRAY_TYPES.contains(type)) {

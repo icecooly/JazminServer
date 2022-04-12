@@ -44,10 +44,6 @@ public class SmartDataSource {
 	
 	private boolean fieldCamelCase;
 	
-	private boolean bool2Int;
-	
-	private boolean bool2String;
-	
 	private Map<String,DatabaseType> driverClassMapping;
 	
 	private String identifier="";
@@ -322,18 +318,6 @@ public class SmartDataSource {
 		this.identifier=identifier;
 	}
 	/**
-	 * @return the bool2Int
-	 */
-	public boolean isBool2Int() {
-		return bool2Int;
-	}
-	/**
-	 * @param bool2Int the bool2Int to set
-	 */
-	public void setBool2Int(boolean bool2Int) {
-		this.bool2Int = bool2Int;
-	}
-	/**
 	 * @return the driverClassMapping
 	 */
 	public Map<String, DatabaseType> getDriverClassMapping() {
@@ -345,17 +329,4 @@ public class SmartDataSource {
 	public void setDriverClassMapping(Map<String, DatabaseType> driverClassMapping) {
 		this.driverClassMapping = driverClassMapping;
 	}
-	/**
-	 * @return the bool2String
-	 */
-	public boolean isBool2String() {
-		return bool2String;
-	}
-	/**
-	 * @param bool2String the bool2String to set
-	 */
-	public void setBool2String(boolean bool2String) {
-		this.bool2String = bool2String;
-	}
-	
 }
