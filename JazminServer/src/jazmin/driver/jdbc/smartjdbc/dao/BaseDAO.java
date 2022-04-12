@@ -510,23 +510,38 @@ public abstract class BaseDAO{
 				continue;
 			}
 			if (Types.ARRAY_TYPES.contains(type)) {
-				if(type.equals(String[].class)) {
-					ps.setArray(i++, conn.createArrayOf("TEXT",(Object[]) o));
-				}
-				if(type.equals(Short[].class)) {
-					ps.setArray(i++, conn.createArrayOf("INTEGER",(Object[]) o));
-				}
-				if(type.equals(Integer[].class)) {
-					ps.setArray(i++, conn.createArrayOf("INTEGER",(Object[]) o));
-				}
-				if(type.equals(Long[].class)) {
-					ps.setArray(i++, conn.createArrayOf("BIGINT",(Object[]) o));
-				}
-				if(type.equals(Float[].class)) {
-					ps.setArray(i++, conn.createArrayOf("FLOAT",(Object[]) o));
-				}
-				if(type.equals(Double[].class)) {
-					ps.setArray(i++, conn.createArrayOf("DOUBLE",(Object[]) o));
+				DatabaseType databaseType=getDatabaseType();
+				if(databaseType.equals(DatabaseType.NDS)) {
+					StringBuilder v=new StringBuilder();
+					v.append("(");
+					Object[] list=((Object[]) o);
+					if(list.length>0) {
+						for (Object item : list) {
+							v.append(item.toString()).append(",");
+						}
+						v.deleteCharAt(v.length()-1);
+					}
+					v.append(")");
+					ps.setString(i++, v.toString());
+				}else {
+					if(type.equals(String[].class)) {
+						ps.setArray(i++, conn.createArrayOf("TEXT",(Object[]) o));
+					}
+					if(type.equals(Short[].class)) {
+						ps.setArray(i++, conn.createArrayOf("INTEGER",(Object[]) o));
+					}
+					if(type.equals(Integer[].class)) {
+						ps.setArray(i++, conn.createArrayOf("INTEGER",(Object[]) o));
+					}
+					if(type.equals(Long[].class)) {
+						ps.setArray(i++, conn.createArrayOf("BIGINT",(Object[]) o));
+					}
+					if(type.equals(Float[].class)) {
+						ps.setArray(i++, conn.createArrayOf("FLOAT",(Object[]) o));
+					}
+					if(type.equals(Double[].class)) {
+						ps.setArray(i++, conn.createArrayOf("DOUBLE",(Object[]) o));
+					}
 				}
 				continue;
 			}
