@@ -91,12 +91,7 @@ public abstract class BaseEntityDAO extends BaseDAO{
 		if(getDatabaseType().equals(DatabaseType.NDS)){
 			String strBoolean=rs.getString(fieldName);
 			if(strBoolean!=null) {
-				if(strBoolean.equals("t")) {
-					return true;
-				}
-				if(strBoolean.equals("f")) {
-					return false;
-				}
+				return Boolean.valueOf(strBoolean);
 			}
 			return null;
 		}else {
