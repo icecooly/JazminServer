@@ -24,6 +24,7 @@ public abstract class BaseTestCase extends TestCase{
 		super.setUp();
 		smartDataSource=new SmartDataSource(createDriverManagerDataSource(),new DefaultTransactionManager());
 		smartDataSource.setFieldCamelCase(true);
+		smartDataSource.setBool2String(true);
 		smartDataSource.init();
 		smartDataSource.start();
 		SmartJdbc.registerDataSource(smartDataSource);

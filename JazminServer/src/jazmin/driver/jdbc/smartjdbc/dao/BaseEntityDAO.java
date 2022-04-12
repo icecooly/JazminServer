@@ -10,6 +10,7 @@ import java.sql.Array;
 import java.sql.Blob;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -20,8 +21,7 @@ import java.util.TreeSet;
 
 import jazmin.log.Logger;
 import jazmin.log.LoggerFactory;
-
-
+import jazmin.driver.jdbc.smartjdbc.SmartDataSource;
 import jazmin.driver.jdbc.smartjdbc.SmartJdbc;
 import jazmin.driver.jdbc.smartjdbc.SmartJdbcException;
 import jazmin.driver.jdbc.smartjdbc.Types;
@@ -87,6 +87,24 @@ public abstract class BaseEntityDAO extends BaseDAO{
 		}
 		return fieldList;
 	}
+	
+	private Boolean getBoolean(ResultSet rs, String fieldName) throws SQLException {
+		SmartDataSource dataSource=getSmartDataSource();
+		if(dataSource.isBool2String()) {
+			String strBoolean=rs.getString(fieldName);
+			if(strBoolean!=null) {
+				if(strBoolean.equals("t")) {
+					return true;
+				}
+				if(strBoolean.equals("f")) {
+					return false;
+				}
+			}
+			return null;
+		}else {
+			return rs.getObject(fieldName)==null?null:rs.getBoolean(fieldName);
+		}
+	}
 	/**
 	 * 
 	 * @param o
@@ -151,9 +169,12 @@ public abstract class BaseEntityDAO extends BaseDAO{
 				} else if (fieldType.equals(Date.class)) {
 					value = rs.getTimestamp(fieldName);
 				} else if (fieldType.equals(boolean.class)) {
-					value = rs.getBoolean(fieldName);
+					value=getBoolean(rs, fieldName);
+					if(value==null) {
+						value=false;
+					}
 				} else if (fieldType.equals(Boolean.class)) {
-					value = rs.getObject(fieldName)==null?null:rs.getBoolean(fieldName);
+					value=getBoolean(rs, fieldName);
 				} else if (fieldType.equals(BigDecimal.class)) {
 					value = rs.getBigDecimal(fieldName);
 				} else if (fieldType.equals(byte[].class)) {

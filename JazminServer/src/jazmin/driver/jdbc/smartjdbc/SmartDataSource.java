@@ -46,6 +46,8 @@ public class SmartDataSource {
 	
 	private boolean bool2Int;
 	
+	private boolean bool2String;
+	
 	private Map<String,DatabaseType> driverClassMapping;
 	
 	private String identifier="";
@@ -343,4 +345,17 @@ public class SmartDataSource {
 	public void setDriverClassMapping(Map<String, DatabaseType> driverClassMapping) {
 		this.driverClassMapping = driverClassMapping;
 	}
+	/**
+	 * @return the bool2String
+	 */
+	public boolean isBool2String() {
+		return bool2String;
+	}
+	/**
+	 * @param bool2String the bool2String to set
+	 */
+	public void setBool2String(boolean bool2String) {
+		this.bool2String = bool2String;
+	}
+	
 }

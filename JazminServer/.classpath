@@ -63,7 +63,7 @@
 	<classpathentry kind="lib" path="lib/async-http-client-1.9.38.jar"/>
 	<classpathentry kind="lib" path="lib/activation-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/josql-2.2.jar"/>
-	<classpathentry kind="lib" path="lib/postgresql-42.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-42.2.16.jar" sourcepath="/var/folders/03/qtj8lms93zj8_mpfcgm0_mdr0000gn/T/.org.sf.feeling.decompiler1649727067470/source/postgresql-42.2.16-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
