@@ -113,14 +113,10 @@ public class SmartDataSource {
 			if(databaseType.equals(DatabaseType.MYSQL)) {
 				identifier="`";
 			}
-			if(databaseType.equals(DatabaseType.POSTGRESQL)) {
+			if(databaseType.equals(DatabaseType.POSTGRESQL)||
+					databaseType.equals(DatabaseType.KINGBASE)||
+					databaseType.equals(DatabaseType.NDS)) {
 				identifier="\"";
-			}
-			if(databaseType.equals(DatabaseType.KINGBASE)) {
-				identifier="\"";
-			}
-			if(databaseType.equals(DatabaseType.NDS)) {
-				identifier="";
 			}
 			logger.info("init driverClassName:{} databaseType:{} identifier:{}",
 					driverClassName,databaseType,identifier);
