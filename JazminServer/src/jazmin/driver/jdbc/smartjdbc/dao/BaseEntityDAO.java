@@ -19,9 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import jazmin.log.Logger;
-import jazmin.log.LoggerFactory;
-import jazmin.driver.jdbc.smartjdbc.SmartDataSource;
 import jazmin.driver.jdbc.smartjdbc.SmartJdbc;
 import jazmin.driver.jdbc.smartjdbc.SmartJdbcException;
 import jazmin.driver.jdbc.smartjdbc.Types;
@@ -37,6 +34,8 @@ import jazmin.driver.jdbc.smartjdbc.provider.factory.SelectProviderFactory;
 import jazmin.driver.jdbc.smartjdbc.provider.factory.UpdateProviderFactory;
 import jazmin.driver.jdbc.smartjdbc.util.IOUtil;
 import jazmin.driver.jdbc.smartjdbc.util.JSONUtil;
+import jazmin.log.Logger;
+import jazmin.log.LoggerFactory;
 
 /**
  * 
@@ -89,8 +88,7 @@ public abstract class BaseEntityDAO extends BaseDAO{
 	}
 	
 	private Boolean getBoolean(ResultSet rs, String fieldName) throws SQLException {
-		SmartDataSource dataSource=getSmartDataSource();
-		if(dataSource.isBool2String()) {
+		if(getDatabaseType().equals(DatabaseType.NDS)){
 			String strBoolean=rs.getString(fieldName);
 			if(strBoolean!=null) {
 				if(strBoolean.equals("t")) {
