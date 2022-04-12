@@ -10,3 +10,5 @@ $.addServer(new MessageServer());
 $.addServer(new RpcServer());
 $.addServer(new ConsoleServer());
 $.addServer(new WebServer());
+
+jazmin.loadApplication('ss',['ssss']);

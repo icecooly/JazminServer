@@ -14,14 +14,16 @@ import jazmin.driver.jdbc.smartjdbc.enums.JoinType;
  * @author skydu
  *
  */
-@Entity(tableName = "t_app_table")
-public class AppTable {
+@Entity(tableName = "t_app_table_field")
+public class AppTableField {
 
 	@PrimaryKey
 	public String id;
 	
 	@PrimaryKey
 	public String appId;
+	
+	public String tableId;
 	
 	public String moduleId;
 	
@@ -34,7 +36,7 @@ public class AppTable {
 	public String moduleIcon;
 	
 	//
-	public static class AppTableQuery extends Query<AppTable>{
+	public static class AppTableQuery extends Query<AppTableField>{
 		
 		@Join(type = JoinType.INNER_JOIN, table2 = AppModule.class,table1Fields = {"appId","moduleId"}, table2Fields = {"appId","id"})
 		@QueryField(field = "name")

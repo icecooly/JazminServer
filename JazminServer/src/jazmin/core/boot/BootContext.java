@@ -56,7 +56,7 @@ public interface BootContext{
 	 * load application image 
 	 * @param appImage the application image path 
 	 */
-	void loadApplication(String appImage);
+	void loadApplication(String appImage, String ... extendJarList);
 	/**
 	 * include another boot file
 	 * @param bootFile the boot file will be loaded

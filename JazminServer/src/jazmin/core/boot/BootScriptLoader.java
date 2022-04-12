@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -162,8 +163,8 @@ public class BootScriptLoader {
 			Jazmin.addDriver(driver);
 		}
 		@Override
-		public void loadApplication(String appImage) {
-			Jazmin.loadApplication(appImage);
+		public void loadApplication(String appImage,String ... extendJarList) {
+			Jazmin.loadApplication(appImage, extendJarList);
 		}
 		//
 		@Override

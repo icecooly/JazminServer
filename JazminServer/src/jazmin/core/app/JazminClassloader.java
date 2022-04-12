@@ -17,8 +17,9 @@ import jazmin.log.LoggerFactory;
 public class JazminClassloader extends URLClassLoader {
 	//
 	private static Logger logger=LoggerFactory.get(JazminClassloader.class);
-	public JazminClassloader(File workImage) throws MalformedURLException {
-		super(getJarUrl(workImage),JazminClassloader.class.getClassLoader());
+	//
+	public JazminClassloader(File workImage,List<String> extendJarList) throws MalformedURLException {
+		super(getJarUrl(workImage,extendJarList),JazminClassloader.class.getClassLoader());
 	}
 	//
 	static void getJarFiles(List<URL>result,File dir) {
@@ -37,7 +38,7 @@ public class JazminClassloader extends URLClassLoader {
 		}
 	}
 	//
-	static URL[] getJarUrl(File workImage) {
+	static URL[] getJarUrl(File workImage,List<String> extendJarList) {
 		List<URL> urls=new ArrayList<>();
 		try {
 			urls.add(workImage.toURI().toURL());
@@ -52,9 +53,20 @@ public class JazminClassloader extends URLClassLoader {
 			getJarFiles(urls,expandLibFile);
 		}
 		//
+		if(extendJarList!=null&&!extendJarList.isEmpty()) {
+			for (String jarPath : extendJarList) {
+				File extendJar=new File(jarPath);
+				if(!extendJar.exists()) {
+					logger.error("jar file not found "+jarPath);
+					continue;
+				}
+				getJarFiles(urls,extendJar);
+			}
+		}
+		//
 		logger.info("classpath urls:");
 		urls.forEach((u)->{
-			logger.info(u);
+			logger.info("URI:{}",u);
 		});
 		return urls.toArray(new URL[urls.size()]);
 	}

@@ -24,10 +24,12 @@ public class ApplicationLoader {
 	private File workDir;
 	private File applicationPackage;
 	private File workImage;
+	private List<String> extendJarList;
 	
-	public ApplicationLoader(File workDir,File applicationPackage) {
+	public ApplicationLoader(File workDir,File applicationPackage,List<String> extendJarList) {
 		this.workDir=workDir;
 		this.applicationPackage=applicationPackage;
+		this.extendJarList=extendJarList;
 	}
 	//
 	public Application load(){
@@ -94,7 +96,7 @@ public class ApplicationLoader {
 		try (JarInputStream jis=new JarInputStream(
 					new FileInputStream(workImage))){
 			JarEntry entry;
-			appClassLoader=new JazminClassloader(workImage);
+			appClassLoader=new JazminClassloader(workImage,extendJarList);
 			while((entry=jis.getNextJarEntry())!=null){
 				String name=entry.getName();
 				if(name.endsWith(".class")){

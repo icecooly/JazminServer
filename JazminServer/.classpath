@@ -22,7 +22,7 @@
 	<classpathentry kind="lib" path="lib/bcprov-jdk15on-1.50.jar"/>
 	<classpathentry kind="lib" path="lib/netty-3.10.3.Final.jar"/>
 	<classpathentry kind="lib" path="lib/jsch-0.1.53.jar"/>
-	<classpathentry kind="lib" path="lib/netty-all-5.0.0.Alpha3.jar"/>
+	<classpathentry kind="lib" path="lib/netty-all-5.0.0.Alpha3.jar" sourcepath="/var/folders/03/qtj8lms93zj8_mpfcgm0_mdr0000gn/T/.org.sf.feeling.decompiler1648524062114/source/netty-all-5.0.0.Alpha3-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="lib/sshd-core-1.2.0.jar" sourcepath="/Users/skydu/.m2/repository/org/apache/sshd/sshd-core/1.2.0/sshd-core-1.2.0-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jedis-2.9.0.jar"/>
 	<classpathentry kind="lib" path="lib/kryo-4.0.1.jar"/>

@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -190,10 +191,10 @@ public class Jazmin {
 	 * load application package
 	 * @param appPackage the application package
 	 */
-	public static void loadApplication(String appPackage){
+	public static void loadApplication(String appPackage, String ...extendJarList ){
 		logger.info("load application from:"+appPackage);
 		ApplicationLoader applicationLoader=new ApplicationLoader(
-				new File("work"+File.separator+serverName),new File(appPackage));
+				new File("work"+File.separator+serverName),new File(appPackage), Arrays.asList(extendJarList));
 		applicationPackage=appPackage;
 		loadApplication(applicationLoader.load());
 	}
