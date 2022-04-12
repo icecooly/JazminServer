@@ -30,6 +30,14 @@ public class NdsSelectProvider extends PostgresqlSelectProvider {
 			if (field.entityField != null && field.entityField.columnType().equals(ColumnType.JSONB)) {
 				sql.append("::text");
 			}
+			if (field.entityField != null && (
+					field.entityField.columnType().equals(ColumnType.VARCHAR_ARRAY)||
+					field.entityField.columnType().equals(ColumnType.TEXT_ARRAY)||
+					field.entityField.columnType().equals(ColumnType.INT_ARRAY)||
+					field.entityField.columnType().equals(ColumnType.FLOAT_ARRAY)
+					)) {
+				sql.append("::text");
+			}
 		} else {
 			sql.append(field.statFunction);
 		}
