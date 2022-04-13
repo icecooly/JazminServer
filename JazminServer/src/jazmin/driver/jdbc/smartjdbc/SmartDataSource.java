@@ -19,6 +19,7 @@ import javax.sql.DataSource;
 import jazmin.driver.jdbc.smartjdbc.annotations.Entity;
 import jazmin.driver.jdbc.smartjdbc.connection.TransactionManager;
 import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
+import jazmin.driver.jdbc.smartjdbc.util.SqlUtil;
 import jazmin.driver.jdbc.smartjdbc.util.StringUtil;
 import jazmin.log.Logger;
 import jazmin.log.LoggerFactory;
@@ -110,14 +111,7 @@ public class SmartDataSource {
 			if(databaseType==null) {
 				throw new SmartJdbcException("not support database "+driverClassName);
 			}
-			if(databaseType.equals(DatabaseType.MYSQL)) {
-				identifier="`";
-			}
-			if(databaseType.equals(DatabaseType.POSTGRESQL)||
-					databaseType.equals(DatabaseType.KINGBASE)||
-					databaseType.equals(DatabaseType.NDS)) {
-				identifier="\"";
-			}
+			identifier=SqlUtil.identifier(databaseType);
 			logger.info("init driverClassName:{} databaseType:{} identifier:{}",
 					driverClassName,databaseType,identifier);
 		} catch (Exception e) {

@@ -6,6 +6,7 @@ import java.util.List;
 import jazmin.driver.jdbc.smartjdbc.SmartDataSource;
 import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
 import jazmin.driver.jdbc.smartjdbc.provider.where.Where.Condition;
+import jazmin.driver.jdbc.smartjdbc.util.SqlUtil;
 
 /**
  * 
@@ -14,14 +15,12 @@ import jazmin.driver.jdbc.smartjdbc.provider.where.Where.Condition;
  */
 public class OperatorContext {
 	//
-	private SmartDataSource smartDataSource;
 	private DatabaseType databaseType;
 	private Condition condition;
 	private List<Object> parameters;
 	//
 	//
 	public OperatorContext(SmartDataSource smartDataSource,DatabaseType databaseType) {
-		this.smartDataSource=smartDataSource;
 		this.databaseType=databaseType;
 		parameters=new ArrayList<>();
 	}
@@ -68,7 +67,7 @@ public class OperatorContext {
 	 * @return
 	 */
 	public String identifier() {
-		return smartDataSource.getIdentifier();
+		return SqlUtil.identifier(databaseType);
 	}
 
 	/**
