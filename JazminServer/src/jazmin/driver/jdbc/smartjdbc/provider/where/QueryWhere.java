@@ -332,11 +332,6 @@ public class QueryWhere {
 	public QueryWhere ge(String alias,String key,Object value){
 		return this.where(alias,key, SqlOperator.GE, value);
 	}
-	
-	public QueryWhere likeOld(String key,Object value){
-		return this.where(key, SqlOperator.LIKE_OLD, value);
-	}
-	
 	/**
 	 * key LIKE '%值%'
 	 * @param key

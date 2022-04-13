@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jazmin.driver.jdbc.smartjdbc.SmartJdbcException;
+import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
 import jazmin.driver.jdbc.smartjdbc.enums.SqlOperator;
 import jazmin.driver.jdbc.smartjdbc.provider.where.Where.Condition;
 import jazmin.log.Logger;
@@ -27,121 +28,121 @@ public class OperatorBuilder {
 	 * @return
 	 */
 	public static Operator build(OperatorContext ctx) {
-		Operator opt=null;
 		Condition w=ctx.getCondition();
 		SqlOperator operator=w.operator;
+		DatabaseType databaseType=ctx.getDatabaseType();
 		if(operator==null) {
 			operator=SqlOperator.EQ;//default
 		}
 		if(operator.equals(SqlOperator.CUSTOM)) {
-			opt=getCustomOperator(w);
+			return getCustomOperator(w);
 		}
 		if(operator.equals(SqlOperator.EQ)) {
-			opt=new EqOperator(ctx);
+			return new EqOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.NE)) {
-			opt=new NeOperator(ctx);
+			return new NeOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.IN)) {
-			opt=new InOperator(ctx);
+			return new InOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.NOT_IN)) {
-			opt=new NotInOperator(ctx);
-		}
-		if(operator.equals(SqlOperator.LIKE_OLD)) {
-			opt=new LikeOldOperator(ctx);
+			return new NotInOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.LIKE)) {
-			opt=new LikeOperator(ctx);
+			if(databaseType.equals(DatabaseType.NDS)) {
+				return new LikeOldOperator(ctx);
+			}
+			return new LikeOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.NOT_LIKE)) {
-			opt=new NotLikeOperator(ctx);
-		}
-		if(operator.equals(SqlOperator.NOT_LIKE_OLD)) {
-			opt=new NotLikeOldOperator(ctx);
+			if(databaseType.equals(DatabaseType.NDS)) {
+				return new NotLikeOldOperator(ctx);
+			}
+			return new NotLikeOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.LIKE_LEFT)) {
-			opt=new LikeLeftOperator(ctx);
-		}
-		if(operator.equals(SqlOperator.LIKE_LEFT_OLD)) {
-			opt=new LikeLeftOldOperator(ctx);
+			if(databaseType.equals(DatabaseType.NDS)) {
+				return new LikeLeftOldOperator(ctx);
+			}
+			return new LikeLeftOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.LIKE_RIGHT)) {
-			opt=new LikeRightOperator(ctx);
-		}
-		if(operator.equals(SqlOperator.LIKE_RIGHT_OLD)) {
-			opt=new LikeRightOldOperator(ctx);
+			if(databaseType.equals(DatabaseType.NDS)) {
+				return new LikeRightOldOperator(ctx);
+			}
+			return new LikeRightOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.NOT_LIKE_LEFT)) {
-			opt=new NotLikeLeftOperator(ctx);
-		}
-		if(operator.equals(SqlOperator.NOT_LIKE_LEFT_OLD)) {
-			opt=new NotLikeLeftOldOperator(ctx);
+			if(databaseType.equals(DatabaseType.NDS)) {
+				return new NotLikeLeftOldOperator(ctx);
+			}
+			return new NotLikeLeftOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.NOT_LIKE_RIGHT)) {
-			opt=new NotLikeRightOperator(ctx);
-		}
-		if(operator.equals(SqlOperator.NOT_LIKE_RIGHT_OLD)) {
-			opt=new NotLikeRightOldOperator(ctx);
+			if(databaseType.equals(DatabaseType.NDS)) {
+				return new NotLikeRightOldOperator(ctx);
+			}
+			return new NotLikeRightOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.GT)) {
-			opt=new GtOperator(ctx);
+			return new GtOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.GE)) {
-			opt=new GeOperator(ctx);
+			return new GeOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.LT)) {
-			opt=new LtOperator(ctx);
+			return new LtOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.LE)) {
-			opt=new LeOperator(ctx);
+			return new LeOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.IS_NULL)) {
-			opt=new IsNullOperator(ctx);
+			return new IsNullOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.IS_NOT_NULL)) {
-			opt=new IsNotNullOperator(ctx);
+			return new IsNotNullOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.JSON_CONTAINS_ANY)) {
-			opt=new JsonContainsAnyOperator(ctx);
+			return new JsonContainsAnyOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.JSON_NOT_CONTAINS_ANY)) {
-			opt=new JsonNotContainsAnyOperator(ctx);
+			return new JsonNotContainsAnyOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.JSON_CONTAINS_ALL)) {
-			opt=new JsonContainsAllOperator(ctx);
+			return new JsonContainsAllOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.JSON_CONTAINS_EQ)) {
-			opt=new JsonContainsEqOperator(ctx);
+			return new JsonContainsEqOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.JSON_CONTAINS_NE)) {
-			opt=new JsonContainsNeOperator(ctx);
+			return new JsonContainsNeOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.ARRAY_ANY)) {
-			opt=new ArrayAnyOperator(ctx);
+			return new ArrayAnyOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.ARRAY_NOT_ANY)) {
-			opt=new ArrayNotAnyOperator(ctx);
+			return new ArrayNotAnyOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.ARRAY_CONTAINS)) {
-			opt=new ArrayContainsOperator(ctx);
+			return new ArrayContainsOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.ARRAY_NOT_CONTAINS)) {
-			opt=new ArrayNotContainsOperator(ctx);
+			return new ArrayNotContainsOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.BETWEEN_AND)) {
-			opt=new BetweenAndOperator(ctx);
+			return new BetweenAndOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.NOT_BETWEEN_AND)) {
-			opt=new NotBetweenAndOperator(ctx);
+			return new NotBetweenAndOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.JSON_BELONG)) {
-			opt=new JsonBelongOperator(ctx);
+			return new JsonBelongOperator(ctx);
 		}
 		if(operator.equals(SqlOperator.ARRAY_BELONG)) {
-			opt=new ArrayBelongOperator(ctx);
+			return new ArrayBelongOperator(ctx);
 		}
-		return opt;
+		return null;
 	}
 	//
 	private static Operator getCustomOperator(Condition w) {
