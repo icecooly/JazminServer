@@ -63,7 +63,7 @@ public class UpdateProvider extends SqlProvider{
 		//
 		QueryWhere queryWhere=update.queryWhere;
 		if(queryWhere!=null) {
-			WhereStatment ws=new WhereSqlBuilder(getDatabaseType(),queryWhere).build();
+			WhereStatment ws=new WhereSqlBuilder(smartDataSource, getDatabaseType(),queryWhere).build();
 			sql.append(ws.sql);
 			for(Object o:ws.values){
 				fieldList.add(o);

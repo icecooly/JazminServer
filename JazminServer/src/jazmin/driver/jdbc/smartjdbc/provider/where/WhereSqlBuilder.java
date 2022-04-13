@@ -27,7 +27,8 @@ public class WhereSqlBuilder {
 	private StringBuilder sql;
 	private List<Object> values;
 	//
-	public WhereSqlBuilder(DatabaseType databaseType, QueryWhere queryWhere) {
+	public WhereSqlBuilder(SmartDataSource smartDataSource, DatabaseType databaseType, QueryWhere queryWhere) {
+		this.smartDataSource=smartDataSource;
 		this.databaseType=databaseType;
 		this.queryWhere=queryWhere;
 		this.sql=new StringBuilder();
