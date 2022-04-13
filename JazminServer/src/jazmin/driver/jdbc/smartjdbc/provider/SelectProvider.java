@@ -692,7 +692,7 @@ public class SelectProvider extends SqlProvider{
 	//
 	protected WhereStatment getWhereSql() {
 		addWheres(query);
-		return new WhereSqlBuilder(smartDataSource,getDatabaseType(),qw).build();
+		return new WhereSqlBuilder(getDatabaseType(),qw).build();
 	}
 	//
 	protected String getGroupBySql() {
