@@ -13,9 +13,7 @@ public class SqlUtil {
 		if(type.equals(DatabaseType.MYSQL)) {
 			return "`";
 		}
-		if(type.equals(DatabaseType.POSTGRESQL)||
-				type.equals(DatabaseType.KINGBASE)||
-				type.equals(DatabaseType.NDS)) {
+		if(isBasePostgresql(type)) {
 			return "\"";
 		}
 		return "";
