@@ -22,4 +22,19 @@ public class SmartJdbcUtils {
 		}
 		return false;
 	}
+	
+	/**
+	 * 
+	 * @param type
+	 * @return
+	 */
+	public static String identifier(DatabaseType type) {
+		if(type.equals(DatabaseType.MYSQL)) {
+			return "`";
+		}
+		if(isBasePostgresql(type)) {
+			return "\"";
+		}
+		return "";
+	}
 }

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jazmin.driver.jdbc.smartjdbc.SmartDataSource;
+import jazmin.driver.jdbc.smartjdbc.SmartJdbcUtils;
 import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
 import jazmin.driver.jdbc.smartjdbc.provider.where.Where.Condition;
-import jazmin.driver.jdbc.smartjdbc.util.SqlUtil;
 
 /**
  * 
@@ -67,7 +67,7 @@ public class OperatorContext {
 	 * @return
 	 */
 	public String identifier() {
-		return SqlUtil.identifier(databaseType);
+		return SmartJdbcUtils.identifier(databaseType);
 	}
 
 	/**

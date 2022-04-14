@@ -19,7 +19,6 @@ import javax.sql.DataSource;
 import jazmin.driver.jdbc.smartjdbc.annotations.Entity;
 import jazmin.driver.jdbc.smartjdbc.connection.TransactionManager;
 import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
-import jazmin.driver.jdbc.smartjdbc.util.SqlUtil;
 import jazmin.driver.jdbc.smartjdbc.util.StringUtil;
 import jazmin.log.Logger;
 import jazmin.log.LoggerFactory;
@@ -111,7 +110,7 @@ public class SmartDataSource {
 			if(databaseType==null) {
 				throw new SmartJdbcException("not support database "+driverClassName);
 			}
-			identifier=SqlUtil.identifier(databaseType);
+			identifier=SmartJdbcUtils.identifier(databaseType);
 			logger.info("init driverClassName:{} databaseType:{} identifier:{}",
 					driverClassName,databaseType,identifier);
 		} catch (Exception e) {
