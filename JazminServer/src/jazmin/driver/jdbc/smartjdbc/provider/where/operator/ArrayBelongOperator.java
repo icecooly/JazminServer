@@ -38,7 +38,9 @@ public class ArrayBelongOperator extends ColumnOperator {
 		if (isBasePostgresql(type)) {
 			sql.append("( ");
 			ctx.addParameter(value);
-			sql.append(getColumnSql()).append("<@").append("?");
+			String columnSql=getColumnSql();
+			sql.append(columnSql).append("<@").append("?");
+			sql.append("and array_length(").append(columnSql).append(")>=1");
 			sql.append(") ");
 		}
 		return sql.toString();
