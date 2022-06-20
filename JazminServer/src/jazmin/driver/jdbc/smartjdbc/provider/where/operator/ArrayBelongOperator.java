@@ -40,7 +40,7 @@ public class ArrayBelongOperator extends ColumnOperator {
 			ctx.addParameter(value);
 			String columnSql=getColumnSql();
 			sql.append(columnSql).append("<@").append("?");
-			sql.append(" and array_length(").append(columnSql).append(")>=1 ");
+			sql.append(" and array_length(").append(columnSql).append(",1)>=1 ");
 			sql.append(") ");
 		}
 		return sql.toString();
