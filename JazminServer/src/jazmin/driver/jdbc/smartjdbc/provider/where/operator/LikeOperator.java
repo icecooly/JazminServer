@@ -13,6 +13,9 @@ public class LikeOperator extends ColumnOperator{
 
 	@Override
 	public String getOperatorSql() {
+		if(isBasePostgresql(ctx.getDatabaseType())) {
+			return "ilike";
+		}
 		return "like";
 	}
 	
