@@ -1,0 +1,12 @@
+webcamera http://www.codeproject.com/Articles/800910/Broadcasting-of-a-Video-Stream-from-an-IP-camera-U
+webrtc proxy http://janus.conf.meetecho.com/siptest.html
+test dtls openssl s_client -dtls1 -tlsextdebug -debug -connect 10.44.218.119:5684
+openssl key http://wangyan.org/blog/openssl-certificate-generation.html
+threadpool size http://www.infoq.com/cn/articles/Java-Thread-Pool-Performance-Tuning
+http://www.jkeabc.com/p/482496.html
+performance set threadpool max size/set c3p0 pool max size
+http upload curl  -F file=@./restartall.sh  http://10.44.218.119:8080/upload/
+
+openssl pkcs12 -inkey x509-server-key.pem -in x509-server.pem -export -out server.pkcs12  
+//pkcs1 to pkcs 8
+openssl pkcs8 -topk8 -inform PEM -outform PEM -in priv1.pem -out priv8.pem -nocrypt
