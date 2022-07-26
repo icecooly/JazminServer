@@ -19,8 +19,12 @@ import jazmin.core.Lifecycle;
 import jazmin.core.Registerable;
 import jazmin.core.Server;
 import jazmin.core.app.AutoWiredObject.AutoWiredField;
+import jazmin.core.proxy.ProxyFactory;
 import jazmin.log.Logger;
 import jazmin.log.LoggerFactory;
+
+import net.sf.cglib.proxy.Callback;
+
 /**
  * 
  * @author yama
@@ -31,6 +35,9 @@ public class Application extends Lifecycle {
 	//
 	private Map<Class<?>,AutoWiredObject>autoWiredMap=
 			new ConcurrentHashMap<Class<?>, AutoWiredObject>();
+	
+	private static Map<String, Callback> proxyCallbackMap = new ConcurrentHashMap<>();
+	
 	//
 	private boolean autoRegisterWired;
 	
@@ -160,7 +167,13 @@ public class Application extends Lifecycle {
 			return (T) autoWiredMap.get(clazz).instance;
 		}
 		try{
-			T instance =clazz.newInstance();
+			T instance;
+			Callback callback = proxyCallbackMap.get(clazz.getName());
+			if (null != callback) {
+				instance = ProxyFactory.createProxyObject(clazz, callback);
+			} else {
+				instance = clazz.newInstance();
+			}
 			createWired(instance);
 			return instance;
 		}catch (Exception e) {
@@ -190,4 +203,9 @@ public class Application extends Lifecycle {
 	public List<AutoWiredObject>getAutoWiredObjects(){
 		return new ArrayList<>(autoWiredMap.values());
 	}
+
+	public static void addProxyCallback(String className, Callback callback) {
+		proxyCallbackMap.put(className, callback);
+	}
+	
 }

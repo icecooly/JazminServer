@@ -50,6 +50,7 @@ import jazmin.log.Logger;
 import jazmin.log.LoggerFactory;
 import jazmin.misc.InfoBuilder;
 import jazmin.util.DumpUtil;
+import net.sf.cglib.proxy.Callback;
 
 /**
  * JazminServer is a Java based application/message/rpc server.
@@ -298,7 +299,7 @@ public class Jazmin {
 	//servers
 	/**
 	 * add server to jazmin server.
-	 * @param the server will be added
+	 * @param  the server will be added
 	 */
 	public static void addServer(Server server) {
 		String name=server.getClass().getSimpleName();
@@ -385,6 +386,15 @@ public class Jazmin {
 		logger.info("\n"+LOGO);	
 	}
 
+	/**
+	 * add Proxy
+	 * @param className
+	 * @param callback
+	 */
+	public static void addProxyCallback(String className, Callback callback) {
+		Application.addProxyCallback(className, callback);
+	}
+	
 	/**
 	 * start jazmin server
 	 */

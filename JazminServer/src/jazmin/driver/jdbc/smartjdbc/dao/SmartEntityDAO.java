@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import cn.hutool.core.util.ClassUtil;
 import jazmin.driver.jdbc.smartjdbc.Query;
 import jazmin.driver.jdbc.smartjdbc.ResultSetHandler;
 import jazmin.driver.jdbc.smartjdbc.provider.SelectProvider;
@@ -26,10 +27,7 @@ public class SmartEntityDAO<T> extends BaseEntityDAO{
 	protected Class<T> entityClass;
 	//
 	protected Class<T> getTypeClass(){
-		ParameterizedType pt=(ParameterizedType) getClass().getGenericSuperclass();
-		@SuppressWarnings("unchecked")
-		Class<T>type=(Class<T>) pt.getActualTypeArguments()[0];
-		return type;
+		return (Class<T>)ClassUtil.getTypeArgument(this.getClass());
 	}
 	//
 	public String getTableName() {
