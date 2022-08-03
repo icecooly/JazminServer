@@ -394,6 +394,15 @@ public class Jazmin {
 	public static void addProxyCallback(String className, Callback callback) {
 		Application.addProxyCallback(className, callback);
 	}
+
+	/**
+	 * add Proxy
+	 * @param className
+	 * @param callbackClassName
+	 */
+	public static void addProxyCallback(String className, String callbackClassName) {
+		Application.addProxyCallback(className, callbackClassName);
+	}
 	
 	/**
 	 * start jazmin server

@@ -36,7 +36,7 @@ public class Application extends Lifecycle {
 	private Map<Class<?>,AutoWiredObject>autoWiredMap=
 			new ConcurrentHashMap<Class<?>, AutoWiredObject>();
 	
-	private static Map<String, Callback> proxyCallbackMap = new ConcurrentHashMap<>();
+	private static Map<String, Object> proxyCallbackMap = new ConcurrentHashMap<>();
 	
 	//
 	private boolean autoRegisterWired;
@@ -87,8 +87,13 @@ public class Application extends Lifecycle {
 	//
 	@SuppressWarnings("unchecked")
 	public void createWired(Object instance)throws Exception{
+		Class<?> clz = instance.getClass();
+		createWired(clz, instance);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void createWired(Class<?> clazz, Object instance)throws Exception{
 		AutoWiredObject autoWiredObject=new AutoWiredObject();
-		Class<?> clazz=instance.getClass();
 		autoWiredObject.clazz=clazz;
 		autoWiredObject.instance=instance;
 		autoWiredMap.put(clazz,autoWiredObject);
@@ -168,13 +173,22 @@ public class Application extends Lifecycle {
 		}
 		try{
 			T instance;
-			Callback callback = proxyCallbackMap.get(clazz.getName());
-			if (null != callback) {
+			Object callbackValue = proxyCallbackMap.get(clazz.getName());
+			if (null != callbackValue) {
+				Callback callback;
+				if (callbackValue instanceof Callback) {
+					callback = (Callback)callbackValue;
+				} else {
+					ClassLoader classLoader = clazz.getClassLoader();
+					Class<?> clz = classLoader.loadClass((String)callbackValue);
+					callback = (Callback) clz.getDeclaredConstructor().newInstance();
+				}
 				instance = ProxyFactory.createProxyObject(clazz, callback);
 			} else {
 				instance = clazz.newInstance();
 			}
-			createWired(instance);
+			// maybe is proxy class
+			createWired(clazz, instance);
 			return instance;
 		}catch (Exception e) {
 			logger.fatal("can not create wired object of class "+clazz);
@@ -206,6 +220,10 @@ public class Application extends Lifecycle {
 
 	public static void addProxyCallback(String className, Callback callback) {
 		proxyCallbackMap.put(className, callback);
+	}
+
+	public static void addProxyCallback(String className, String callbackClassName) {
+		proxyCallbackMap.put(className, callbackClassName);
 	}
 	
 }
