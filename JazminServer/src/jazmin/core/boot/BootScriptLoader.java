@@ -151,6 +151,10 @@ public class BootScriptLoader {
 			LoggerFactory.setFile(logFile,immdiateFlush);
 		}
 		@Override
+		public void setLogFile(String logFile, boolean immdiateFlush, boolean disableColor) {
+			LoggerFactory.setFile(logFile, immdiateFlush, disableColor);
+		}
+		@Override
 		public void disableConsoleLog() {
 			LoggerFactory.disableConsoleLog();
 		}

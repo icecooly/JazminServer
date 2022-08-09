@@ -146,8 +146,12 @@ public class Log4j2ConfigurationFactory extends ConfigurationFactory {
 		public String getFile(){
 			return file;
 		}
-		//
+
 		public void setFile(String file,boolean immediateFlush){
+			setFile(file,  immediateFlush,  false);
+		}
+		//
+		public void setFile(String file,boolean immediateFlush, boolean disableColor){
 			this.file=file;
 			File logFilePath=new File(file);
 			String patternPath=logFilePath.getParent()+"/${date:yyyyMM}/"
@@ -180,8 +184,13 @@ public class Log4j2ConfigurationFactory extends ConfigurationFactory {
 							},
 							true,
 							this);
+			String colorPattern = COLOR_PATTERN_LAYOUT;
+			if  (disableColor) {
+				colorPattern = "[%d] [%-5level] [%logger{1}] [%t]- %msg %n";
+			}
+			//
 			Layout<? extends Serializable> layout = PatternLayout.createLayout(
-					COLOR_PATTERN_LAYOUT,
+					colorPattern,
 					null,
 					null,
 					null,

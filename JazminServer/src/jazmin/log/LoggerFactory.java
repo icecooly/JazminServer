@@ -69,6 +69,10 @@ public class LoggerFactory {
 		configFactory.getConfiguration().setFile(file, immediateFlush);
 	}
 
+	public static void setFile(String file, boolean immediateFlush,  boolean disableColor) {
+		configFactory.getConfiguration().setFile(file, immediateFlush, disableColor);
+	}
+
 	//
 	public static String getFile() {
 		return configFactory.getConfiguration().getFile();

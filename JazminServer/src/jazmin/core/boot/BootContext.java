@@ -34,6 +34,13 @@ public interface BootContext{
 	 */
 	void setLogFile(String logFile,boolean immdiateFlush);
 	/**
+	 * set log file
+	 * @param logFile the log file 
+	 * @param immdiateFlush if flush to file  immediately
+	 * @param disableColor if disable log color
+	 */
+	void setLogFile(String logFile,boolean immdiateFlush, boolean disableColor);
+	/**
 	 * stop server and print message 
 	 * @param msg the message to print
 	 */
