@@ -78,20 +78,6 @@ public class SmartJdbcUtils {
 	}
 	
 	public static String addIdentifier(DatabaseType type, String fieldName) {
-		String leftIdentifier = "";
-		String rightIdentifier = "";
-		if(DatabaseType.MYSQL.equals(type)) {
-			leftIdentifier = "`";
-			rightIdentifier = "`";
-		} else if(isBasePostgresql(type)) {
-			leftIdentifier = "\"";
-			rightIdentifier = "\"";
-		}
-		// sql server use [field] or "field"
-		else if (DatabaseType.SQL_SERVER.equals(type)) {
-			leftIdentifier = "[";
-			rightIdentifier = "]";
-		}
-		return new StringBuilder().append(leftIdentifier).append(fieldName).append(rightIdentifier).toString();
+		return leftIdentifier(type) + fieldName + rightIdentifier(type);
 	}
 }
