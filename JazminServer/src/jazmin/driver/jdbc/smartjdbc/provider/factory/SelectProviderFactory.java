@@ -7,6 +7,7 @@ import jazmin.driver.jdbc.smartjdbc.provider.impl.kingbase.KingbaseSelectProvide
 import jazmin.driver.jdbc.smartjdbc.provider.impl.mysql.MysqlSelectProvider;
 import jazmin.driver.jdbc.smartjdbc.provider.impl.nds.NdsSelectProvider;
 import jazmin.driver.jdbc.smartjdbc.provider.impl.postgresql.PostgresqlSelectProvider;
+import jazmin.driver.jdbc.smartjdbc.provider.impl.sqlserver.SqlServerSelectProvider;
 
 /**
  * 
@@ -22,6 +23,9 @@ public class SelectProviderFactory {
 		}
 		if(type.equals(DatabaseType.POSTGRESQL)) {
 			return new PostgresqlSelectProvider(smartDataSource);
+		}
+		if(DatabaseType.SQL_SERVER.equals(type)) {
+			return new SqlServerSelectProvider(smartDataSource);
 		}
 		if(type.equals(DatabaseType.KINGBASE)) {
 			return new KingbaseSelectProvider(smartDataSource);

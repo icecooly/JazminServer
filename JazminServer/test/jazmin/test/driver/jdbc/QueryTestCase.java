@@ -23,10 +23,9 @@ import jazmin.driver.jdbc.smartjdbc.provider.where.Where.Condition;
 import jazmin.driver.jdbc.smartjdbc.provider.where.Where.JsonContain;
 import jazmin.driver.jdbc.smartjdbc.util.DumpUtil;
 import jazmin.test.driver.jdbc.dao.BizDAO;
-import jazmin.test.driver.jdbc.domain.entity.AppTable;
+import jazmin.test.driver.jdbc.domain.entity.*;
 import jazmin.test.driver.jdbc.domain.entity.AppTable.AppTableQuery;
-import jazmin.test.driver.jdbc.domain.entity.Article;
-import jazmin.test.driver.jdbc.domain.entity.User;
+import jazmin.test.driver.jdbc.domain.query.AppServerQuery;
 import jazmin.test.driver.jdbc.domain.query.ArticleQuery;
 import jazmin.test.driver.jdbc.domain.query.ArticleQuery.IdListOrTitle;
 import jazmin.test.driver.jdbc.domain.query.UserComplexQuery;
@@ -666,4 +665,14 @@ public class QueryTestCase extends BaseTestCase{
 		List<AppTable> tables=dao.getList(query);
 		System.out.println(DumpUtil.dump(tables));
 	}
+	
+	
+	public void testSqlServer() {
+		AppServerQuery query=new AppServerQuery();
+		query.setAppIdInList(Arrays.asList("222","21"));
+		List<AppServer> list = dao.getList(query);
+
+		System.out.println(list);
+	}
+	
 }

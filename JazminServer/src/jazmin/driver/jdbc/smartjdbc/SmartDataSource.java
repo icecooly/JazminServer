@@ -68,6 +68,7 @@ public class SmartDataSource {
 		driverClassMapping.put("org.postgresql.Driver", DatabaseType.POSTGRESQL);
 		driverClassMapping.put("com.kingbase8.Driver", DatabaseType.KINGBASE);
 		driverClassMapping.put("sgcc.nds.jdbc.driver.NdsDriver", DatabaseType.NDS);
+		driverClassMapping.put("com.microsoft.sqlserver.jdbc.SQLServerDriver", DatabaseType.SQL_SERVER);
 	}
 	//
 	private void loadingDriverClassNameMapping() {

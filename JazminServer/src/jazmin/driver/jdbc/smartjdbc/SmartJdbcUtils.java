@@ -29,10 +29,13 @@ public class SmartJdbcUtils {
 	 * @return
 	 */
 	public static String identifier(DatabaseType type) {
-		if(type.equals(DatabaseType.MYSQL)) {
+		if(DatabaseType.MYSQL.equals(type)) {
 			return "`";
-		}
-		if(isBasePostgresql(type)) {
+		} else if(isBasePostgresql(type)) {
+			return "\"";
+		} 
+		// sql server use [field] or "field"
+		else if (DatabaseType.SQL_SERVER.equals(type)) {
 			return "\"";
 		}
 		return "";

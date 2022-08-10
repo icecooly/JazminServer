@@ -37,7 +37,7 @@ public abstract class BaseTestCase extends TestCase{
 	//
 	private DataSource createDriverManagerDataSource() throws Exception{
 		Properties prop = new Properties();
-		prop.load(new FileInputStream("env"));
+		prop.load(new FileInputStream("env.properties"));
 		DriverManagerDataSource dataSource=new DriverManagerDataSource();
 		dataSource.setUrl(prop.getProperty("dbUrl"));
 		dataSource.setUsername(prop.getProperty("dbUser"));
