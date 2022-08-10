@@ -17,7 +17,7 @@ import java.util.*;
 
 /**
  * 
- * @author skydu
+ * @author liutao
  *
  */
 public class SqlServerSelectProvider extends SelectProvider{
