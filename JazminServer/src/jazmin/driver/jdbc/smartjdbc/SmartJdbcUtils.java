@@ -40,6 +40,42 @@ public class SmartJdbcUtils {
 		}
 		return "";
 	}
+
+	/**
+	 *  leftIdentifier
+	 * @param type
+	 * @return
+	 */
+	public static String leftIdentifier(DatabaseType type) {
+		if(DatabaseType.MYSQL.equals(type)) {
+			return "`";
+		} else if(isBasePostgresql(type)) {
+			return "\"";
+		}
+		// sql server use [field] or "field"
+		else if (DatabaseType.SQL_SERVER.equals(type)) {
+			return "[";
+		}
+		return "";
+	}
+
+	/**
+	 *  leftIdentifier
+	 * @param type
+	 * @return
+	 */
+	public static String rightIdentifier(DatabaseType type) {
+		if(DatabaseType.MYSQL.equals(type)) {
+			return "`";
+		} else if(isBasePostgresql(type)) {
+			return "\"";
+		}
+		// sql server use [field] or "field"
+		else if (DatabaseType.SQL_SERVER.equals(type)) {
+			return "]";
+		}
+		return "";
+	}
 	
 	public static String addIdentifier(DatabaseType type, String fieldName) {
 		String leftIdentifier = "";

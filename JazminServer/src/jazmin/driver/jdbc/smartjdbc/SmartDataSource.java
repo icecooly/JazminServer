@@ -47,6 +47,10 @@ public class SmartDataSource {
 	private Map<String,DatabaseType> driverClassMapping;
 	
 	private String identifier="";
+
+	private String leftIdentifier="";
+	
+	private String rightIdentifier="";
 	
 	/**
 	 * javaFieldName->dbName
@@ -112,8 +116,10 @@ public class SmartDataSource {
 				throw new SmartJdbcException("not support database "+driverClassName);
 			}
 			identifier=SmartJdbcUtils.identifier(databaseType);
-			logger.info("init driverClassName:{} databaseType:{} identifier:{}",
-					driverClassName,databaseType,identifier);
+			leftIdentifier = SmartJdbcUtils.leftIdentifier(databaseType);
+			rightIdentifier = SmartJdbcUtils.rightIdentifier(databaseType);
+			logger.info("init driverClassName:{} databaseType:{} leftIdentifier:{} rightIdentifier:{}",
+					driverClassName,databaseType, leftIdentifier, rightIdentifier);
 		} catch (Exception e) {
 			logger.error(e.getMessage(),e);
 			throw e;
@@ -300,6 +306,29 @@ public class SmartDataSource {
 	public String getIdentifier() {
 		return identifier;
 	}
+	/**
+	 * left Identifier
+	 * @return
+	 */
+	public String getLeftIdentifier() {
+		return this.leftIdentifier;
+	}
+	/**
+	 * right Identifier
+	 * @return
+	 */
+	public String getRightIdentifier() {
+		return this.rightIdentifier;
+	}
+
+	public void setLeftIdentifier(String leftIdentifier) {
+		this.leftIdentifier = leftIdentifier;
+	}
+
+	public void setRightIdentifier(String rightIdentifier) {
+		this.rightIdentifier = rightIdentifier;
+	}
+
 	/**
 	 * 
 	 * @param identifier

@@ -44,7 +44,7 @@ public abstract class SqlProvider {
 	 * @return
 	 */
 	public String addIdentifier(String name) {
-		 return identifier()+name+identifier();
+		 return leftIdentifier()+name+rightIdentifier();
 	}
 	
 	/**
@@ -60,6 +60,22 @@ public abstract class SqlProvider {
 	public String identifier() {
 		return smartDataSource.getIdentifier();
 	}
+	/**
+	 * left identifier
+	 * @return
+	 */
+	public String leftIdentifier() {
+		return smartDataSource.getLeftIdentifier();
+	}
+
+	/**
+	 * right identifier
+	 * @return
+	 */
+	public String rightIdentifier() {
+		return smartDataSource.getRightIdentifier();
+	}
+	
 	//
 	public String getAlias(String alias) {
 		if(alias==null) {
