@@ -44,15 +44,12 @@ public abstract class ColumnOperator extends Operator{
 	 */
 	protected String getColumnSql() {
 		StringBuilder sql=new StringBuilder();
-		String identifier=ctx.identifier();
 		Condition c=getCtx().getCondition();
 		if(c.isColumn) {
 			if(c.alias!=null) {
 				sql.append(c.alias).append(".");
 			}
-			sql.append(identifier);
-			sql.append(c.key);
-			sql.append(identifier);
+			sql.append(ctx.addIdentifier(c.key));
 		}else {
 			sql.append(c.key);
 		}

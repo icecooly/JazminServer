@@ -71,6 +71,15 @@ public class OperatorContext {
 	}
 
 	/**
+	 * Returns: [xxx]、`xxx`、"xxx"
+	 * @param fieldName
+	 * @return
+	 */
+	public String addIdentifier(String fieldName) {
+		return SmartJdbcUtils.addIdentifier(databaseType,  fieldName);
+	}
+
+	/**
 	 * @return the databaseType
 	 */
 	public DatabaseType getDatabaseType() {
