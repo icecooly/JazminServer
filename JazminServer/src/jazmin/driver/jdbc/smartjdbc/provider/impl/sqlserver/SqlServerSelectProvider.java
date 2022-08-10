@@ -170,5 +170,10 @@ public class SqlServerSelectProvider extends SelectProvider{
 		public EntityFieldInfo field;
 		public int orderByWeight;
 	}
+
+	@Override
+	public String addIdentifier(String fieldId) {
+		return "[" +  fieldId + "]";
+	}
 	
 }
