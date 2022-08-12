@@ -24,7 +24,7 @@ public class SelectProviderFactory {
 		if(type.equals(DatabaseType.POSTGRESQL)) {
 			return new PostgresqlSelectProvider(smartDataSource);
 		}
-		if(DatabaseType.SQL_SERVER.equals(type)) {
+		if(DatabaseType.SQLSERVER.equals(type)) {
 			return new SqlServerSelectProvider(smartDataSource);
 		}
 		if(type.equals(DatabaseType.KINGBASE)) {

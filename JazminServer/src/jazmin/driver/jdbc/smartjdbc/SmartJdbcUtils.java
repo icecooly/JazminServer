@@ -35,7 +35,7 @@ public class SmartJdbcUtils {
 			return "\"";
 		} 
 		// sql server use [field] or "field"
-		else if (DatabaseType.SQL_SERVER.equals(type)) {
+		else if (DatabaseType.SQLSERVER.equals(type)) {
 			return "\"";
 		}
 		return "";
@@ -53,7 +53,7 @@ public class SmartJdbcUtils {
 			return "\"";
 		}
 		// sql server use [field] or "field"
-		else if (DatabaseType.SQL_SERVER.equals(type)) {
+		else if (DatabaseType.SQLSERVER.equals(type)) {
 			return "[";
 		}
 		return "";
@@ -71,7 +71,7 @@ public class SmartJdbcUtils {
 			return "\"";
 		}
 		// sql server use [field] or "field"
-		else if (DatabaseType.SQL_SERVER.equals(type)) {
+		else if (DatabaseType.SQLSERVER.equals(type)) {
 			return "]";
 		}
 		return "";
