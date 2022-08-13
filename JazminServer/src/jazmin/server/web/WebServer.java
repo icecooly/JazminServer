@@ -326,7 +326,7 @@ public class WebServer extends jazmin.core.Server implements Registerable{
 	//
 	public void init()throws Exception{
 		//set up jetty logger
-		server = new Server(new JettyThreadPool());
+		server = new Server();
 		// Setup JMX
 		MBeanContainer mbContainer=new MBeanContainer(ManagementFactory.getPlatformMBeanServer());
 		server.addEventListener(mbContainer);
@@ -386,6 +386,7 @@ public class WebServer extends jazmin.core.Server implements Registerable{
         server.start();
         if(webAppContext!=null){
 			Jazmin.setAppClassLoader(webAppContext.getClassLoader());
+			logger.info("setAppClassLoader");
 		}
 		//
 		ConsoleServer cs=Jazmin.getServer(ConsoleServer.class);
