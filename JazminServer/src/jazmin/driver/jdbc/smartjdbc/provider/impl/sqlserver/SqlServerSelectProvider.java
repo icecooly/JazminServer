@@ -71,6 +71,7 @@ public class SqlServerSelectProvider extends SelectProvider{
 		}
 		StringBuilder sbu = new StringBuilder();
 		sbu.append(", ROW_NUMBER() OVER(ORDER BY ")
+				.append(field.tableAlias).append(".")
 				.append(addIdentifier(orderByFiled))
 				.append(") AS ").append(orderByFieldName);
 		return sbu.toString();
@@ -88,7 +89,7 @@ public class SqlServerSelectProvider extends SelectProvider{
 	private String getPagingSql(String sql, String orderByFieldName) {
 		StringBuilder sqlBuilder = new StringBuilder();
 		String orderByFiled;
-		sqlBuilder.append("select * from (").append(sql).append(") t where ")
+		sqlBuilder.append("select * from (").append(sql).append(") t where t.")
 				.append(orderByFieldName)
 				.append(" between ")
 				.append(qw.getLimitStart())
