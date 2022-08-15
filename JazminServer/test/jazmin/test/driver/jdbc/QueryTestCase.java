@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import jazmin.driver.jdbc.smartjdbc.Query;
 import jazmin.driver.jdbc.smartjdbc.enums.ConditionType;
 import jazmin.driver.jdbc.smartjdbc.enums.OrderByType;
 import jazmin.driver.jdbc.smartjdbc.enums.SqlOperator;
@@ -670,6 +671,17 @@ public class QueryTestCase extends BaseTestCase{
 	public void testSqlServer() {
 		AppServerQuery query=new AppServerQuery();
 		query.setAppIdInList(Arrays.asList("222","21"));
+		List<Query.OrderBy> orderByList = new ArrayList<>();
+		
+		Query.OrderBy orderBy  = new Query.OrderBy();
+		orderBy.field  = "mobileNo";
+		orderBy.type = "asc";
+		orderByList.add(orderBy);
+		orderBy  = new Query.OrderBy();
+		orderBy.field  = "name";
+		orderBy.type = "desc";
+		orderByList.add(orderBy);
+		query.setOrderByList(orderByList);
 		List<AppServer> list = dao.getList(query);
 
 		System.out.println(list);

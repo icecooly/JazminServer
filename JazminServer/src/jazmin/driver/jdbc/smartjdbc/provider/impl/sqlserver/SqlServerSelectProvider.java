@@ -46,33 +46,37 @@ public class SqlServerSelectProvider extends SelectProvider{
 		QueryWhere.WhereStatment ws=getWhereSql();
 		bean.whereSql=ws.sql;
 		bean.groupBySql=getGroupBySql();
-		bean.orderBySql=getOrderBySql();
-		bean.forUpdateSql=getForUpdateSql();
 		boolean needPaging = getNeedPaging();
 		bean.parameters=ws.values;
 		if (!needPaging) {
+			bean.orderBySql=getOrderBySql();
+			bean.forUpdateSql=getForUpdateSql();
 			bean.sql=bean.toSql();
-			return bean;
+		} else {
+			// now ms to field name
+			String orderByFieldName = addIdentifier(String.valueOf(System.currentTimeMillis()));
+			String orderBySql = getOrderBySql();
+			if (null == orderBySql || "".equals(orderBySql.trim())) {
+				EntityFieldInfo field = getOrderEntityField();
+				String orderByFiled;
+				if(StringUtil.isEmpty(field.statFunction)) {
+					orderByFiled = addIdentifier(convertFieldName(field.name));
+				}else {
+					orderByFiled = field.statFunction;
+				}
+				orderBySql = "\norder by " +  field.tableAlias + "." + orderByFiled;
+			}
+			EntityFieldInfo field = getOrderEntityField();
+			bean.selectSql = selectSql.append(getSelectPaging(orderBySql, orderByFieldName)).toString();
+			bean.sql = getPagingSql(bean.toSql(), orderByFieldName);
 		}
-		// now ms to field name
-		String orderByFieldName = addIdentifier(String.valueOf(System.currentTimeMillis()));
-		EntityFieldInfo field = getOrderEntityField();
-		bean.selectSql = selectSql.append(getSelectPaging(field, orderByFieldName)).toString();
-		bean.sql = getPagingSql(bean.toSql(), orderByFieldName);
 		return bean;
 	}
 	
-	private String getSelectPaging(EntityFieldInfo field, String orderByFieldName) {
-		String orderByFiled;
-		if(StringUtil.isEmpty(field.statFunction)) {
-			orderByFiled = convertFieldName(field.name);
-		}else {
-			orderByFiled = field.statFunction;
-		}
+	private String getSelectPaging(String orderBySql, String orderByFieldName) {
 		StringBuilder sbu = new StringBuilder();
-		sbu.append(", ROW_NUMBER() OVER(ORDER BY ")
-				.append(field.tableAlias).append(".")
-				.append(addIdentifier(orderByFiled))
+		sbu.append(", ROW_NUMBER() OVER(")
+				.append(orderBySql)
 				.append(") AS ").append(orderByFieldName);
 		return sbu.toString();
 	}
@@ -101,6 +105,9 @@ public class SqlServerSelectProvider extends SelectProvider{
 	
 	
 	private EntityFieldInfo getOrderEntityField() {
+		if (null != groupBys && !groupBys.isEmpty()) {
+			return groupBys.get(0);
+		}
 		List<EntityFieldInfo> selectFields = getSelectFields();
 		List<OrderByField> orderByFieldList = new ArrayList<>();
 		for (EntityFieldInfo field : selectFields) {
