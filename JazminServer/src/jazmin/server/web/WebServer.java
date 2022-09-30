@@ -10,9 +10,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
-import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
 
 import jazmin.core.Jazmin;
@@ -27,6 +24,9 @@ import jazmin.server.web.mvc.ControllerStub;
 import jazmin.server.web.mvc.DispatchServlet;
 import jazmin.util.FileUtil;
 
+import org.eclipse.jetty.alpn.server.ALPNServerConnectionFactory;
+import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
+import org.eclipse.jetty.http2.server.HTTP2ServerConnectionFactory;
 import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
@@ -348,8 +348,8 @@ public class WebServer extends jazmin.core.Server implements Registerable{
 	    List<Connector>connectors=new ArrayList<Connector>();
 		//
 		HttpConfiguration httpConfig = new HttpConfiguration();
-        ServerConnector httpConnector = new ServerConnector(server,
-        		new HttpConnectionFactory(httpConfig)); 
+		ServerConnector httpConnector = new ServerConnector(server,
+				new HttpConnectionFactory(httpConfig), new HTTP2CServerConnectionFactory(httpConfig));
 		httpConnector.setPort(port);
 		httpConnector.setIdleTimeout(idleTimeout*1000);
 		connectors.add(httpConnector);
@@ -367,15 +367,26 @@ public class WebServer extends jazmin.core.Server implements Registerable{
 			 if(keyStorePassword!=null){
 				 sslContextFactory.setKeyStorePassword(keyStorePassword);
 			 }
+			// HTTPS Configuration
 			 //sslContextFactory.setKeyManagerPassword("OBF:1u2u1wml1z7s1z7a1wnl1u2g");
 			 HttpConfiguration https_config = new HttpConfiguration(sslHttpConfig);
 			 sslHttpConfig.addCustomizer(new SecureRequestCustomizer());
-			 ServerConnector https = new ServerConnector(server,
-			              new SslConnectionFactory(sslContextFactory, "http/1.1"),
-			                new HttpConnectionFactory(https_config));
-			 https.setPort(httpsPort);
-			 https.setIdleTimeout(idleTimeout*1000);
-			 connectors.add(https);
+
+			// HTTP/2 Connection Factory
+			HTTP2ServerConnectionFactory h2 = new HTTP2ServerConnectionFactory(https_config);
+
+			ALPNServerConnectionFactory alpn = new ALPNServerConnectionFactory();
+			alpn.setDefaultProtocol(httpConnector.getDefaultProtocol());
+
+			// SSL Connection Factory
+			SslConnectionFactory ssl = new SslConnectionFactory(sslContextFactory, alpn.getProtocol());
+
+			// HTTP/2 Connector
+			ServerConnector http2Connector =
+					new ServerConnector(server, ssl, alpn, h2, new HttpConnectionFactory(https_config));
+			http2Connector.setPort(httpsPort);
+			http2Connector.setIdleTimeout(idleTimeout*1000);
+			server.addConnector(http2Connector);
 		}
 		//
 		server.setConnectors(connectors.toArray(new Connector[connectors.size()]));		
@@ -384,9 +395,9 @@ public class WebServer extends jazmin.core.Server implements Registerable{
 			server.setAttribute(e.getKey(), e.getValue());
 		}
         server.start();
+		server.join();
         if(webAppContext!=null){
 			Jazmin.setAppClassLoader(webAppContext.getClassLoader());
-			logger.info("setAppClassLoader");
 		}
 		//
 		ConsoleServer cs=Jazmin.getServer(ConsoleServer.class);
