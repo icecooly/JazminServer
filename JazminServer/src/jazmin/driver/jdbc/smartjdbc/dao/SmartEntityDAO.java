@@ -1,12 +1,10 @@
 package jazmin.driver.jdbc.smartjdbc.dao;
 
-import java.lang.reflect.ParameterizedType;
 import java.sql.ResultSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import cn.hutool.core.util.ClassUtil;
 import jazmin.driver.jdbc.smartjdbc.Query;
 import jazmin.driver.jdbc.smartjdbc.ResultSetHandler;
 import jazmin.driver.jdbc.smartjdbc.provider.SelectProvider;
@@ -16,6 +14,7 @@ import jazmin.driver.jdbc.smartjdbc.provider.entity.EntityUpdate;
 import jazmin.driver.jdbc.smartjdbc.provider.entity.SqlBean;
 import jazmin.driver.jdbc.smartjdbc.provider.where.QueryWhere;
 import jazmin.driver.jdbc.smartjdbc.util.ArrayUtils;
+import jazmin.util.ClassUtil;
 
 /**
  * 
@@ -27,7 +26,7 @@ public class SmartEntityDAO<T> extends BaseEntityDAO{
 	protected Class<T> entityClass;
 	//
 	protected Class<T> getTypeClass(){
-		return (Class<T>)ClassUtil.getTypeArgument(this.getClass());
+		return (Class<T>) ClassUtil.getTypeArgument(this.getClass());
 	}
 	//
 	public String getTableName() {

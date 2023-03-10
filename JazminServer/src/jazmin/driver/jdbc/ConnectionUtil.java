@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
 
+import jazmin.driver.jdbc.smartjdbc.Types;
+import jazmin.driver.jdbc.smartjdbc.enums.DatabaseType;
 import jazmin.log.Logger;
 import jazmin.log.LoggerFactory;
 import jazmin.util.DumpUtil;
@@ -147,6 +149,107 @@ public class ConnectionUtil {
 				continue;
 			}
 			throw new IllegalArgumentException("unsupport type:" + o.getClass()+","+DumpUtil.dump(o));
+		}
+	}
+
+
+	public static void set(Connection conn,
+					   DatabaseType databaseType,
+					   PreparedStatement ps,
+					   Object... objs)
+			throws SQLException {
+		if (objs == null || objs.length == 0) {
+			return;
+		}
+		int i = 1;
+		for (Object o : objs) {
+			if (o == null) {
+				ps.setString(i++, null);
+				continue;
+			}
+			Class<?> type=o.getClass();
+			if (o instanceof String) {
+				ps.setString(i++, ((String) o));
+				continue;
+			}
+			if (o instanceof Date) {
+				Date date = (Date) o;
+				ps.setTimestamp(i++, new Timestamp(date.getTime()));
+				continue;
+			}
+			// Integer
+			if (o instanceof Integer) {
+				ps.setInt(i++, ((Integer) o));
+				continue;
+			}
+			if (o instanceof Double) {
+				ps.setDouble(i++, ((Double) o));
+				continue;
+			}
+			if (o instanceof Float) {
+				ps.setFloat(i++, ((Float) o));
+				continue;
+			}
+			if (o instanceof BigDecimal) {
+				ps.setBigDecimal(i++, ((BigDecimal) o));
+				continue;
+			}
+			if (o instanceof Long) {
+				ps.setLong(i++, ((Long) o));
+				continue;
+			}
+			if (o instanceof Short) {
+				ps.setShort(i++, ((Short) o));
+				continue;
+			}
+			if (o instanceof Byte) {
+				ps.setByte(i++, ((Byte) o));
+				continue;
+			}
+			if (o instanceof byte[]) {
+				ps.setBytes(i++, ((byte[]) o));
+				continue;
+			}
+			if (o instanceof Boolean) {
+				ps.setBoolean(i++, ((Boolean) o));
+				continue;
+			}
+			if (Types.ARRAY_TYPES.contains(type)) {
+				if(DatabaseType.NDS.equals(databaseType)) {
+					StringBuilder v=new StringBuilder();
+					v.append("{");
+					Object[] list=((Object[]) o);
+					if(list.length>0) {
+						for (Object item : list) {
+							v.append(item.toString()).append(",");
+						}
+						v.deleteCharAt(v.length()-1);
+					}
+					v.append("}");
+					ps.setString(i++, v.toString());
+				}else {
+					if(type.equals(String[].class)) {
+						ps.setArray(i++, conn.createArrayOf("TEXT",(Object[]) o));
+					}
+					if(type.equals(Short[].class)) {
+						ps.setArray(i++, conn.createArrayOf("INTEGER",(Object[]) o));
+					}
+					if(type.equals(Integer[].class)) {
+						ps.setArray(i++, conn.createArrayOf("INTEGER",(Object[]) o));
+					}
+					if(type.equals(Long[].class)) {
+						ps.setArray(i++, conn.createArrayOf("BIGINT",(Object[]) o));
+					}
+					if(type.equals(Float[].class)) {
+						ps.setArray(i++, conn.createArrayOf("FLOAT",(Object[]) o));
+					}
+					if(type.equals(Double[].class)) {
+						ps.setArray(i++, conn.createArrayOf("DOUBLE",(Object[]) o));
+					}
+				}
+				continue;
+			}
+			throw new IllegalArgumentException("unsupport type:" + o.getClass());
 		}
 	}
 	
