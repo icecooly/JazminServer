@@ -24,9 +24,6 @@ import jazmin.server.web.mvc.ControllerStub;
 import jazmin.server.web.mvc.DispatchServlet;
 import jazmin.util.FileUtil;
 
-import org.eclipse.jetty.alpn.server.ALPNServerConnectionFactory;
-import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
-import org.eclipse.jetty.http2.server.HTTP2ServerConnectionFactory;
 import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
@@ -157,7 +154,7 @@ public class WebServer extends jazmin.core.Server implements Registerable{
 			logger.warn("can not create temp dir:"+tempDir.getAbsolutePath());
 		}else{
 			logger.info("set temp dir to:"+tempDir.getAbsolutePath());
-			webAppContext.setTempDirectory(tempDir);		
+			webAppContext.setTempDirectory(tempDir);
 		}
 		ServletHolder defaultServlet=new ServletHolder(DefaultServlet.class);
 		webAppContext.addServlet(defaultServlet, "/");
@@ -210,7 +207,7 @@ public class WebServer extends jazmin.core.Server implements Registerable{
 		this.port = port;
 	}
 	//
-	
+
 	//
 	/**
 	 * return idle timeout time of server connection
@@ -238,7 +235,7 @@ public class WebServer extends jazmin.core.Server implements Registerable{
 	public String getKeyStoreFile() {
 		return keyStoreFile;
 	}
-	
+
 	/**
 	 * @return the keyStorePassword
 	 */
@@ -260,14 +257,14 @@ public class WebServer extends jazmin.core.Server implements Registerable{
 	/**
 	 * set server idle timeout time of server connection
 	 * @param idleTimeout server idle timeout time of server connection 
-	 */ 
+	 */
 	public void setIdleTimeout(int idleTimeout) {
 		if(isInited()){
 			throw new IllegalArgumentException("set before inited");
 		}
 		this.idleTimeout = idleTimeout;
 	}
-	
+
 	/**
 	 * @return the keyStoreType
 	 */
@@ -334,70 +331,59 @@ public class WebServer extends jazmin.core.Server implements Registerable{
 		// Add loggers MBean to server (will be picked up by MBeanContainer above)
 		server.addBean(Log.getLog());
 		handlers = new HandlerCollection();
-	    contextHandler=new ContextHandlerCollection();
+		contextHandler=new ContextHandlerCollection();
 		requestLogHandler=new RequestLogHandler();
 		requestLogHandler.setRequestLog(new WebRequestLog());
-	    handlers.setHandlers(new Handler[] {
-	    		new DefaultHandler(),
-	    		contextHandler,
-	    		requestLogHandler});
-	    //  
-	    if(webAppContext!=null){
+		handlers.setHandlers(new Handler[] {
+				new DefaultHandler(),
+				contextHandler,
+				requestLogHandler});
+		//  
+		if(webAppContext!=null){
 			contextHandler.addHandler(webAppContext);
 		}
-	    List<Connector>connectors=new ArrayList<Connector>();
+		List<Connector>connectors=new ArrayList<Connector>();
 		//
 		HttpConfiguration httpConfig = new HttpConfiguration();
 		ServerConnector httpConnector = new ServerConnector(server,
-				new HttpConnectionFactory(httpConfig), new HTTP2CServerConnectionFactory(httpConfig));
+				new HttpConnectionFactory(httpConfig));
 		httpConnector.setPort(port);
 		httpConnector.setIdleTimeout(idleTimeout*1000);
 		connectors.add(httpConnector);
 		//
 		if(httpsPort!=-1){
-			 HttpConfiguration sslHttpConfig = new HttpConfiguration();
-			 sslHttpConfig.setSecureScheme("https");
-			 sslHttpConfig.setSecurePort(httpsPort);
-			 sslHttpConfig.setOutputBufferSize(32768);
-			 SslContextFactory sslContextFactory = new SslContextFactory();
-			 if(keyStoreType!=null){
-				 sslContextFactory.setKeyStoreType(keyStoreType);	 
-			 }
-			 sslContextFactory.setKeyStorePath(keyStoreFile);
-			 if(keyStorePassword!=null){
-				 sslContextFactory.setKeyStorePassword(keyStorePassword);
-			 }
-			// HTTPS Configuration
-			 //sslContextFactory.setKeyManagerPassword("OBF:1u2u1wml1z7s1z7a1wnl1u2g");
-			 HttpConfiguration https_config = new HttpConfiguration(sslHttpConfig);
-			 sslHttpConfig.addCustomizer(new SecureRequestCustomizer());
-
-			// HTTP/2 Connection Factory
-			HTTP2ServerConnectionFactory h2 = new HTTP2ServerConnectionFactory(https_config);
-
-			ALPNServerConnectionFactory alpn = new ALPNServerConnectionFactory();
-			alpn.setDefaultProtocol(httpConnector.getDefaultProtocol());
-
-			// SSL Connection Factory
-			SslConnectionFactory ssl = new SslConnectionFactory(sslContextFactory, alpn.getProtocol());
-
-			// HTTP/2 Connector
-			ServerConnector http2Connector =
-					new ServerConnector(server, ssl, alpn, h2, new HttpConnectionFactory(https_config));
-			http2Connector.setPort(httpsPort);
-			http2Connector.setIdleTimeout(idleTimeout*1000);
-			server.addConnector(http2Connector);
+			HttpConfiguration sslHttpConfig = new HttpConfiguration();
+			sslHttpConfig.setSecureScheme("https");
+			sslHttpConfig.setSecurePort(httpsPort);
+			sslHttpConfig.setOutputBufferSize(32768);
+			SslContextFactory sslContextFactory = new SslContextFactory();
+			if(keyStoreType!=null){
+				sslContextFactory.setKeyStoreType(keyStoreType);
+			}
+			sslContextFactory.setKeyStorePath(keyStoreFile);
+			if(keyStorePassword!=null){
+				sslContextFactory.setKeyStorePassword(keyStorePassword);
+			}
+			//sslContextFactory.setKeyManagerPassword("OBF:1u2u1wml1z7s1z7a1wnl1u2g");
+			HttpConfiguration https_config = new HttpConfiguration(sslHttpConfig);
+			sslHttpConfig.addCustomizer(new SecureRequestCustomizer());
+			ServerConnector https = new ServerConnector(server,
+					new SslConnectionFactory(sslContextFactory, "http/1.1"),
+					new HttpConnectionFactory(https_config));
+			https.setPort(httpsPort);
+			https.setIdleTimeout(idleTimeout*1000);
+			connectors.add(https);
 		}
 		//
-		server.setConnectors(connectors.toArray(new Connector[connectors.size()]));		
-        server.setHandler(handlers);
-        for(Entry<String, Object> e :serverAttributes.entrySet()){
+		server.setConnectors(connectors.toArray(new Connector[connectors.size()]));
+		server.setHandler(handlers);
+		for(Entry<String, Object> e :serverAttributes.entrySet()){
 			server.setAttribute(e.getKey(), e.getValue());
 		}
-        server.start();
-		server.join();
-        if(webAppContext!=null){
+		server.start();
+		if(webAppContext!=null){
 			Jazmin.setAppClassLoader(webAppContext.getClassLoader());
+			logger.info("setAppClassLoader");
 		}
 		//
 		ConsoleServer cs=Jazmin.getServer(ConsoleServer.class);
@@ -441,13 +427,13 @@ public class WebServer extends jazmin.core.Server implements Registerable{
 		if(webAppContext!=null){
 			webAppContext.getServletContext().getServletRegistrations().forEach((k,v)->{
 				ib.println(k);
-			});	
+			});
 			ib.section("welcome files");
 			int index=0;
 			if(webAppContext.getWelcomeFiles()!=null){
 				for(String s:webAppContext.getWelcomeFiles()){
-					ib.print("welcome file-"+(index++),s);						
-				}	
+					ib.print("welcome file-"+(index++),s);
+				}
 			}
 		}
 		//
@@ -495,5 +481,5 @@ public class WebServer extends jazmin.core.Server implements Registerable{
 	public void register(Object object) {
 		DispatchServlet.dispatcher.registerController(object);
 	}
-	
+
 }
