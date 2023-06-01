@@ -200,7 +200,7 @@ public class ConsoleServer extends Server{
 		} 
 	}
 	//
-	private void registerCommand(ConsoleCommand cmd){
+	public void registerCommand(ConsoleCommand cmd){
 		if(commands.containsKey(cmd.getId())){
 			throw new IllegalArgumentException("cmd :"+cmd.getId()+" already exists.");
 		}
