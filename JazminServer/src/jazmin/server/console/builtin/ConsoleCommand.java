@@ -57,8 +57,8 @@ public class ConsoleCommand{
     protected String desc;
     protected CommandLine cli;
     protected String rawInput;
-    private volatile boolean finished;
-    private Options options;
+	protected volatile boolean finished;
+	protected Options options;
     ConsoleServer consoleServer;
     //
     private Map<String,OptionDefine>commandOptionMap;
@@ -99,7 +99,7 @@ public class ConsoleCommand{
 	}
 
 	/**
-	 * @param finished the finished to set
+	 * @param f the finished to set
 	 */
 	public void setFinished(boolean f) {
 		this.finished=f;
