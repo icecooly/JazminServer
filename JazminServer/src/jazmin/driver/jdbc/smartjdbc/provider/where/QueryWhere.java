@@ -29,6 +29,9 @@ public class QueryWhere {
 	protected int limitStart=0;
 	protected int limitEnd=-1;
 	protected boolean forUpdate;
+	
+	protected boolean forUpdateNotWait;
+	
 	protected String of;
 	//
 	protected QueryWhere(ConditionType conditionType) {
@@ -175,6 +178,25 @@ public class QueryWhere {
 	 */
 	public void setForUpdate(boolean forUpdate) {
 		this.forUpdate = forUpdate;
+	}
+
+	/**
+	 * @return the forUpdate
+	 */
+	public boolean isForUpdateNoWait() {
+		return this.forUpdateNotWait;
+	}
+	
+	/**
+	 * set forUpdateNotWait
+	 * @param forUpdateNotWait
+	 */
+	public void setForUpdateNoWait(boolean forUpdateNotWait) {
+		if (forUpdateNotWait) {
+			// auto for update
+			this.forUpdate = true;
+		}
+		this.forUpdateNotWait = forUpdateNotWait;
 	}
 	/**
 	 * @return the of

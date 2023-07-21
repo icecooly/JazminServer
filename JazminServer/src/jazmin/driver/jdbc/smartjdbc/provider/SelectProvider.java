@@ -748,7 +748,12 @@ public class SelectProvider extends SqlProvider{
 	//
 	protected String getForUpdateSql() {
 		if(qw.isForUpdate()) {
-			return "\nfor update ";
+			String forUpdateSql = "\nfor update ";
+			// not wait for update
+			if (qw.isForUpdateNoWait()) {
+				forUpdateSql += " nowait ";
+			}
+			return forUpdateSql;
 		}
 		return "";
 	}
