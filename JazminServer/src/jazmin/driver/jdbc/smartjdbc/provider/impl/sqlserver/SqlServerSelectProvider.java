@@ -33,6 +33,7 @@ public class SqlServerSelectProvider extends SelectProvider{
 			return "";
 		}
 		return "\nwith(UPDLOCK) ";
+		// sql server can't notwait
 	}
 
 	@Override

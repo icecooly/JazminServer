@@ -48,6 +48,10 @@ public class KingbaseSelectProvider extends SelectProvider{
 		}else {
 			sql+="\nof "+qw.getOf();
 		}
+		// not wait for update
+		if (qw.isForUpdateNoWait()) {
+			sql += " nowait ";
+		}
 		return sql;
 	}
 	

@@ -44,6 +44,9 @@ public class PostgresqlSelectProvider extends SelectProvider{
 		}else {
 			sql+="\nof "+qw.getOf();
 		}
+		if (qw.isForUpdateNoWait()) {
+			sql += " nowait ";
+		}
 		return sql;
 	}
 }

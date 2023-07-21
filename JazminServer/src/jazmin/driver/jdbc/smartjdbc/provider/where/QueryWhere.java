@@ -131,6 +131,12 @@ public class QueryWhere {
 		forUpdate=true;
 		return this;
 	}
+
+	public QueryWhere forUpdateNotWait() {
+		this.setForUpdateNoWait(true);
+		return this;
+	}
+	
 	//
 	/**
 	 * @return the orderBy
