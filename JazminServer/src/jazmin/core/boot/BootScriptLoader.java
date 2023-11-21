@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
-import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -228,6 +228,10 @@ public class BootScriptLoader {
 		@Override
 		public Monitor getMonitor() {
 			return Jazmin.mointor;
+		}
+		@Override
+		public ScheduledThreadPoolExecutor getScheduledExecutor() {
+			return Jazmin.scheduledExecutor;
 		}
 	}
 }

@@ -3,6 +3,8 @@
  */
 package jazmin.core.boot;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+
 import jazmin.core.Driver;
 import jazmin.core.Server;
 import jazmin.core.job.JobStore;
@@ -99,4 +101,5 @@ public interface BootContext{
 	JobStore getJobStore();
 	TaskStore getTaskStore();
 	Monitor getMonitor();
+	ScheduledThreadPoolExecutor getScheduledExecutor();
 }

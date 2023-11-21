@@ -28,7 +28,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -102,7 +101,7 @@ public class Jazmin {
 
 	//--------------------------------------------------------------------------
 	//
-	private static ScheduledExecutorService scheduledExecutorService=
+	public static ScheduledThreadPoolExecutor scheduledExecutor=
 			new ScheduledThreadPoolExecutor(
 					5,
 					new JazminThreadFactory("ScheduledExecutor"),
@@ -348,7 +347,7 @@ public class Jazmin {
 	 */
 	public static ScheduledFuture<?> scheduleAtFixedRate(Runnable command,
 			long initialDelay, long period, TimeUnit unit) {
-		return scheduledExecutorService.scheduleAtFixedRate(command,
+		return scheduledExecutor.scheduleAtFixedRate(command,
 				initialDelay, period, unit);
 	}
 	
@@ -357,14 +356,14 @@ public class Jazmin {
 	 * @see java.util.concurrent.Executor#execute(java.lang.Runnable)
 	 */
 	public static void execute(Runnable command) {
-		scheduledExecutorService.execute(command);
+		scheduledExecutor.execute(command);
 	}
 	/**
 	 * @see java.util.concurrent.ScheduledExecutorService#scheduleWithFixedDelay(Runnable, long, long, TimeUnit)
 	 */
 	public static ScheduledFuture<?> scheduleWithFixedDelay(Runnable command,
 			long initialDelay, long delay, TimeUnit unit) {
-		return scheduledExecutorService.scheduleWithFixedDelay(command,
+		return scheduledExecutor.scheduleWithFixedDelay(command,
 				initialDelay, delay, unit);
 	}
 	
@@ -378,7 +377,7 @@ public class Jazmin {
 	 */
 	public static ScheduledFuture<?> schedule(Runnable command, long delay,
 			TimeUnit unit) {
-		return scheduledExecutorService.schedule(command, delay, unit);
+		return scheduledExecutor.schedule(command, delay, unit);
 	}
 	//
 	// --------------------------------------------------------------------------
